@@ -113,7 +113,7 @@ export default function LandingPage() {
           </div>
           <div className="text-right mt-4">
             <blockquote className="text-sm text-zinc-500 italic">
-              "Life can only be understood backwards; but it must be lived forwards." - K.
+              &ldquo;Life can only be understood backwards; but it must be lived forwards.&rdquo; - K.
             </blockquote>
           </div>
         </div>
