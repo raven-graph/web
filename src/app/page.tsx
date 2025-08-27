@@ -7,18 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-// RavenGraph Silhouette Logo (inline SVG)
+// RavenGraph Logo using external SVG
 const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
-  <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-label="RavenGraph" className={className}>
-    <defs>
-      <linearGradient id="rgPurple" x1="0" x2="1" y1="0" y2="1">
-        <stop offset="0%" stopOpacity="1" stopColor="#7c3aed" />
-        <stop offset="100%" stopOpacity="1" stopColor="#a855f7" />
-      </linearGradient>
-    </defs>
-    <path d="M364.4 179.3c-18.2-22.8-48.6-38.1-82.5-42.4-39.7-5-83.7 6.6-117.3 27.1-36.5 22.1-57.6 51.6-61.8 84.8-3 23.8 5.7 45.1 23.3 60.8 14.8 13.2 35.2 21.7 57.9 24.9-2.9 8.4-8.2 17.1-15.8 25.8-6.2 7.1-6.3 14.9-.1 20.6 6.1 5.7 16.5 7.9 27.8 2.8 27.4-12.3 49.4-31.7 64.6-52.2 3 .2 6 .3 9.1.3 63.1 0 121.8-27.8 144.8-71.8 12.2-23.4 9.4-52.4-9.9-80.7zm-213.2 55.5c5.7-26.8 34.9-51.8 74.6-64.7 37.8-12.4 75.8-9.4 96.6 7.7 8.8 7.3 12.4 16.1 11.2 25.5-3.1 24.2-39.8 51.9-83.5 63.6-45.9 12.3-92.8 4.6-99-17.1-1.3-4.6-1.4-9.6.1-15z" fill="url(#rgPurple)" />
-    <circle cx="330" cy="184" r="10" fill="#1f2937" />
-  </svg>
+  <img 
+    src="/noun-raven-6274501.svg" 
+    alt="RavenGraph" 
+    className={className}
+    style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)' }}
+  />
 );
 
 const GradientOrb: React.FC<{ className?: string }> = ({ className }) => (
