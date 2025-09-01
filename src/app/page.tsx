@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 // RavenGraph Logo using external SVG
 const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
   <img 
-    src="/noun-raven-6274501.svg" 
+    src="/noun-raven-1040402.svg" 
     alt="RavenGraph" 
     className={className}
     style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)' }}
@@ -42,7 +42,7 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-2">
             <a href="#waitlist">
-              <Button className="rounded-2xl">Request access</Button>
+              <Button className="rounded-2xl">Join the waitlist</Button>
             </a>
           </div>
         </div>
@@ -57,7 +57,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-6xl font-semibold leading-[1.1]"
           >
-            Where signals hide in structure.
+            Discover hidden signals within complex networks. 
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 6 }}
@@ -65,17 +65,17 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="mt-5 text-lg text-zinc-300"
           >
-            A private effort at the edge of networks and markets. For those who listen closely, the patterns reveal themselves.
+            An invitation-only project at the frontier of networks and markets — for those who seek patterns before they emerge.
           </motion.p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center" id="waitlist">
             <form onSubmit={(e) => { e.preventDefault(); alert("Thanks. We'll be in touch."); }} className="grid sm:grid-cols-[1fr_auto] gap-3 w-full max-w-xl">
               <Input required type="email" placeholder="you@firm.com" className="h-12 rounded-xl border-white/20 bg-zinc-900/70" />
-              <Button type="submit" className="h-12 rounded-xl"><Mail className="mr-2 w-4 h-4" /> Request access</Button>
+              <Button type="submit" className="h-12 rounded-xl"><Mail className="mr-2 w-4 h-4" /> Join the waitlist</Button>
             </form>
           </div>
 
-          <p className="mt-4 text-xs text-zinc-500">Selective private beta · Invitations go out occasionally.</p>
+          <p className="mt-4 text-xs text-zinc-500">Private beta — limited spots, invitations released in waves.</p>
         </div>
       </section>
 
@@ -83,9 +83,9 @@ export default function LandingPage() {
       <section className="py-16 border-t border-white/10">
         <div className="mx-auto max-w-5xl px-4 grid md:grid-cols-3 gap-6">
           {[
-            {t:"Clarity through Structure", s:"Find order in the hidden networks of markets."},
-            {t:"Craft over Noise", s:"Build with rigor, elegance, and restraint."},
-            {t:"Stealth and Independence", s:"Advance quietly, free from consensus and hype."}
+            {t:"Clarity in Complexity", s:"Extract predictive power from the structure of complex networks."},
+            {t:"Learning from Links", s:"Leverage graph neural networks to cut through market noise."},
+            {t:"Edge-First Intelligence", s:"Evolve models at the frontier of markets, beyond mainstream consensus."}
           ].map(({t, s}) => (
             <Card key={t} className="rounded-3xl border-white/10 bg-zinc-900/60">
               <CardContent className="p-6">
