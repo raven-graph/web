@@ -441,17 +441,14 @@ export default function LandingPage() {
             {/* Product Explanation */}
             <div className="space-y-6">
               <h3 className="text-2xl md:text-3xl font-semibold text-zinc-100">
-                Real-time Signal Propagation
+                Unlock the Power of RavenPulse™
               </h3>
               <p className="text-lg text-zinc-300 leading-relaxed">
-                Watch as market signals ripple through interconnected assets in real-time. Our graph neural networks detect subtle changes in one instrument and trace their impact across the entire market network.
-              </p>
-              <p className="text-lg text-zinc-300 leading-relaxed">
-                When a signal emerges — whether from earnings, macro data, or sentiment shifts — we don't just see the immediate reaction. We capture the cascading effects as that information flows through correlated assets, revealing hidden opportunities before they become obvious.
+                RavenPulse™ is our proprietary real-time signal propagation technology that turns market noise into foresight. The moment a signal emerges — from earnings, macro data, or sentiment — RavenPulse™ tracks how it ripples across the entire market network. By capturing these cascading effects before they become obvious, RavenPulse™ uncovers opportunities traditional methods miss, giving you an edge where timing and insight matter most.
               </p>
               <div className="pt-4">
                 <div className="inline-flex items-center gap-2 text-purple-400 font-medium">
-                  <span>Live signal detection</span>
+                  <span>RavenPulse™ active</span>
                   <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
                 </div>
               </div>
