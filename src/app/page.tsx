@@ -1,11 +1,122 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
+import { Mail, Share2, Radar, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+
+// Base text that stays constant
+const BASE_TEXT = "Discover hidden signals";
+
+// Words that rotate after "in"
+const ROTATING_WORDS = [
+  "networks", 
+  "markets", 
+  "structures", 
+  "connections", 
+  "graphs"
+];
+
+/** Typewriter component */
+export function Typewriter({
+  typingSpeed = 22,
+  deletingSpeed = 18,
+  pauseBeforeDelete = 1200,
+  pauseBetweenPhrases = 350,
+  loop = true,
+  deleteMode = "backspace",
+  className = "",
+}: {
+  typingSpeed?: number;
+  deletingSpeed?: number;
+  pauseBeforeDelete?: number;
+  pauseBetweenPhrases?: number;
+  loop?: boolean;
+  deleteMode?: "none" | "backspace" | "erase";
+  className?: string;
+}) {
+  const [text, setText] = useState("");
+  const [i, setI] = useState(0);
+  const [mode, setMode] = useState<"typing" | "pausing" | "deleting" | "done">("typing");
+  const timer = useRef<number | null>(null);
+
+  // Memoize timer functions to prevent unnecessary re-renders
+  const clearTimer = useCallback(() => {
+    if (timer.current) window.clearTimeout(timer.current);
+  }, []);
+
+  const setTypingTimer = useCallback((callback: () => void, delay: number) => {
+    clearTimer();
+    timer.current = window.setTimeout(callback, delay);
+  }, [clearTimer]);
+
+  useEffect(() => {
+    const changingWord = ROTATING_WORDS[i] ?? "";
+    
+    if (mode === "typing") {
+      // If we have a zero-width space, replace it with the first character
+      if (text === "\u200B") {
+        setText(changingWord[0] || "");
+        return;
+      }
+      
+      if (text.length < changingWord.length) {
+        setTypingTimer(() => setText(changingWord.slice(0, text.length + 1)), typingSpeed);
+      } else {
+        if (deleteMode === "none" && !loop && i === ROTATING_WORDS.length - 1) {
+          setMode("done");
+        } else if (deleteMode === "none") {
+          setTypingTimer(() => setMode("pausing"), pauseBeforeDelete);
+        } else {
+          setMode("pausing");
+        }
+      }
+    } else if (mode === "pausing") {
+      setTypingTimer(() => {
+        if (deleteMode === "backspace") setMode("deleting");
+        else if (deleteMode === "erase") { setText(""); setMode("deleting"); }
+        else {
+          const next = i + 1;
+          if (next < ROTATING_WORDS.length) { setI(next); setMode("typing"); }
+          else if (loop) { setI(0); setMode("typing"); }
+          else { setMode("done"); }
+        }
+      }, pauseBeforeDelete);
+    } else if (mode === "deleting") {
+      if (deleteMode === "backspace" && text.length > 0) {
+        setTypingTimer(() => setText((t: string) => t.slice(0, -1)), deletingSpeed);
+      } else {
+        // Changing word has been completely deleted, move to next phrase immediately
+        const next = (i + 1) % ROTATING_WORDS.length;
+        if (!loop && i === ROTATING_WORDS.length - 1) { 
+          setMode("done"); 
+        } else { 
+          setI(next); 
+          setText("\u200B"); // Use zero-width space to maintain cursor position
+          setMode("typing"); // Move to typing mode immediately
+        }
+      }
+    }
+    
+    return clearTimer;
+  }, [text, i, mode, typingSpeed, deletingSpeed, pauseBeforeDelete, pauseBetweenPhrases, loop, deleteMode, setTypingTimer, clearTimer]);
+
+  return (
+    <div className={`flex flex-col items-center ${className}`} aria-label={`${BASE_TEXT} in ${ROTATING_WORDS[i]}`}>
+      <div className="text-center">
+        <span>{BASE_TEXT}</span>
+      </div>
+      <div className="text-center">
+        <span>in{' '}</span>
+        <span className="text-purple-400 font-semibold">{text}</span>
+        <span className="ml-0.5 w-[1px] h-[1.2em] bg-current animate-pulse inline-block" />
+      </div>
+    </div>
+  );
+}
+
 
 // RavenGraph Logo using external SVG
 const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
@@ -57,7 +168,15 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-6xl font-semibold leading-[1.1]"
           >
-            Discover hidden signals within complex networks. 
+            <Typewriter
+              typingSpeed={40}
+              deletingSpeed={18}
+              pauseBeforeDelete={1600}
+              pauseBetweenPhrases={350}
+              loop={true}
+              deleteMode="backspace"
+              className="leading-tight"
+            />
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 6 }}
@@ -79,21 +198,63 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* PRINCIPLES (no product details) */}
+      {/* VALUE PROPOSITION */}
       <section className="py-16 border-t border-white/10">
-        <div className="mx-auto max-w-5xl px-4 grid md:grid-cols-3 gap-6">
-          {[
-            {t:"Clarity in Complexity", s:"Extract predictive power from the structure of complex networks."},
-            {t:"Learning from Links", s:"Leverage graph neural networks to cut through market noise."},
-            {t:"Edge-First Intelligence", s:"Evolve models at the frontier of markets, beyond mainstream consensus."}
-          ].map(({t, s}) => (
-            <Card key={t} className="rounded-3xl border-white/10 bg-zinc-900/60">
-              <CardContent className="p-6">
-                <div className="text-xl font-medium text-zinc-100">{t}</div>
-                <p className="mt-2 text-zinc-300">{s}</p>
+        <div className="mx-auto max-w-5xl px-4">
+          {/* Main description */}
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold text-zinc-100 leading-tight max-w-5xl mx-auto mb-6">
+              RavenGraph maps markets as living graphs, connecting assets, trends, and sentiment in real time.
+            </h2>
+            <p className="text-lg md:text-xl text-zinc-300 leading-relaxed max-w-4xl mx-auto">
+              By modeling markets as networks rather than isolated time series, we surface early signals and structural patterns missed by conventional methods — turning complexity into clarity.
+            </p>
+          </div>
+          
+          {/* Three key points */}
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Share2 className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                  <div className="text-xl font-semibold text-zinc-100 leading-tight">
+                    See the market as a network, not tickers.
+                  </div>
+                </div>
+                <p className="text-zinc-300 leading-relaxed text-base">
+                  Stocks, commodities, and indicators become interconnected nodes linked by influence, correlation, and lead–lag effects.
+                </p>
               </CardContent>
             </Card>
-          ))}
+            
+            <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Radar className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                  <div className="text-xl font-semibold text-zinc-100 leading-tight">
+                    Unlock hidden signals from structure.
+                  </div>
+                </div>
+                <p className="text-zinc-300 leading-relaxed text-base">
+                  We turn the invisible fabric of global markets into actionable insights — embeddings that forecast risk regimes, directional moves, and anomalies.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Rocket className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                  <div className="text-xl font-semibold text-zinc-100 leading-tight">
+                    Built for the frontier, not for consensus.
+                  </div>
+                </div>
+                <p className="text-zinc-300 leading-relaxed text-base">
+                Our edge is uniting graph learning, real-time infrastructure, and production ML into a single stack.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
