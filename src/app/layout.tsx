@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   title: "RavenGraph",
   description: "Where signals hide in structure.",
   icons: {
-    icon: "/noun-raven-6274501.png",
-    shortcut: "/noun-raven-6274501.png",
-    apple: "/noun-raven-6274501.png",
+    icon: "/noun-raven-1040402.png",
+    shortcut: "/noun-raven-1040402.png",
+    apple: "/noun-raven-1040402.png",
   },
 };
 
