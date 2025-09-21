@@ -1,3 +1,5 @@
+![Logo](assets/logo_rectangle.png)
+
 # RavenGraph
 
 A Next.js application for network and market analysis.

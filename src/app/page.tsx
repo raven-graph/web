@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Mail, Share2, Radar, Rocket, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -123,9 +124,11 @@ export function Typewriter({
 
 // RavenGraph Logo using external SVG
 const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
-  <img 
+  <Image 
     src="/icon-white-transparent.svg" 
-    alt="RavenGraph" 
+    alt="RavenGraph"
+    width={32}
+    height={32}
     className={className}
     style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)' }}
   />

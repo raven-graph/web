@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,11 +12,7 @@ import {
   TrendingDown, 
   Minus,
   Activity, 
-  BarChart3, 
   Network, 
-  AlertTriangle,
-  Eye,
-  Brain,
   Zap,
   Target,
   LogOut,
@@ -26,15 +23,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
-// RavenGraph Logo using external SVG
-const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
-  <img 
-    src="/icon-white-transparent.svg" 
-    alt="RavenGraph" 
-    className={className}
-    style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)' }}
-  />
-);
 
 // Signal Card Component
 const SignalCard: React.FC<{ 
@@ -502,11 +490,13 @@ const Sidebar: React.FC<{ isOpen: boolean; onToggle: () => void }> = ({ isOpen, 
           {/* Header with Close Button */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
-              <img 
-                src="/icon-white-transparent.svg" 
-                alt="RavenGraph Logo" 
-                className="w-8 h-8"
-              />
+            <Image 
+              src="/icon-white-transparent.svg" 
+              alt="RavenGraph Logo" 
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
               <span className="text-xl font-semibold text-zinc-100">RavenGraph</span>
             </div>
             <button
@@ -785,12 +775,12 @@ export default function Dashboard() {
                     </Button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {signals.map((signal, index) => (
+                    {signals.map((signal) => (
                       <motion.div
                         key={signal.ticker}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
+                        transition={{ duration: 0.4, delay: 0.7 }}
                       >
                         <SignalCard {...signal} />
                       </motion.div>
@@ -865,7 +855,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    {watchlist.map((ticker, index) => (
+                    {watchlist.map((ticker) => (
                       <div key={ticker} className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
                         <div>
                           <p className="font-semibold text-zinc-100">{ticker}</p>
@@ -892,7 +882,7 @@ export default function Dashboard() {
                 <CardContent className="pt-1 px-6 pb-6">
                   <h3 className="text-lg font-semibold text-zinc-100 mb-4">Sector Outlook</h3>
                   <div className="space-y-3">
-                    {sectorOutlook.map((sector, index) => (
+                    {sectorOutlook.map((sector) => (
                       <div key={sector.name} className="flex items-center justify-between">
                         <span className="text-sm text-zinc-300">{sector.name}</span>
                         <div className="flex items-center gap-2">
@@ -1029,17 +1019,19 @@ export default function Dashboard() {
           
           {/* Trademark Footer */}
           <div className="flex items-center justify-center gap-3 pt-4 border-t border-zinc-800/50">
-            <img 
+            <Image 
               src="/logo-no-background 2.svg" 
               alt="RavenGraph Logo" 
+              width={64}
+              height={64}
               className="w-16 h-16 opacity-80"
             />
             <div className="text-center">
               <p className="text-xs text-zinc-600">
-                © 2025 RavenGraph. All rights reserved.
+                &copy; 2025 RavenGraph. All rights reserved.
               </p>
               <p className="text-xs text-zinc-600">
-                RavenGraph™ and RavenPulse™ are trademarks of RavenGraph Inc.
+                RavenGraph&trade; and RavenPulse&trade; are trademarks of RavenGraph Inc.
               </p>
             </div>
           </div>
