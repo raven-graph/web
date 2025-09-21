@@ -25,7 +25,7 @@ export function LoginForm() {
     setTimeout(() => {
       const success = login(email, password);
       if (!success) {
-        setError('Invalid credentials. Use demo@ravengraph.com / demo');
+        setError('Invalid credentials');
       }
       setIsLoading(false);
     }, 800);
