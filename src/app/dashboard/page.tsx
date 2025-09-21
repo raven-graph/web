@@ -563,7 +563,7 @@ export default function Dashboard() {
 
   const signals = [
     { ticker: 'AAPL', signalType: 'bullish' as const, probability: 78, price: 175.43, change: 2.3, reason: 'Momentum clustering detected in tech sector', riskScore: 4 },
-    { ticker: 'TSLA', signalType: 'bearish' as const, probability: 72, price: 248.12, change: -1.8, reason: 'Volatility regime shift identified' },
+    { ticker: 'TSLA', signalType: 'bearish' as const, probability: 72, price: 248.12, change: -1.8, reason: 'Volatility regime shift identified', riskScore: 8 },
     { ticker: 'NVDA', signalType: 'bullish' as const, probability: 85, price: 421.67, change: 4.2, reason: 'Cross-sector correlation strength increasing', riskScore: 3 },
     { ticker: 'MSFT', signalType: 'neutral' as const, probability: 52, price: 378.91, change: 0.4, reason: 'Mixed embedding signals detected', riskScore: 6 },
     { ticker: 'GOOGL', signalType: 'bullish' as const, probability: 69, price: 142.33, change: 1.9, reason: 'Lead-lag relationship with search sentiment', riskScore: 5 }
