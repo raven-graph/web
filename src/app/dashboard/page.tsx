@@ -644,7 +644,7 @@ export default function Dashboard() {
             Welcome back, Ralph
           </h1>
           <p className="text-zinc-400">
-            Market intelligence powered by RavenGraph's network analysis
+            Market intelligence powered by RavenGraph&apos;s network analysis
           </p>
         </motion.div>
 
@@ -818,7 +818,7 @@ export default function Dashboard() {
                     <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20">
                       <p className="text-sm text-purple-400 font-medium mb-2">Embedding Space Shift</p>
                       <p className="text-xs text-zinc-300 leading-relaxed">
-                        Healthcare sector clustering pattern changed. Stocks moving from "defensive" to "growth" embedding space.
+                        Healthcare sector clustering pattern changed. Stocks moving from &quot;defensive&quot; to &quot;growth&quot; embedding space.
                       </p>
                     </div>
                   </div>
