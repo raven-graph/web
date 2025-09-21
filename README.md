@@ -1,4 +1,4 @@
-![Logo](assets/logo_rectangle.png)
+![Logo](public/logo_rectangle.png)
 
 # RavenGraph
 
