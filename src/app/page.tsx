@@ -2,10 +2,13 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Mail, Share2, Radar, Rocket } from "lucide-react";
+import { Mail, Share2, Radar, Rocket, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoginForm } from "@/components/LoginForm";
+import { useRouter } from "next/navigation";
 
 // Base text that stays constant
 const BASE_TEXT = "Discover hidden signals";
@@ -138,6 +141,21 @@ const GradientOrb: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 export default function LandingPage() {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [showLogin, setShowLogin] = useState(false);
+
+  // Redirect to dashboard if authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, router]);
+
+  if (isAuthenticated) {
+    return null; // Will redirect to dashboard
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-950 to-zinc-900 text-zinc-100">
       {/* Background ornaments */}
@@ -152,8 +170,18 @@ export default function LandingPage() {
             <span className="font-semibold tracking-wide text-lg">RavenGraph</span>
           </div>
           <div className="flex items-center gap-2">
+            <Button 
+              onClick={() => setShowLogin(true)}
+              className="rounded-2xl h-10"
+              style={{ backgroundColor: "#B066FF", borderColor: "#B066FF" }}
+            >
+              <LogIn className="w-4 h-4 mr-2" />
+              Sign In
+            </Button>
             <a href="#waitlist">
-              <Button className="rounded-2xl">Join the waitlist</Button>
+              <Button variant="outline" className="rounded-2xl border-white/20 hover:bg-zinc-800/50 bg-transparent h-10">
+                Join the waitlist
+              </Button>
             </a>
           </div>
         </div>
@@ -474,6 +502,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Login Modal */}
+      {showLogin && <LoginForm />}
     </div>
   );
 }
