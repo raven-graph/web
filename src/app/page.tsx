@@ -110,7 +110,7 @@ export function Typewriter({
       </div>
       <div className="text-center">
         <span>in{' '}</span>
-        <span className="text-purple-400 font-semibold">{text}</span>
+        <span className="font-semibold" style={{ color: "#B066FF" }}>{text}</span>
         <span className="ml-0.5 w-[1px] h-[1.2em] bg-current animate-pulse inline-block" />
       </div>
     </div>
@@ -121,7 +121,7 @@ export function Typewriter({
 // RavenGraph Logo using external SVG
 const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
   <img 
-    src="/noun-raven-1040402.svg" 
+    src="/icon-white-transparent.svg" 
     alt="RavenGraph" 
     className={className}
     style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)' }}
@@ -132,7 +132,7 @@ const GradientOrb: React.FC<{ className?: string }> = ({ className }) => (
   <div className={`absolute blur-3xl opacity-25 ${className}`}>
     <div
       className="size-72 md:size-[28rem] rounded-full"
-      style={{ background: "radial-gradient(closest-side, #a855f7 0%, rgba(168,85,247,0.08) 60%, transparent 70%)" }}
+      style={{ background: "radial-gradient(closest-side, #B066FF 0%, rgba(176,102,255,0.08) 60%, transparent 70%)" }}
     />
   </div>
 );
@@ -216,7 +216,7 @@ export default function LandingPage() {
             <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <Share2 className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                  <Share2 className="w-6 h-6 flex-shrink-0" style={{ color: "#B066FF" }} />
                   <div className="text-xl font-semibold text-zinc-100 leading-tight">
                     See the market as a network, not tickers.
                   </div>
@@ -230,7 +230,7 @@ export default function LandingPage() {
             <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <Radar className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                  <Radar className="w-6 h-6 flex-shrink-0" style={{ color: "#B066FF" }} />
                   <div className="text-xl font-semibold text-zinc-100 leading-tight">
                     Unlock hidden signals from structure.
                   </div>
@@ -244,7 +244,7 @@ export default function LandingPage() {
             <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <Rocket className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                  <Rocket className="w-6 h-6 flex-shrink-0" style={{ color: "#B066FF" }} />
                   <div className="text-xl font-semibold text-zinc-100 leading-tight">
                     Built for the frontier, not for consensus.
                   </div>
@@ -271,8 +271,8 @@ export default function LandingPage() {
                       <feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
                     <linearGradient id="pulseStrokeX" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#a855f7" stopOpacity="1"/>
-                      <stop offset="100%" stopColor="#a855f7" stopOpacity="0.15"/>
+                      <stop offset="0%" stopColor="#B066FF" stopOpacity="1"/>
+                      <stop offset="100%" stopColor="#B066FF" stopOpacity="0.15"/>
                     </linearGradient>
                   </defs>
 
@@ -350,8 +350,8 @@ export default function LandingPage() {
                   {/* --- Nodes --- */}
                   {/* Top (source) node: glows first */}
                   <g>
-                    <circle cx="50" cy="10" r="3.2" fill="#a855f7" filter="url(#glowX)"/>
-                    <circle cx="50" cy="10" r="6" fill="none" stroke="#a855f7" strokeOpacity="0.35">
+                    <circle cx="50" cy="10" r="3.2" fill="#B066FF" filter="url(#glowX)"/>
+                    <circle cx="50" cy="10" r="6" fill="none" stroke="#B066FF" strokeOpacity="0.35">
                       <animate attributeName="r" values="6;9;6" dur="2s" repeatCount="indefinite"/>
                       <animate attributeName="stroke-opacity" values="0.35;0.08;0.35" dur="2s" repeatCount="indefinite"/>
                     </circle>
@@ -361,9 +361,9 @@ export default function LandingPage() {
                   {/* upper-left - pulse arrives at 1.2s, then repeats every 1.2s */}
                   <g>
                     <circle cx="20" cy="25" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#a855f7;#52525b" dur="0.5s" begin="1.2s;2.4s;3.6s;4.8s;6.0s;7.2s;8.4s;9.6s;10.8s;12.0s;13.2s;14.4s;15.6s;16.8s;18.0s;19.2s;20.4s;21.6s;22.8s;24.0s;25.2s;26.4s;27.6s;28.8s;30.0s;31.2s;32.4s;33.6s;34.8s;36.0s;37.2s;38.4s;39.6s;40.8s;42.0s;43.2s;44.4s;45.6s;46.8s;48.0s;49.2s;50.4s;51.6s;52.8s;54.0s;55.2s;56.4s;57.6s;58.8s;60.0s" />
+                      <animate attributeName="fill" values="#52525b;#B066FF;#52525b" dur="0.5s" begin="1.2s;2.4s;3.6s;4.8s;6.0s;7.2s;8.4s;9.6s;10.8s;12.0s;13.2s;14.4s;15.6s;16.8s;18.0s;19.2s;20.4s;21.6s;22.8s;24.0s;25.2s;26.4s;27.6s;28.8s;30.0s;31.2s;32.4s;33.6s;34.8s;36.0s;37.2s;38.4s;39.6s;40.8s;42.0s;43.2s;44.4s;45.6s;46.8s;48.0s;49.2s;50.4s;51.6s;52.8s;54.0s;55.2s;56.4s;57.6s;58.8s;60.0s" />
                     </circle>
-                    <circle cx="20" cy="25" r="2.6" fill="none" stroke="#a855f7" strokeOpacity="0">
+                    <circle cx="20" cy="25" r="2.6" fill="none" stroke="#B066FF" strokeOpacity="0">
                       <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="1.2s;2.4s;3.6s;4.8s;6.0s;7.2s;8.4s;9.6s;10.8s;12.0s;13.2s;14.4s;15.6s;16.8s;18.0s;19.2s;20.4s;21.6s;22.8s;24.0s;25.2s;26.4s;27.6s;28.8s;30.0s;31.2s;32.4s;33.6s;34.8s;36.0s;37.2s;38.4s;39.6s;40.8s;42.0s;43.2s;44.4s;45.6s;46.8s;48.0s;49.2s;50.4s;51.6s;52.8s;54.0s;55.2s;56.4s;57.6s;58.8s;60.0s"/>
                       <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="1.2s;2.4s;3.6s;4.8s;6.0s;7.2s;8.4s;9.6s;10.8s;12.0s;13.2s;14.4s;15.6s;16.8s;18.0s;19.2s;20.4s;21.6s;22.8s;24.0s;25.2s;26.4s;27.6s;28.8s;30.0s;31.2s;32.4s;33.6s;34.8s;36.0s;37.2s;38.4s;39.6s;40.8s;42.0s;43.2s;44.4s;45.6s;46.8s;48.0s;49.2s;50.4s;51.6s;52.8s;54.0s;55.2s;56.4s;57.6s;58.8s;60.0s"/>
                     </circle>
@@ -372,9 +372,9 @@ export default function LandingPage() {
                   {/* upper-right - pulse arrives at 1.5s, then repeats every 1.5s */}
                   <g>
                     <circle cx="80" cy="25" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#a855f7;#52525b" dur="0.5s" begin="1.5s;3.0s;4.5s;6.0s;7.5s;9.0s;10.5s;12.0s;13.5s;15.0s;16.5s;18.0s;19.5s;21.0s;22.5s;24.0s;25.5s;27.0s;28.5s;30.0s;31.5s;33.0s;34.5s;36.0s;37.5s;39.0s;40.5s;42.0s;43.5s;45.0s;46.5s;48.0s;49.5s;51.0s;52.5s;54.0s;55.5s;57.0s;58.5s;60.0s" />
+                      <animate attributeName="fill" values="#52525b;#B066FF;#52525b" dur="0.5s" begin="1.5s;3.0s;4.5s;6.0s;7.5s;9.0s;10.5s;12.0s;13.5s;15.0s;16.5s;18.0s;19.5s;21.0s;22.5s;24.0s;25.5s;27.0s;28.5s;30.0s;31.5s;33.0s;34.5s;36.0s;37.5s;39.0s;40.5s;42.0s;43.5s;45.0s;46.5s;48.0s;49.5s;51.0s;52.5s;54.0s;55.5s;57.0s;58.5s;60.0s" />
                     </circle>
-                    <circle cx="80" cy="25" r="2.6" fill="none" stroke="#a855f7" strokeOpacity="0">
+                    <circle cx="80" cy="25" r="2.6" fill="none" stroke="#B066FF" strokeOpacity="0">
                       <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="1.5s;3.0s;4.5s;6.0s;7.5s;9.0s;10.5s;12.0s;13.5s;15.0s;16.5s;18.0s;19.5s;21.0s;22.5s;24.0s;25.5s;27.0s;28.5s;30.0s;31.5s;33.0s;34.5s;36.0s;37.5s;39.0s;40.5s;42.0s;43.5s;45.0s;46.5s;48.0s;49.5s;51.0s;52.5s;54.0s;55.5s;57.0s;58.5s;60.0s"/>
                       <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="1.5s;3.0s;4.5s;6.0s;7.5s;9.0s;10.5s;12.0s;13.5s;15.0s;16.5s;18.0s;19.5s;21.0s;22.5s;24.0s;25.5s;27.0s;28.5s;30.0s;31.5s;33.0s;34.5s;36.0s;37.5s;39.0s;40.5s;42.0s;43.5s;45.0s;46.5s;48.0s;49.5s;51.0s;52.5s;54.0s;55.5s;57.0s;58.5s;60.0s"/>
                     </circle>
@@ -383,9 +383,9 @@ export default function LandingPage() {
                   {/* left-mid - pulse arrives at 1.8s, then repeats every 1.8s */}
                   <g>
                     <circle cx="10" cy="50" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#a855f7;#52525b" dur="0.5s" begin="1.8s;3.6s;5.4s;7.2s;9.0s;10.8s;12.6s;14.4s;16.2s;18.0s;19.8s;21.6s;23.4s;25.2s;27.0s;28.8s;30.6s;32.4s;34.2s;36.0s;37.8s;39.6s;41.4s;43.2s;45.0s;46.8s;48.6s;50.4s;52.2s;54.0s;55.8s;57.6s;59.4s" />
+                      <animate attributeName="fill" values="#52525b;#B066FF;#52525b" dur="0.5s" begin="1.8s;3.6s;5.4s;7.2s;9.0s;10.8s;12.6s;14.4s;16.2s;18.0s;19.8s;21.6s;23.4s;25.2s;27.0s;28.8s;30.6s;32.4s;34.2s;36.0s;37.8s;39.6s;41.4s;43.2s;45.0s;46.8s;48.6s;50.4s;52.2s;54.0s;55.8s;57.6s;59.4s" />
                     </circle>
-                    <circle cx="10" cy="50" r="2.6" fill="none" stroke="#a855f7" strokeOpacity="0">
+                    <circle cx="10" cy="50" r="2.6" fill="none" stroke="#B066FF" strokeOpacity="0">
                       <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="1.8s;3.6s;5.4s;7.2s;9.0s;10.8s;12.6s;14.4s;16.2s;18.0s;19.8s;21.6s;23.4s;25.2s;27.0s;28.8s;30.6s;32.4s;34.2s;36.0s;37.8s;39.6s;41.4s;43.2s;45.0s;46.8s;48.6s;50.4s;52.2s;54.0s;55.8s;57.6s;59.4s"/>
                       <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="1.8s;3.6s;5.4s;7.2s;9.0s;10.8s;12.6s;14.4s;16.2s;18.0s;19.8s;21.6s;23.4s;25.2s;27.0s;28.8s;30.6s;32.4s;34.2s;36.0s;37.8s;39.6s;41.4s;43.2s;45.0s;46.8s;48.6s;50.4s;52.2s;54.0s;55.8s;57.6s;59.4s"/>
                     </circle>
@@ -394,9 +394,9 @@ export default function LandingPage() {
                   {/* right-mid - pulse arrives at 2.1s, then repeats every 2.1s */}
                   <g>
                     <circle cx="90" cy="50" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#a855f7;#52525b" dur="0.5s" begin="2.1s;4.2s;6.3s;8.4s;10.5s;12.6s;14.7s;16.8s;18.9s;21.0s;23.1s;25.2s;27.3s;29.4s;31.5s;33.6s;35.7s;37.8s;39.9s;42.0s;44.1s;46.2s;48.3s;50.4s;52.5s;54.6s;56.7s;58.8s" />
+                      <animate attributeName="fill" values="#52525b;#B066FF;#52525b" dur="0.5s" begin="2.1s;4.2s;6.3s;8.4s;10.5s;12.6s;14.7s;16.8s;18.9s;21.0s;23.1s;25.2s;27.3s;29.4s;31.5s;33.6s;35.7s;37.8s;39.9s;42.0s;44.1s;46.2s;48.3s;50.4s;52.5s;54.6s;56.7s;58.8s" />
                     </circle>
-                    <circle cx="90" cy="50" r="2.6" fill="none" stroke="#a855f7" strokeOpacity="0">
+                    <circle cx="90" cy="50" r="2.6" fill="none" stroke="#B066FF" strokeOpacity="0">
                       <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="2.1s;4.2s;6.3s;8.4s;10.5s;12.6s;14.7s;16.8s;18.9s;21.0s;23.1s;25.2s;27.3s;29.4s;31.5s;33.6s;35.7s;37.8s;39.9s;42.0s;44.1s;46.2s;48.3s;50.4s;52.5s;54.6s;56.7s;58.8s"/>
                       <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="2.1s;4.2s;6.3s;8.4s;10.5s;6.3s;8.4s;10.5s;12.6s;14.7s;16.8s;18.9s;21.0s;23.1s;25.2s;27.3s;29.4s;31.5s;33.6s;35.7s;37.8s;39.9s;42.0s;44.1s;46.2s;48.3s;50.4s;52.5s;54.6s;56.7s;58.8s"/>
                     </circle>
@@ -447,9 +447,9 @@ export default function LandingPage() {
                 RavenPulse™ is our proprietary real-time signal propagation technology that turns market noise into foresight. The moment a signal emerges — from earnings, macro data, or sentiment — RavenPulse™ tracks how it ripples across the entire market network. By capturing these cascading effects before they become obvious, RavenPulse™ uncovers opportunities traditional methods miss, giving you an edge where timing and insight matter most.
               </p>
               <div className="pt-4">
-                <div className="inline-flex items-center gap-2 text-purple-400 font-medium">
+                <div className="inline-flex items-center gap-2 font-medium" style={{ color: "#B066FF" }}>
                   <span>RavenPulse™ active</span>
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#B066FF" }} />
                 </div>
               </div>
             </div>
