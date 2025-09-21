@@ -433,12 +433,6 @@ const MarketNetwork: React.FC = () => {
         </motion.div>
       )}
       
-      <div className="absolute bottom-4 left-4">
-        <div className="flex items-center gap-2 text-xs text-zinc-400">
-          <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#B066FF" }} />
-          Live Market Network
-        </div>
-      </div>
 
       {/* Legend */}
       <div className="absolute bottom-4 right-4">
