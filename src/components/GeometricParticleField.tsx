@@ -202,13 +202,13 @@ export function GeometricParticleField({ className = "" }: { className?: string 
                   : {
                       default: {
                         duration: NODE_MOVE_DURATION,
-                        ease: "easeInOut",
+                        ease: "easeInOut" as const,
                       },
                       strokeOpacity: {
                         repeat: Infinity,
-                        repeatType: "mirror",
+                        repeatType: "mirror" as const,
                         duration: edge.duration,
-                        ease: "easeInOut",
+                        ease: "easeInOut" as const,
                       },
                     }
               }
@@ -222,7 +222,7 @@ export function GeometricParticleField({ className = "" }: { className?: string 
           const fill = `hsla(${node.hue}, 90%, 58%, 0.28)`;
           const moveTransition = shouldReduceMotion
             ? undefined
-            : { duration: NODE_MOVE_DURATION, ease: "easeInOut" };
+            : { duration: NODE_MOVE_DURATION, ease: "easeInOut" as const };
 
           return (
             <React.Fragment key={node.id}>
@@ -257,14 +257,14 @@ export function GeometricParticleField({ className = "" }: { className?: string 
                         r: {
                           duration: Math.max(4, node.pulse + node.pulseOffset),
                           repeat: Infinity,
-                          repeatType: "mirror",
-                          ease: "easeInOut",
+                          repeatType: "mirror" as const,
+                          ease: "easeInOut" as const,
                         },
                         opacity: {
                           duration: Math.max(4, node.pulse + node.pulseOffset),
                           repeat: Infinity,
-                          repeatType: "mirror",
-                          ease: "easeInOut",
+                          repeatType: "mirror" as const,
+                          ease: "easeInOut" as const,
                         },
                       }
                 }
@@ -302,15 +302,15 @@ export function GeometricParticleField({ className = "" }: { className?: string 
                         cy: moveTransition,
                         r: {
                           duration: node.shimmerDuration,
-                          ease: "easeInOut",
+                          ease: "easeInOut" as const,
                           repeat: Infinity,
-                          repeatType: "mirror",
+                          repeatType: "mirror" as const,
                         },
                         opacity: {
                           duration: node.shimmerDuration,
-                          ease: "easeInOut",
+                          ease: "easeInOut" as const,
                           repeat: Infinity,
-                          repeatType: "mirror",
+                          repeatType: "mirror" as const,
                         },
                       }
                 }
@@ -343,9 +343,9 @@ export function GeometricParticleField({ className = "" }: { className?: string 
                         cy: moveTransition,
                         opacity: {
                           duration: node.glowDuration,
-                          ease: "easeInOut",
+                          ease: "easeInOut" as const,
                           repeat: Infinity,
-                          repeatType: "mirror",
+                          repeatType: "mirror" as const,
                         },
                       }
                 }
