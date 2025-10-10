@@ -1,128 +1,18 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Mail, Share2, Radar, Rocket, LogIn } from "lucide-react";
+import { Share2, Radar, Rocket, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoginForm } from "@/components/LoginForm";
 import { useRouter } from "next/navigation";
+import { GeometricParticleField } from "@/components/GeometricParticleField";
+import { FeatureGraphPreview } from "@/components/features/FeatureGraphPreview";
+import { FeatureTimeseriesPreview } from "@/components/features/FeatureTimeseriesPreview";
+import { FeatureApiPreview } from "@/components/features/FeatureApiPreview";
 
-// Base text that stays constant
-const BASE_TEXT = "Discover hidden signals";
-
-// Words that rotate after "in"
-const ROTATING_WORDS = [
-  "networks", 
-  "markets", 
-  "structures", 
-  "connections", 
-  "graphs"
-];
-
-/** Typewriter component */
-export function Typewriter({
-  typingSpeed = 22,
-  deletingSpeed = 18,
-  pauseBeforeDelete = 1200,
-  pauseBetweenPhrases = 350,
-  loop = true,
-  deleteMode = "backspace",
-  className = "",
-}: {
-  typingSpeed?: number;
-  deletingSpeed?: number;
-  pauseBeforeDelete?: number;
-  pauseBetweenPhrases?: number;
-  loop?: boolean;
-  deleteMode?: "none" | "backspace" | "erase";
-  className?: string;
-}) {
-  const [text, setText] = useState("");
-  const [i, setI] = useState(0);
-  const [mode, setMode] = useState<"typing" | "pausing" | "deleting" | "done">("typing");
-  const timer = useRef<number | null>(null);
-
-  // Memoize timer functions to prevent unnecessary re-renders
-  const clearTimer = useCallback(() => {
-    if (timer.current) window.clearTimeout(timer.current);
-  }, []);
-
-  const setTypingTimer = useCallback((callback: () => void, delay: number) => {
-    clearTimer();
-    timer.current = window.setTimeout(callback, delay);
-  }, [clearTimer]);
-
-  useEffect(() => {
-    const changingWord = ROTATING_WORDS[i] ?? "";
-    
-    if (mode === "typing") {
-      // If we have a zero-width space, replace it with the first character
-      if (text === "\u200B") {
-        setText(changingWord[0] || "");
-        return;
-      }
-      
-      if (text.length < changingWord.length) {
-        setTypingTimer(() => setText(changingWord.slice(0, text.length + 1)), typingSpeed);
-      } else {
-        if (deleteMode === "none" && !loop && i === ROTATING_WORDS.length - 1) {
-          setMode("done");
-        } else if (deleteMode === "none") {
-          setTypingTimer(() => setMode("pausing"), pauseBeforeDelete);
-        } else {
-          setMode("pausing");
-        }
-      }
-    } else if (mode === "pausing") {
-      setTypingTimer(() => {
-        if (deleteMode === "backspace") setMode("deleting");
-        else if (deleteMode === "erase") { setText(""); setMode("deleting"); }
-        else {
-          const next = i + 1;
-          if (next < ROTATING_WORDS.length) { setI(next); setMode("typing"); }
-          else if (loop) { setI(0); setMode("typing"); }
-          else { setMode("done"); }
-        }
-      }, pauseBeforeDelete);
-    } else if (mode === "deleting") {
-      if (deleteMode === "backspace" && text.length > 0) {
-        setTypingTimer(() => setText((t: string) => t.slice(0, -1)), deletingSpeed);
-      } else {
-        // Changing word has been completely deleted, move to next phrase immediately
-        const next = (i + 1) % ROTATING_WORDS.length;
-        if (!loop && i === ROTATING_WORDS.length - 1) { 
-          setMode("done"); 
-        } else { 
-          setI(next); 
-          setText("\u200B"); // Use zero-width space to maintain cursor position
-          setMode("typing"); // Move to typing mode immediately
-        }
-      }
-    }
-    
-    return clearTimer;
-  }, [text, i, mode, typingSpeed, deletingSpeed, pauseBeforeDelete, pauseBetweenPhrases, loop, deleteMode, setTypingTimer, clearTimer]);
-
-  return (
-    <div className={`flex flex-col items-center ${className}`} aria-label={`${BASE_TEXT} in ${ROTATING_WORDS[i]}`}>
-      <div className="text-center">
-        <span>{BASE_TEXT}</span>
-      </div>
-      <div className="text-center">
-        <span>in{' '}</span>
-        <span className="font-semibold" style={{ color: "#B066FF" }}>{text}</span>
-        <span className="ml-0.5 w-[1px] h-[1.2em] bg-current animate-pulse inline-block" />
-      </div>
-    </div>
-  );
-}
-
-
-// RavenGraph Logo using external SVG
 const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
   <Image 
     src="/icon-white-transparent.svg" 
@@ -130,7 +20,7 @@ const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
     width={32}
     height={32}
     className={className}
-    style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)' }}
+    style={{ filter: "brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)" }}
   />
 );
 
@@ -172,6 +62,12 @@ export default function LandingPage() {
             <RavenLogo className="w-8 h-8" />
             <span className="font-semibold tracking-wide text-lg">RavenGraph</span>
           </div>
+          <nav className="hidden items-center gap-6 text-sm text-zinc-300 md:flex">
+            <a href="#problem" className="transition-colors hover:text-white/90">Problem</a>
+            <a href="#solution" className="transition-colors hover:text-white/90">Solution</a>
+            <a href="#business" className="transition-colors hover:text-white/90">Business</a>
+            <a href="#access" className="transition-colors hover:text-white/90">Access</a>
+          </nav>
           <div className="flex items-center gap-2">
             <Button 
               onClick={() => setShowLogin(true)}
@@ -181,8 +77,8 @@ export default function LandingPage() {
               <LogIn className="w-4 h-4 mr-2" />
               Sign In
             </Button>
-            <a href="#waitlist">
-              <Button variant="outline" className="rounded-2xl border-white/20 hover:bg-zinc-800/50 bg-transparent h-10">
+            <a href="#access">
+              <Button variant="outline" className="rounded-2xl border-white/20 hover:bg-zinc-800/50 bg-transparent h-10 text-zinc-200">
                 Join the waitlist
               </Button>
             </a>
@@ -192,316 +88,270 @@ export default function LandingPage() {
 
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-4xl px-4 py-28 text-center">
+        <GeometricParticleField className="z-0" />
+        <div className="relative z-10 mx-auto max-w-4xl px-4 py-32 md:py-40 text-center space-y-6">
           <motion.h1
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-6xl font-semibold leading-[1.1]"
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="text-[2.75rem] md:text-[3.75rem] font-semibold tracking-tight leading-[1.05]"
           >
-            <Typewriter
-              typingSpeed={40}
-              deletingSpeed={18}
-              pauseBeforeDelete={1600}
-              pauseBetweenPhrases={350}
-              loop={true}
-              deleteMode="backspace"
-              className="leading-tight"
-            />
+            Reveal the invisible fabric of global markets.
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05 }}
-            className="mt-5 text-lg text-zinc-300"
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.05 }}
+            className="text-lg md:text-xl text-zinc-300/90 max-w-3xl mx-auto"
           >
-            An invitation-only project at the frontier of networks and markets — for those who seek patterns before they emerge.
+            RavenGraph maps how information flows between stocks, sectors, and macro signals, turning market complexity into real-time, usable intelligence.
           </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3"
+          >
+            <Button
+              className="rounded-full px-6 py-3 text-sm font-semibold"
+              style={{ backgroundColor: "#B066FF", borderColor: "#B066FF" }}
+              onClick={() => setShowLogin(true)}
+            >
+              Request early access
+            </Button>
+            <div className="text-sm font-semibold text-zinc-300 transition-colors hover:text-white/90">
+              <a href="#problem">Why RavenGraph?</a>
+            </div>
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
+            className="text-xs uppercase tracking-[0.3em] text-zinc-500"
+          >
+            Now piloting with select funds; limited early-access seats.
+          </motion.p>
+        </div>
+      </section>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center" id="waitlist">
-            <form onSubmit={(e) => { e.preventDefault(); alert("Thanks. We'll be in touch."); }} className="grid sm:grid-cols-[1fr_auto] gap-3 w-full max-w-xl">
-              <Input required type="email" placeholder="you@firm.com" className="h-12 rounded-xl border-white/20 bg-zinc-900/70" />
-              <Button type="submit" className="h-12 rounded-xl"><Mail className="mr-2 w-4 h-4" /> Join the waitlist</Button>
-            </form>
+      <section id="problem" className="py-20 border-t border-white/10">
+        <div className="mx-auto max-w-4xl px-4 text-center space-y-6">
+          <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1 text-xs font-semibold tracking-[0.28em] uppercase text-zinc-300">
+            Problem
+          </span>
+          <h2 className="text-3xl md:text-4xl font-semibold text-zinc-100 leading-tight">
+            Markets aren’t time series. They’re living networks.
+          </h2>
+          <p className="text-lg text-zinc-300/90">
+            Most stacks still treat each asset as an isolated stream. They miss how sectors ripple, how macro shocks cascade, and how sentiment shifts risk appetite—in real time.
+          </p>
+          <div className="grid gap-4 text-left text-sm text-zinc-300/90 md:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
+              <span className="font-semibold text-zinc-100">Structural blind spots</span>
+              <p className="mt-2 text-zinc-400">Models overlook cross-asset dependencies and how influence travels across the market graph.</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
+              <span className="font-semibold text-zinc-100">Causality flattened</span>
+              <p className="mt-2 text-zinc-400">Lagging features blur lead–lag dynamics into noise.</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
+              <span className="font-semibold text-zinc-100">Static pipelines</span>
+              <p className="mt-2 text-zinc-400">Streaming multi-source data overwhelms batch-era infrastructure.</p>
+            </div>
           </div>
-
-          <p className="mt-4 text-xs text-zinc-500">Private beta — limited spots, invitations released in waves.</p>
         </div>
       </section>
 
       {/* VALUE PROPOSITION */}
-      <section className="py-16 border-t border-white/10">
-        <div className="mx-auto max-w-5xl px-4">
-          {/* Main description */}
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-semibold text-zinc-100 leading-tight max-w-5xl mx-auto mb-6">
-              RavenGraph maps markets as living graphs, connecting assets, trends, and sentiment in real time.
+      <section id="solution" className="relative overflow-hidden py-24 border-t border-white/10">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(176,102,255,0.08),transparent_70%)]" />
+        <div className="mx-auto max-w-6xl px-4">
+          <div id="overview" className="text-center mb-16 space-y-4">
+            <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1 text-xs font-semibold tracking-[0.28em] uppercase text-zinc-300">
+              Solution
+            </span>
+            <h2 className="text-3xl md:text-4xl font-semibold text-zinc-100 leading-tight max-w-4xl mx-auto">
+              Turn market structure into real-time, actionable intelligence.
             </h2>
-            <p className="text-lg md:text-xl text-zinc-300 leading-relaxed max-w-4xl mx-auto">
-              By modeling markets as networks rather than isolated time series, we surface early signals and structural patterns missed by conventional methods — turning complexity into clarity.
+            <p className="text-lg text-zinc-300 leading-relaxed max-w-3xl mx-auto">
+              A living graph of assets, macro, and sentiment feeds your desk with structural signals—surfacing shifts before they appear in returns. Graph ML frameworks and cloud GPUs have made real-time market graphs practical—the edge is moving from latency to understanding.
             </p>
           </div>
-          
-          {/* Three key points */}
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Share2 className="w-6 h-6 flex-shrink-0" style={{ color: "#B066FF" }} />
-                  <div className="text-xl font-semibold text-zinc-100 leading-tight">
-                    See the market as a network, not tickers.
-                  </div>
+
+          <div className="space-y-16">
+            <motion.div
+              className="grid gap-10 lg:grid-cols-2 lg:items-center"
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-400">
+                  <Share2 className="h-4 w-4" style={{ color: "#B066FF" }} />
+                  Graph Layer
                 </div>
-                <p className="text-zinc-300 leading-relaxed text-base">
-                  Stocks, commodities, and indicators become interconnected nodes linked by influence, correlation, and lead–lag effects.
+                <h3 className="text-2xl font-semibold text-zinc-100 leading-tight">
+                  Living market graph
+                </h3>
+                <p className="text-base text-zinc-300 leading-relaxed">
+                  A continuously updated network of equities, sectors, macro indicators, commodities, and sentiment.
                 </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Radar className="w-6 h-6 flex-shrink-0" style={{ color: "#B066FF" }} />
-                  <div className="text-xl font-semibold text-zinc-100 leading-tight">
-                    Unlock hidden signals from structure.
-                  </div>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  Every edge refreshes in real time, revealing how information flows through markets as it happens.
+                </p>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  Watch clusters, correlations, and lead–lag paths form—the topology that explains why a move begins.
+                </p>
+              </div>
+              <FeatureGraphPreview className="max-w-[540px] min-h-[340px] justify-self-center lg:justify-self-end" />
+            </motion.div>
+
+            <motion.div
+              className="grid gap-10 lg:grid-cols-2 lg:items-center"
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+            >
+              <FeatureTimeseriesPreview className="min-h-[320px] lg:order-1" />
+              <div className="space-y-5 lg:order-2">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-400">
+                  <Radar className="h-4 w-4" style={{ color: "#B066FF" }} />
+                  Model Layer
                 </div>
-                <p className="text-zinc-300 leading-relaxed text-base">
-                  We turn the invisible fabric of global markets into actionable insights — embeddings that forecast risk regimes, directional moves, and anomalies.
+                <h3 className="text-2xl font-semibold text-zinc-100 leading-tight">
+                  Structure-aware intelligence
+                </h3>
+                <p className="text-base text-zinc-300 leading-relaxed">
+                  Temporal models track how influence ripples across the graph—identifying rising conviction, fading themes, and emerging risk pockets.
                 </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="rounded-3xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300 hover:scale-105 hover:border-white/30">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Rocket className="w-6 h-6 flex-shrink-0" style={{ color: "#B066FF" }} />
-                  <div className="text-xl font-semibold text-zinc-100 leading-tight">
-                    Built for the frontier, not for consensus.
-                  </div>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  Delivered as clear, actionable signals: trend strength, propagation alerts, and optimal entry windows.
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="grid gap-10 lg:grid-cols-2 lg:items-center"
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            >
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-400">
+                  <Rocket className="h-4 w-4" style={{ color: "#B066FF" }} />
+                  Signal Layer
                 </div>
-                <p className="text-zinc-300 leading-relaxed text-base">
-                Our edge is uniting graph learning, real-time infrastructure, and production ML into a single stack.
+                <h3 className="text-2xl font-semibold text-zinc-100 leading-tight">
+                  Seamless delivery
+                </h3>
+                <p className="text-base text-zinc-300 leading-relaxed">
+                  Stream embeddings, alerts, and graph-derived factors straight into your dashboards, notebooks, or automated strategies.
                 </p>
-              </CardContent>
-            </Card>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  Accessible through APIs, webhooks, or export payloads—so your team stays focused on ideas, not integration.
+                </p>
+              </div>
+              <FeatureApiPreview className="min-h-[320px]" />
+            </motion.div>
           </div>
+
         </div>
       </section>
 
-      {/* GRAPH ANIMATION & PRODUCT EXPLANATION */}
-      <section className="py-20 border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Graph Animation */}
-            <div className="relative">
-              <div className="w-full h-96 bg-zinc-900/60 rounded-3xl border border-white/20 p-4 md:p-6 relative overflow-hidden">
-                <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <defs>
-                    <filter id="glowX" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                    </filter>
-                    <linearGradient id="pulseStrokeX" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#B066FF" stopOpacity="1"/>
-                      <stop offset="100%" stopColor="#B066FF" stopOpacity="0.15"/>
-                    </linearGradient>
-                  </defs>
+      <section id="business" className="py-20 border-t border-white/10">
+        <div className="mx-auto max-w-6xl px-4 space-y-12 text-center md:text-left">
+          <div className="space-y-3 text-center">
+            <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1 text-xs font-semibold tracking-[0.28em] uppercase text-zinc-300">
+              Business
+            </span>
+            <h2 className="text-3xl md:text-[2.6rem] font-semibold text-zinc-100 leading-tight">
+              Who It’s For
+            </h2>
+            <p className="text-lg text-zinc-300/90 max-w-3xl mx-auto text-center">
+              RavenGraph delivers real-time market intelligence to funds, fintechs, and institutional research teams — as live data, tailored insights, or embedded intelligence.
+            </p>
+          </div>
 
-                  {/* --- Inactive (base) edges: dense network, low opacity --- */}
-                  <g stroke="#52525b" strokeWidth="0.7" opacity="0.45" strokeLinecap="round">
-                    {/* Connect every pair (complete-like look) */}
-                    <line x1="50" y1="10" x2="20" y2="25" />
-                    <line x1="50" y1="10" x2="80" y2="25" />
-                    <line x1="50" y1="10" x2="10" y2="50" />
-                    <line x1="50" y1="10" x2="90" y2="50" />
-                    <line x1="50" y1="10" x2="30" y2="85" />
-                    <line x1="50" y1="10" x2="50" y2="90" />
-                    <line x1="50" y1="10" x2="70" y2="85" />
-
-                    <line x1="20" y1="25" x2="80" y2="25" />
-                    <line x1="20" y1="25" x2="10" y2="50" />
-                    <line x1="20" y1="25" x2="90" y2="50" />
-                    <line x1="20" y1="25" x2="30" y2="85" />
-                    <line x1="20" y1="25" x2="50" y2="90" />
-                    <line x1="20" y1="25" x2="70" y2="85" />
-
-                    <line x1="80" y1="25" x2="10" y2="50" />
-                    <line x1="80" y1="25" x2="90" y2="50" />
-                    <line x1="80" y1="25" x2="30" y2="85" />
-                    <line x1="80" y1="25" x2="50" y2="90" />
-                    <line x1="80" y1="25" x2="70" y2="85" />
-
-                    <line x1="10" y1="50" x2="90" y2="50" />
-                    <line x1="10" y1="50" x2="30" y2="85" />
-                    <line x1="10" y1="50" x2="50" y2="90" />
-                    <line x1="10" y1="50" x2="70" y2="85" />
-
-                    <line x1="90" y1="50" x2="30" y2="85" />
-                    <line x1="90" y1="50" x2="50" y2="90" />
-                    <line x1="90" y1="50" x2="70" y2="85" />
-
-                    <line x1="30" y1="85" x2="50" y2="90" />
-                    <line x1="30" y1="85" x2="70" y2="85" />
-                    <line x1="50" y1="90" x2="70" y2="85" />
-                  </g>
-
-                  {/* --- Traveling pulse from TOP (node 0) to all others --- */}
-                  <g stroke="url(#pulseStrokeX)" strokeLinecap="round">
-                    {/* pathLength=1 lets dashoffset 1->0 animate tip-to-target */}
-                    <line x1="50" y1="10" x2="20" y2="25" strokeWidth="2.6" pathLength="1" strokeDasharray="1" strokeDashoffset="1">
-                      <animate attributeName="stroke-dashoffset" values="1;0" dur="1.2s" begin="0s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0;1;0" dur="1.2s" begin="0s" repeatCount="indefinite"/>
-                    </line>
-                    <line x1="50" y1="10" x2="80" y2="25" strokeWidth="2.4" pathLength="1" strokeDasharray="1" strokeDashoffset="1">
-                      <animate attributeName="stroke-dashoffset" values="1;0" dur="1.5s" begin="0s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="0s" repeatCount="indefinite"/>
-                    </line>
-                    <line x1="50" y1="10" x2="10" y2="50" strokeWidth="2.2" pathLength="1" strokeDasharray="1" strokeDashoffset="1">
-                      <animate attributeName="stroke-dashoffset" values="1;0" dur="1.8s" begin="0s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0;1;0" dur="1.8s" begin="0s" repeatCount="indefinite"/>
-                    </line>
-                    <line x1="50" y1="10" x2="90" y2="50" strokeWidth="2.8" pathLength="1" strokeDasharray="1" strokeDashoffset="1">
-                      <animate attributeName="stroke-dashoffset" values="1;0" dur="2.1s" begin="0s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0;1;0" dur="2.1s" begin="0s" repeatCount="indefinite"/>
-                    </line>
-                    <line x1="50" y1="10" x2="30" y2="85" strokeWidth="2.0" pathLength="1" strokeDasharray="1" strokeDashoffset="1">
-                      <animate attributeName="stroke-dashoffset" values="1;0" dur="2.4s" begin="0s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="0s" repeatCount="indefinite"/>
-                    </line>
-                    <line x1="50" y1="10" x2="50" y2="90" strokeWidth="2.2" pathLength="1" strokeDasharray="1" strokeDashoffset="1">
-                      <animate attributeName="stroke-dashoffset" values="1;0" dur="2.7s" begin="0s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0;1;0" dur="2.7s" begin="0s" repeatCount="indefinite"/>
-                    </line>
-                    <line x1="50" y1="10" x2="70" y2="85" strokeWidth="2.4" pathLength="1" strokeDasharray="1" strokeDashoffset="1">
-                      <animate attributeName="stroke-dashoffset" values="1;0" dur="3.0s" begin="0s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0;1;0" dur="3.0s" begin="0s" repeatCount="indefinite"/>
-                    </line>
-                  </g>
-
-                  {/* --- Nodes --- */}
-                  {/* Top (source) node: glows first */}
-                  <g>
-                    <circle cx="50" cy="10" r="3.2" fill="#B066FF" filter="url(#glowX)"/>
-                    <circle cx="50" cy="10" r="6" fill="none" stroke="#B066FF" strokeOpacity="0.35">
-                      <animate attributeName="r" values="6;9;6" dur="2s" repeatCount="indefinite"/>
-                      <animate attributeName="stroke-opacity" values="0.35;0.08;0.35" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                  </g>
-
-                  {/* Targets: light up when pulse arrives, then repeat every pulse cycle */}
-                  {/* upper-left - pulse arrives at 1.2s, then repeats every 1.2s */}
-                  <g>
-                    <circle cx="20" cy="25" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#B066FF;#52525b" dur="0.5s" begin="1.2s;2.4s;3.6s;4.8s;6.0s;7.2s;8.4s;9.6s;10.8s;12.0s;13.2s;14.4s;15.6s;16.8s;18.0s;19.2s;20.4s;21.6s;22.8s;24.0s;25.2s;26.4s;27.6s;28.8s;30.0s;31.2s;32.4s;33.6s;34.8s;36.0s;37.2s;38.4s;39.6s;40.8s;42.0s;43.2s;44.4s;45.6s;46.8s;48.0s;49.2s;50.4s;51.6s;52.8s;54.0s;55.2s;56.4s;57.6s;58.8s;60.0s" />
-                    </circle>
-                    <circle cx="20" cy="25" r="2.6" fill="none" stroke="#B066FF" strokeOpacity="0">
-                      <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="1.2s;2.4s;3.6s;4.8s;6.0s;7.2s;8.4s;9.6s;10.8s;12.0s;13.2s;14.4s;15.6s;16.8s;18.0s;19.2s;20.4s;21.6s;22.8s;24.0s;25.2s;26.4s;27.6s;28.8s;30.0s;31.2s;32.4s;33.6s;34.8s;36.0s;37.2s;38.4s;39.6s;40.8s;42.0s;43.2s;44.4s;45.6s;46.8s;48.0s;49.2s;50.4s;51.6s;52.8s;54.0s;55.2s;56.4s;57.6s;58.8s;60.0s"/>
-                      <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="1.2s;2.4s;3.6s;4.8s;6.0s;7.2s;8.4s;9.6s;10.8s;12.0s;13.2s;14.4s;15.6s;16.8s;18.0s;19.2s;20.4s;21.6s;22.8s;24.0s;25.2s;26.4s;27.6s;28.8s;30.0s;31.2s;32.4s;33.6s;34.8s;36.0s;37.2s;38.4s;39.6s;40.8s;42.0s;43.2s;44.4s;45.6s;46.8s;48.0s;49.2s;50.4s;51.6s;52.8s;54.0s;55.2s;56.4s;57.6s;58.8s;60.0s"/>
-                    </circle>
-                  </g>
-
-                  {/* upper-right - pulse arrives at 1.5s, then repeats every 1.5s */}
-                  <g>
-                    <circle cx="80" cy="25" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#B066FF;#52525b" dur="0.5s" begin="1.5s;3.0s;4.5s;6.0s;7.5s;9.0s;10.5s;12.0s;13.5s;15.0s;16.5s;18.0s;19.5s;21.0s;22.5s;24.0s;25.5s;27.0s;28.5s;30.0s;31.5s;33.0s;34.5s;36.0s;37.5s;39.0s;40.5s;42.0s;43.5s;45.0s;46.5s;48.0s;49.5s;51.0s;52.5s;54.0s;55.5s;57.0s;58.5s;60.0s" />
-                    </circle>
-                    <circle cx="80" cy="25" r="2.6" fill="none" stroke="#B066FF" strokeOpacity="0">
-                      <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="1.5s;3.0s;4.5s;6.0s;7.5s;9.0s;10.5s;12.0s;13.5s;15.0s;16.5s;18.0s;19.5s;21.0s;22.5s;24.0s;25.5s;27.0s;28.5s;30.0s;31.5s;33.0s;34.5s;36.0s;37.5s;39.0s;40.5s;42.0s;43.5s;45.0s;46.5s;48.0s;49.5s;51.0s;52.5s;54.0s;55.5s;57.0s;58.5s;60.0s"/>
-                      <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="1.5s;3.0s;4.5s;6.0s;7.5s;9.0s;10.5s;12.0s;13.5s;15.0s;16.5s;18.0s;19.5s;21.0s;22.5s;24.0s;25.5s;27.0s;28.5s;30.0s;31.5s;33.0s;34.5s;36.0s;37.5s;39.0s;40.5s;42.0s;43.5s;45.0s;46.5s;48.0s;49.5s;51.0s;52.5s;54.0s;55.5s;57.0s;58.5s;60.0s"/>
-                    </circle>
-                  </g>
-
-                  {/* left-mid - pulse arrives at 1.8s, then repeats every 1.8s */}
-                  <g>
-                    <circle cx="10" cy="50" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#B066FF;#52525b" dur="0.5s" begin="1.8s;3.6s;5.4s;7.2s;9.0s;10.8s;12.6s;14.4s;16.2s;18.0s;19.8s;21.6s;23.4s;25.2s;27.0s;28.8s;30.6s;32.4s;34.2s;36.0s;37.8s;39.6s;41.4s;43.2s;45.0s;46.8s;48.6s;50.4s;52.2s;54.0s;55.8s;57.6s;59.4s" />
-                    </circle>
-                    <circle cx="10" cy="50" r="2.6" fill="none" stroke="#B066FF" strokeOpacity="0">
-                      <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="1.8s;3.6s;5.4s;7.2s;9.0s;10.8s;12.6s;14.4s;16.2s;18.0s;19.8s;21.6s;23.4s;25.2s;27.0s;28.8s;30.6s;32.4s;34.2s;36.0s;37.8s;39.6s;41.4s;43.2s;45.0s;46.8s;48.6s;50.4s;52.2s;54.0s;55.8s;57.6s;59.4s"/>
-                      <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="1.8s;3.6s;5.4s;7.2s;9.0s;10.8s;12.6s;14.4s;16.2s;18.0s;19.8s;21.6s;23.4s;25.2s;27.0s;28.8s;30.6s;32.4s;34.2s;36.0s;37.8s;39.6s;41.4s;43.2s;45.0s;46.8s;48.6s;50.4s;52.2s;54.0s;55.8s;57.6s;59.4s"/>
-                    </circle>
-                  </g>
-
-                  {/* right-mid - pulse arrives at 2.1s, then repeats every 2.1s */}
-                  <g>
-                    <circle cx="90" cy="50" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#B066FF;#52525b" dur="0.5s" begin="2.1s;4.2s;6.3s;8.4s;10.5s;12.6s;14.7s;16.8s;18.9s;21.0s;23.1s;25.2s;27.3s;29.4s;31.5s;33.6s;35.7s;37.8s;39.9s;42.0s;44.1s;46.2s;48.3s;50.4s;52.5s;54.6s;56.7s;58.8s" />
-                    </circle>
-                    <circle cx="90" cy="50" r="2.6" fill="none" stroke="#B066FF" strokeOpacity="0">
-                      <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="2.1s;4.2s;6.3s;8.4s;10.5s;12.6s;14.7s;16.8s;18.9s;21.0s;23.1s;25.2s;27.3s;29.4s;31.5s;33.6s;35.7s;37.8s;39.9s;42.0s;44.1s;46.2s;48.3s;50.4s;52.5s;54.6s;56.7s;58.8s"/>
-                      <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="2.1s;4.2s;6.3s;8.4s;10.5s;6.3s;8.4s;10.5s;12.6s;14.7s;16.8s;18.9s;21.0s;23.1s;25.2s;27.3s;29.4s;31.5s;33.6s;35.7s;37.8s;39.9s;42.0s;44.1s;46.2s;48.3s;50.4s;52.5s;54.6s;56.7s;58.8s"/>
-                    </circle>
-                  </g>
-
-                  {/* bottom-left - pulse arrives at 2.4s, then repeats every 2.4s */}
-                  <g>
-                    <circle cx="30" cy="85" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#a855f7;#52525b" dur="0.5s" begin="2.4s;4.8s;7.2s;9.6s;12.0s;14.4s;16.8s;19.2s;21.6s;24.0s;26.4s;28.8s;31.2s;33.6s;36.0s;38.4s;40.8s;43.2s;45.6s;48.0s;50.4s;52.8s;55.2s;57.6s;60.0s" />
-                    </circle>
-                    <circle cx="30" cy="85" r="2.6" fill="none" stroke="#a855f7" strokeOpacity="0">
-                      <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="2.4s;4.8s;7.2s;9.6s;12.0s;14.4s;16.8s;19.2s;21.6s;24.0s;26.4s;28.8s;31.2s;33.6s;36.0s;38.4s;40.8s;43.2s;45.6s;48.0s;50.4s;52.8s;55.2s;57.6s;60.0s"/>
-                      <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="2.4s;4.8s;7.2s;9.6s;12.0s;14.4s;16.8s;19.2s;21.6s;24.0s;26.4s;28.8s;31.2s;33.6s;36.0s;38.4s;40.8s;43.2s;45.6s;48.0s;50.4s;52.8s;55.2s;57.6s;60.0s"/>
-                    </circle>
-                  </g>
-
-                  {/* bottom - pulse arrives at 2.7s, then repeats every 2.7s */}
-                  <g>
-                    <circle cx="50" cy="90" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#a855f7;#52525b" dur="0.5s" begin="2.7s;5.4s;8.1s;10.8s;13.5s;16.2s;18.9s;21.6s;24.3s;27.0s;29.7s;32.4s;35.1s;37.8s;40.5s;43.2s;45.9s;48.6s;51.3s;54.0s;56.7s;59.4s" />
-                    </circle>
-                    <circle cx="50" cy="90" r="2.6" fill="none" stroke="#a855f7" strokeOpacity="0">
-                      <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="2.7s;5.4s;8.1s;10.8s;13.5s;16.2s;18.9s;21.6s;24.3s;27.0s;29.7s;32.4s;35.1s;37.8s;40.5s;43.2s;45.9s;48.6s;51.3s;54.0s;56.7s;59.4s"/>
-                      <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="2.7s;5.4s;8.1s;10.8s;13.5s;16.2s;18.9s;21.6s;24.3s;27.0s;29.7s;32.4s;35.1s;37.8s;40.5s;43.2s;45.9s;48.6s;51.3s;54.0s;56.7s;59.4s"/>
-                    </circle>
-                  </g>
-
-                  {/* bottom-right - pulse arrives at 3.0s, then repeats every 3.0s */}
-                  <g>
-                    <circle cx="70" cy="85" r="2.6" fill="#52525b">
-                      <animate attributeName="fill" values="#52525b;#a855f7;#52525b" dur="0.5s" begin="3.0s;6.0s;9.0s;12.0s;15.0s;18.0s;21.0s;24.0s;27.0s;30.0s;33.0s;36.0s;39.0s;42.0s;45.0s;48.0s;51.0s;54.0s;57.0s;60.0s" />
-                    </circle>
-                    <circle cx="70" cy="85" r="2.6" fill="none" stroke="#a855f7" strokeOpacity="0">
-                      <animate attributeName="stroke-opacity" values="0;0.7;0" dur="0.5s" begin="3.0s;6.0s;9.0s;12.0s;15.0s;18.0s;21.0s;24.0s;27.0s;30.0s;33.0s;36.0s;39.0s;42.0s;45.0s;48.0s;51.0s;54.0s;57.0s;60.0s"/>
-                      <animate attributeName="r" values="2.6;4.4;2.6" dur="0.5s" begin="3.0s;6.0s;9.0s;12.0s;15.0s;18.0s;21.0s;24.0s;27.0s;30.0s;33.0s;36.0s;39.0s;42.0s;45.0s;48.0s;51.0s;54.0s;57.0s;60.0s"/>
-                    </circle>
-                  </g>
-                </svg>
-              </div>
+          <div className="grid gap-6 md:grid-cols-3 text-left text-sm text-zinc-300/90">
+            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 space-y-2">
+              <h3 className="text-zinc-100 font-semibold">Structural Intelligence Feed</h3>
+              <p>Real-time embeddings, alerts, and propagation metrics streamed directly into your systems via API or data connector.</p>
+              <p className="text-zinc-400">Ideal for funds running internal models and automated strategies.</p>
             </div>
+            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 space-y-2">
+              <h3 className="text-zinc-100 font-semibold">Research Access</h3>
+              <p>Custom model outputs, feature sets, and graph snapshots for institutional research and strategy development.</p>
+              <p className="text-zinc-400">Ideal for macro researchers and discretionary desks exploring new regimes.</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 space-y-2">
+              <h3 className="text-zinc-100 font-semibold">Embedded Intelligence</h3>
+              <p>Fintech and analytics platforms integrate RavenGraph insights to power next-generation dashboards, portfolio tools, and client experiences.</p>
+              <p className="text-zinc-400">Ideal for product teams embedding structural awareness into their UX.</p>
+            </div>
+          </div>
 
-            {/* Product Explanation */}
-            <div className="space-y-6">
-              <h3 className="text-2xl md:text-3xl font-semibold text-zinc-100">
-                Unlock the Power of RavenPulse™
-              </h3>
-              <p className="text-lg text-zinc-300 leading-relaxed">
-                RavenPulse™ is our proprietary real-time signal propagation technology that turns market noise into foresight. The moment a signal emerges — from earnings, macro data, or sentiment — RavenPulse™ tracks how it ripples across the entire market network. By capturing these cascading effects before they become obvious, RavenPulse™ uncovers opportunities traditional methods miss, giving you an edge where timing and insight matter most.
+          <div className="rounded-3xl border border-white/10 bg-zinc-900/60 p-8 space-y-6">
+            <div className="space-y-3">
+              <h3 className="text-base font-semibold text-zinc-100">Who Uses RavenGraph</h3>
+              <p className="text-sm text-zinc-300/90">
+                Portfolio managers, macro researchers, and systematic teams use RavenGraph to:
               </p>
-              <div className="pt-4">
-                <div className="inline-flex items-center gap-2 font-medium" style={{ color: "#B066FF" }}>
-                  <span>RavenPulse™ active</span>
-                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#B066FF" }} />
+              <div className="grid gap-3 text-sm text-zinc-300/90 sm:grid-cols-2">
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#B066FF" }} />
+                  Surface cross-asset opportunities early
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#B066FF" }} />
+                  Identify regime transitions before consensus
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#B066FF" }} />
+                  Add structural explainability to risk overlays
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#B066FF" }} />
+                  Stream live propagation feeds into execution
                 </div>
               </div>
             </div>
+            <p className="text-xs text-zinc-500/80">
+              Next verticals: climate-linked commodities, credit risk networks, DeFi anomaly detection.
+            </p>
           </div>
         </div>
       </section>
+
+
+      <section id="access" className="py-24 border-t border-white/10">
+        <div className="mx-auto max-w-3xl px-4 text-center space-y-4">
+          <h3 className="text-3xl md:text-4xl font-semibold text-white">See hidden connections.</h3>
+          <p className="text-lg text-zinc-400">Unlock financial network intelligence now.</p>
+          <Button
+            className="rounded-full px-6 py-3 text-sm font-semibold transition-colors"
+            style={{ backgroundColor: "#B066FF", borderColor: "#B066FF" }}
+            onClick={() => setShowLogin(true)}
+          >
+            Request access
+          </Button>
+          <p className="text-xs text-zinc-500/80">Limited seats; we onboard 2–3 funds per month.</p>
+        </div>
+      </section>
+
 
       {/* FOOTER */}
-      <footer className="py-12 border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2 text-sm">
-              <RavenLogo className="w-5 h-5" /> RavenGraph © {new Date().getFullYear()}
-            </div>
-            <div className="text-sm text-zinc-400">contact@ravengraph.com</div>
-            <div className="text-sm text-zinc-500">Private beta</div>
+      <footer className="py-10 border-t border-white/10">
+        <div className="mx-auto max-w-6xl px-4 flex flex-col items-center gap-4 text-sm text-zinc-400 md:flex-row md:justify-between">
+          <div className="flex items-center gap-2 text-zinc-300">
+            <RavenLogo className="w-5 h-5" /> RavenGraph © {new Date().getFullYear()}
           </div>
-          <div className="text-right mt-4">
-            <blockquote className="text-sm text-zinc-500 italic">
-              &ldquo;Life can only be understood backwards; but it must be lived forwards.&rdquo; - K.
-            </blockquote>
+          <div className="flex items-center gap-4">
+            <span>contact@ravengraph.com</span>
+            <span className="hidden h-4 w-px bg-white/10 md:inline-block" />
+            <span className="text-zinc-500">Private beta</span>
           </div>
         </div>
       </footer>
