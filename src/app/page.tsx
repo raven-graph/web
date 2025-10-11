@@ -134,6 +134,44 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* METRICS */}
+      <section className="py-16 border-t border-white/10">
+        <div className="mx-auto max-w-6xl px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="grid gap-8 md:grid-cols-3"
+          >
+            <div className="text-center space-y-2">
+              <div className="text-4xl md:text-5xl font-bold tracking-tight text-white">
+                10M<span style={{ color: "#B066FF" }}>+</span>
+              </div>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                market relationships trained
+              </p>
+            </div>
+            <div className="text-center space-y-2">
+              <div className="text-4xl md:text-5xl font-bold tracking-tight text-white">
+                3,000<span style={{ color: "#B066FF" }}>+</span>
+              </div>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                symbols supported
+              </p>
+            </div>
+            <div className="text-center space-y-2">
+              <div className="text-4xl md:text-5xl font-bold tracking-tight text-white">
+                50<span style={{ color: "#B066FF" }}>+</span>
+              </div>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                macro & sector signals integrated
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       <section id="problem" className="py-20 border-t border-white/10">
         <div className="mx-auto max-w-4xl px-4 text-center space-y-6">
           <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1 text-xs font-semibold tracking-[0.28em] uppercase text-zinc-300">
