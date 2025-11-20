@@ -103,7 +103,13 @@ export function FeatureApiPreview({ className = "" }: { className?: string }) {
                 transition={shouldReduceMotion ? { duration: 0 } : { delay: 0.3 + idx * 0.05 }}
                 className="text-zinc-300 whitespace-pre"
               >
-                {line.content}
+                {typeof line.content === 'string' ? line.content : (
+                  <span>
+                    {(line.content as Token[]).map((token, i) => (
+                      <span key={i} className={token.color}>{token.text}</span>
+                    ))}
+                  </span>
+                )}
               </motion.div>
             ))}
           </div>

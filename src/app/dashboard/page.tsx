@@ -18,7 +18,6 @@ import {
   LogOut,
   Search,
   Bell,
-  Settings,
   Plus,
   Menu,
   X
