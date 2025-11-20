@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 
 const POINTS = [
   { x: 0, y: 70 }, { x: 10, y: 65 }, { x: 20, y: 68 }, 
@@ -13,8 +13,6 @@ const POINTS = [
 const PATH = `M ${POINTS.map(p => `${p.x},${p.y}`).join(" L ")}`;
 
 export function FeatureTimeseriesPreview({ className = "" }: { className?: string }) {
-  const shouldReduceMotion = useReducedMotion();
-
   return (
     <div
       className={`relative overflow-hidden rounded-3xl border border-white/10 bg-[#0B0C15] p-8 ${className}`}

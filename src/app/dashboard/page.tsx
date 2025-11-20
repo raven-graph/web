@@ -538,14 +538,6 @@ export default function Dashboard() {
     { ticker: 'GOOGL', signalType: 'bullish' as const, probability: 69, price: 142.33, change: 1.9, reason: 'Lead-lag relationship with search sentiment', riskScore: 5 }
   ];
 
-  const sectorOutlook = [
-    { name: 'Technology', outlook: 'bullish', strength: 85 },
-    { name: 'Healthcare', outlook: 'neutral', strength: 52 },
-    { name: 'Energy', outlook: 'bearish', strength: 34 },
-    { name: 'Finance', outlook: 'bullish', strength: 78 },
-    { name: 'Consumer', outlook: 'neutral', strength: 61 }
-  ];
-
   return (
     <div className="min-h-screen bg-[#0B0C15] text-white font-sans selection:bg-[#B066FF]/30 overflow-hidden flex">
       

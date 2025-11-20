@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Menu,
   X,
-  ArrowRight,
-  Play
+  ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -218,7 +217,7 @@ export default function LandingPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-xl text-zinc-400 max-w-2xl leading-relaxed font-light"
           >
-                The market isn't just time-series. It's a complex network. We build <span className="text-white font-medium">Graph Intelligence</span> to map the dynamic fabric of financial reality.
+                The market isn&apos;t just time-series. It&apos;s a complex network. We build <span className="text-white font-medium">Graph Intelligence</span> to map the dynamic fabric of financial reality.
           </motion.p>
 
           <motion.div

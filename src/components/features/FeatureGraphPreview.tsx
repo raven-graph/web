@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 type Node = {
@@ -29,8 +29,6 @@ const EDGES = [
   { id: "e7", source: "sentiment", target: "commodities" },
   { id: "e8", source: "commodities", target: "sectors" },
 ];
-
-const ACTIVE_LOOP = ["equities", "macro", "fx", "sentiment", "equities"];
 
 const nodeMap = Object.fromEntries(NODES.map((node) => [node.id, node])) as Record<string, Node>;
 
