@@ -137,12 +137,12 @@ export default function LandingPage() {
             >
               Log In
             </button>
-            <Button 
-              onClick={() => setShowLogin(true)}
-              className="bg-[#B066FF] hover:bg-[#9d4edd] text-white rounded-full px-6 h-10 text-sm font-semibold shadow-[0_0_20px_-5px_rgba(176,102,255,0.4)]"
+            <a 
+              href="mailto:hello@ravengraph.com"
+              className="inline-flex items-center justify-center bg-[#B066FF] hover:bg-[#9d4edd] text-white rounded-full px-6 h-10 text-sm font-semibold shadow-[0_0_20px_-5px_rgba(176,102,255,0.4)] transition-colors"
             >
               Request Access
-            </Button>
+            </a>
           </div>
 
           <button 
@@ -301,9 +301,10 @@ export default function LandingPage() {
               <span className="font-display font-bold text-lg tracking-tight text-white">RavenGraph</span>
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 text-xs text-zinc-600 font-mono">
+              <a href="mailto:hello@ravengraph.com" className="hover:text-[#B066FF] transition-colors">hello@ravengraph.com</a>
               <p>© 2025 RavenGraph Inc.</p>
               <p>SYSTEM: ONLINE</p>
-          </div>
+            </div>
         </div>
       </footer>
       </main>
