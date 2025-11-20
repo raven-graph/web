@@ -3,358 +3,132 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-const NODE_COUNT = 16;
-const EDGE_MULTIPLIER = 2;
+const NODE_COUNT = 40;
 const CANVAS_SIZE = { width: 1200, height: 720 };
-const NODE_MOVE_DURATION = 8;
-const RNG_SEED = 1337;
-const MOVE_RANGE_X = 0.08;
-const MOVE_RANGE_Y = 0.06;
+const MOVE_RANGE = 0.08;
+const MOVE_DURATION = 12;
 
 type Node = {
-  id: string;
+  id: number;
   x: number;
   y: number;
-  radius: number;
-  pulse: number;
-  pulseOffset: number;
-  hue: number;
-  shimmerDuration: number;
-  glowDuration: number;
+  r: number;
 };
 
 type Edge = {
-  id: string;
-  source: string;
-  target: string;
+  source: number;
+  target: number;
   opacity: number;
-  duration: number;
 };
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
-
 const randomRange = (min: number, max: number) => Math.random() * (max - min) + min;
-
-const createRng = (seed: number) => {
-  let value = seed >>> 0;
-  return () => {
-    value = (value * 1664525 + 1013904223) >>> 0;
-    return value / 4294967296;
-  };
-};
-
-const seededRange = (rng: () => number, min: number, max: number) => rng() * (max - min) + min;
-
-function generateNodes(rng: () => number): Node[] {
-  return Array.from({ length: NODE_COUNT }).map((_, index) => ({
-    id: `node-${index}`,
-    x: seededRange(rng, 0.08, 0.92),
-    y: seededRange(rng, 0.22, 0.88),
-    radius: seededRange(rng, 4, 10),
-    pulse: seededRange(rng, 5.5, 11.5),
-    pulseOffset: seededRange(rng, -2, 2),
-    hue: seededRange(rng, 260, 285),
-    shimmerDuration: seededRange(rng, 7, 10),
-    glowDuration: seededRange(rng, 5, 8),
-  }));
-}
-
-function generateEdges(nodes: Node[], rng: () => number): Edge[] {
-  const edges: Edge[] = [];
-  const maxEdges = Math.floor(nodes.length * EDGE_MULTIPLIER);
-
-  for (let i = 0; i < nodes.length; i++) {
-    const source = nodes[i];
-    const neighbors = [...nodes]
-      .filter((candidate) => candidate.id !== source.id)
-      .sort((a, b) => {
-        const dxA = a.x - source.x;
-        const dyA = a.y - source.y;
-        const dxB = b.x - source.x;
-        const dyB = b.y - source.y;
-        return dxA * dxA + dyA * dyA - (dxB * dxB + dyB * dyB);
-      })
-      .slice(0, 3);
-
-    neighbors.forEach((target, index) => {
-      const edgeId = `${source.id}-${target.id}`;
-      const reverseId = `${target.id}-${source.id}`;
-      const exists = edges.some((edge) => edge.id === reverseId);
-
-      if (!exists && edges.length < maxEdges) {
-        edges.push({
-          id: edgeId,
-          source: source.id,
-          target: target.id,
-          opacity: index === 0 ? 0.55 : 0.32,
-          duration: seededRange(rng, 5, 8.5),
-        });
-      }
-    });
-  }
-
-  return edges;
-}
 
 export function GeometricParticleField({ className = "" }: { className?: string }) {
   const shouldReduceMotion = useReducedMotion();
-  const seededInitialState = useMemo(() => {
-    const rng = createRng(RNG_SEED);
-    const seededNodes = generateNodes(rng);
-    const seededEdges = generateEdges(seededNodes, rng);
-    return { nodes: seededNodes, edges: seededEdges };
-  }, []);
-  const [nodes, setNodes] = useState<Node[]>(seededInitialState.nodes);
-  const edges = seededInitialState.edges;
+  
+  // Initialize nodes deterministically for SSR matching if needed, but client-side random is fine for this visual
+  const [nodes, setNodes] = useState<Node[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
 
+  // Initial Setup
   useEffect(() => {
-    if (shouldReduceMotion) return;
+    const initialNodes = Array.from({ length: NODE_COUNT }).map((_, i) => ({
+      id: i,
+      x: Math.random() * CANVAS_SIZE.width,
+      y: Math.random() * CANVAS_SIZE.height,
+      r: Math.random() * 4 + 2,
+    }));
+    setNodes(initialNodes);
+  }, []);
 
-    const updatePositions = () =>
-      setNodes((prev) =>
-        prev.map((node) => {
-          const nextX = clamp(node.x + randomRange(-MOVE_RANGE_X, MOVE_RANGE_X), 0.04, 0.96);
-          const nextY = clamp(node.y + randomRange(-MOVE_RANGE_Y, MOVE_RANGE_Y), 0.15, 0.95);
-          return { ...node, x: nextX, y: nextY };
-        })
-      );
-    const initialKick = window.setTimeout(updatePositions, 600);
-    const interval = window.setInterval(updatePositions, 9000);
+  // Continuous Movement
+  useEffect(() => {
+    if (shouldReduceMotion || nodes.length === 0) return;
+
+    const updatePositions = () => {
+      setNodes(prevNodes => prevNodes.map(node => {
+        const dx = randomRange(-MOVE_RANGE, MOVE_RANGE) * CANVAS_SIZE.width;
+        const dy = randomRange(-MOVE_RANGE, MOVE_RANGE) * CANVAS_SIZE.height;
+        return {
+          ...node,
+          x: clamp(node.x + dx, 0, CANVAS_SIZE.width),
+          y: clamp(node.y + dy, 0, CANVAS_SIZE.height),
+        };
+      }));
+    };
+
+    const interval = setInterval(updatePositions, MOVE_DURATION * 1000); // Long interval for smooth CSS transitions
+    // Initial tiny kick to start motion
+    const timeout = setTimeout(updatePositions, 100);
 
     return () => {
-      window.clearTimeout(initialKick);
-      window.clearInterval(interval);
+      clearInterval(interval);
+      clearTimeout(timeout);
     };
-  }, [shouldReduceMotion]);
+  }, [shouldReduceMotion, nodes.length]); // Depend on nodes.length to start after initial render
 
-  const nodeLookup = useMemo(() => {
-    const lookup: Record<string, Node> = {};
-    nodes.forEach((node) => {
-      lookup[node.id] = node;
-    });
-    return lookup;
+  // Recompute edges whenever nodes move
+  useEffect(() => {
+    const newEdges: Edge[] = [];
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 300) {
+          newEdges.push({ source: i, target: j, opacity: 1 - dist / 300 });
+        }
+      }
+    }
+    setEdges(newEdges);
   }, [nodes]);
 
   return (
-    <div
-      className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
-      aria-hidden
-    >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(60,16,110,0.32),rgba(20,20,30,0)_70%)]" />
-      <div className="absolute inset-x-0 top-[-35%] bottom-[-45%] bg-[radial-gradient(circle_at_center,rgba(150,60,255,0.22),rgba(20,20,30,0)_75%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(10,10,15,0.5),rgba(10,10,15,0)_70%)]" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-zinc-950/70" />
+    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+      {/* Background Atmosphere */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0B0C15] via-[#151725] to-[#0B0C15]" />
+      <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_50%_0%,rgba(176,102,255,0.25),transparent_70%)]" />
 
-      <motion.svg
+      <svg
         viewBox={`0 0 ${CANVAS_SIZE.width} ${CANVAS_SIZE.height}`}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full opacity-70"
         preserveAspectRatio="xMidYMid slice"
       >
-        <defs>
-          <radialGradient id="node-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
-            <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-          </radialGradient>
-          <linearGradient id="edge-glow" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="rgba(176,102,255,0.05)" />
-            <stop offset="0.5" stopColor="rgba(176,102,255,0.6)" />
-            <stop offset="1" stopColor="rgba(176,102,255,0.05)" />
-          </linearGradient>
-        </defs>
-
         {edges.map((edge) => {
-          const source = nodeLookup[edge.source];
-          const target = nodeLookup[edge.target];
-          if (!source || !target) return null;
-
-          const animatedStroke =
-            edge.opacity * 0.7 < 0.05
-              ? [edge.opacity * 0.9, edge.opacity, edge.opacity * 0.9]
-              : [edge.opacity * 0.7, edge.opacity, edge.opacity * 0.6];
-
+          const s = nodes[edge.source];
+          const t = nodes[edge.target];
+          if (!s || !t) return null;
           return (
             <motion.line
-              key={edge.id}
-              stroke="url(#edge-glow)"
-              strokeWidth="1.4"
-              strokeLinecap="round"
-              initial={false}
-              animate={
-                shouldReduceMotion
-                  ? {
-                      x1: source.x * CANVAS_SIZE.width,
-                      y1: source.y * CANVAS_SIZE.height,
-                      x2: target.x * CANVAS_SIZE.width,
-                      y2: target.y * CANVAS_SIZE.height,
-                      strokeOpacity: edge.opacity,
-                    }
-                  : {
-                      x1: source.x * CANVAS_SIZE.width,
-                      y1: source.y * CANVAS_SIZE.height,
-                      x2: target.x * CANVAS_SIZE.width,
-                      y2: target.y * CANVAS_SIZE.height,
-                      strokeOpacity: animatedStroke,
-                    }
-              }
-              transition={
-                shouldReduceMotion
-                  ? undefined
-                  : {
-                      default: {
-                        duration: NODE_MOVE_DURATION,
-                        ease: "easeInOut" as const,
-                      },
-                      strokeOpacity: {
-                        repeat: Infinity,
-                        repeatType: "mirror" as const,
-                        duration: edge.duration,
-                        ease: "easeInOut" as const,
-                      },
-                    }
-              }
+              key={`${edge.source}-${edge.target}`}
+              animate={{
+                x1: s.x,
+                y1: s.y,
+                x2: t.x,
+                y2: t.y,
+                strokeOpacity: edge.opacity
+              }}
+              transition={{ duration: MOVE_DURATION, ease: "linear" }}
+              stroke="rgba(176,102,255,0.6)" // Increased brightness
+              strokeWidth="1" // Slightly thicker
             />
           );
         })}
-
-        {nodes.map((node) => {
-          const cx = node.x * CANVAS_SIZE.width;
-          const cy = node.y * CANVAS_SIZE.height;
-          const fill = `hsla(${node.hue}, 90%, 58%, 0.28)`;
-          const moveTransition = shouldReduceMotion
-            ? undefined
-            : { duration: NODE_MOVE_DURATION, ease: "easeInOut" as const };
-
-          return (
-            <React.Fragment key={node.id}>
-              <motion.circle
-                cx={cx}
-                cy={cy}
-                r={node.radius * 2.3}
-                fill="url(#node-glow)"
-                opacity={0.06}
-                initial={false}
-                animate={
-                  shouldReduceMotion
-                    ? {
-                        cx,
-                        cy,
-                        r: node.radius * 2.3,
-                        opacity: 0.06,
-                      }
-                    : {
-                        cx,
-                        cy,
-                        r: [node.radius * 2, node.radius * 2.7, node.radius * 2],
-                        opacity: [0.04, 0.1, 0.04],
-                      }
-                }
-                transition={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        cx: moveTransition,
-                        cy: moveTransition,
-                        r: {
-                          duration: Math.max(4, node.pulse + node.pulseOffset),
-                          repeat: Infinity,
-                          repeatType: "mirror" as const,
-                          ease: "easeInOut" as const,
-                        },
-                        opacity: {
-                          duration: Math.max(4, node.pulse + node.pulseOffset),
-                          repeat: Infinity,
-                          repeatType: "mirror" as const,
-                          ease: "easeInOut" as const,
-                        },
-                      }
-                }
-              />
-
-              <motion.circle
-                cx={cx}
-                cy={cy}
-                r={node.radius}
-                fill={fill}
-                stroke={`hsla(${node.hue}, 100%, 78%, 0.34)`}
-                opacity={0.45}
-                strokeWidth={1}
-                initial={false}
-                animate={
-                  shouldReduceMotion
-                    ? {
-                        cx,
-                        cy,
-                        r: node.radius,
-                        opacity: 0.45,
-                      }
-                    : {
-                        cx,
-                        cy,
-                        r: [node.radius * 0.92, node.radius * 1.08, node.radius * 0.92],
-                        opacity: [0.35, 0.65, 0.35],
-                      }
-                }
-                transition={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        cx: moveTransition,
-                        cy: moveTransition,
-                        r: {
-                          duration: node.shimmerDuration,
-                          ease: "easeInOut" as const,
-                          repeat: Infinity,
-                          repeatType: "mirror" as const,
-                        },
-                        opacity: {
-                          duration: node.shimmerDuration,
-                          ease: "easeInOut" as const,
-                          repeat: Infinity,
-                          repeatType: "mirror" as const,
-                        },
-                      }
-                }
-              />
-
-              <motion.circle
-                cx={cx}
-                cy={cy}
-                r={node.radius / 2.8}
-                fill="rgba(255,255,255,0.6)"
-                initial={false}
-                animate={
-                  shouldReduceMotion
-                    ? {
-                        cx,
-                        cy,
-                        opacity: 0.4,
-                      }
-                    : {
-                        cx,
-                        cy,
-                        opacity: [0.35, 0.6, 0.3],
-                      }
-                }
-                transition={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        cx: moveTransition,
-                        cy: moveTransition,
-                        opacity: {
-                          duration: node.glowDuration,
-                          ease: "easeInOut" as const,
-                          repeat: Infinity,
-                          repeatType: "mirror" as const,
-                        },
-                      }
-                }
-              />
-
-            </React.Fragment>
-          );
-        })}
-      </motion.svg>
+        {nodes.map((node) => (
+          <motion.circle
+            key={node.id}
+            animate={{
+              cx: node.x,
+              cy: node.y,
+            }}
+            transition={{ duration: MOVE_DURATION, ease: "linear" }}
+            r={node.r}
+            fill="#D8B4FE" // Lighter purple for visibility
+            className="animate-pulse"
+          />
+        ))}
+      </svg>
     </div>
   );
 }

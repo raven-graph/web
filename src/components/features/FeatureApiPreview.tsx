@@ -3,131 +3,112 @@
 import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-const REQUEST = {
-  method: "GET",
-  path: "/v1/signals/market-structure",
-  query: "?universe=global-alpha",
+type Token = {
+  text: string;
+  color: string;
 };
 
-const RESPONSE_LINES = [
-  "{",
-  '  "as_of": "2025-10-10T14:30:00Z",',
-  '  "summary": "Cross-sector propagation detected",',
-  '  "clusters": [',
-  '   {"name": "Growth–AI", "strength": 0.84, "momentum": "rising" },',
-  '   {"name": "Energy–Commodities", "strength": 0.42, "momentum": "fading"}',
-  "  ],",
-  '  "signals": [',
-  '   {"ticker": "NVDA", "score": 0.82, "regime": "growth"},',
-  '   {"ticker": "QQQ", "score": 0.68, "influence": ["NVDA", "META"]}',
-  "  ]",
-  "}",
-] as const;
+type CodeLine =
+  | { type: 'comment'; content: string }
+  | { type: 'code'; content: Token[] }
+  | { type: 'output'; content: string };
 
-const TOKEN_CLASS_MAP: Record<string, string> = {
-  plain: "text-zinc-500/70",
-  key: "text-[#B066FF]",
-  string: "text-zinc-100",
-  number: "text-emerald-300",
-  punct: "text-zinc-500/70",
-};
+const REQUEST_LINES: CodeLine[] = [
+  { type: "code", content: [
+    { text: "curl", color: "text-[#B066FF]" }, // Purple accent
+    { text: " https://api.ravengraph.com/v1/signals/live \\", color: "text-zinc-400" }
+  ]},
+  { type: "code", content: [
+    { text: "  -H ", color: "text-[#B066FF]" },
+    { text: "'Authorization: Bearer sk_live_...'", color: "text-zinc-400" },
+    { text: " \\", color: "text-zinc-500" }
+  ]},
+  { type: "code", content: [
+    { text: "  -d ", color: "text-[#B066FF]" },
+    { text: "'{ \"sector\": \"SEMICONDUCTORS\", \"depth\": 2 }'", color: "text-zinc-400" }
+  ]}
+];
 
-function tokenizeJsonLine(line: string) {
-  const tokens: Array<{ type: keyof typeof TOKEN_CLASS_MAP; value: string }> = [];
-  const regex = /(".*?"|\b\d+(?:\.\d+)?\b|[{}[\],:])/g;
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  while ((match = regex.exec(line)) !== null) {
-    if (match.index > lastIndex) {
-      tokens.push({ type: 'plain', value: line.slice(lastIndex, match.index) });
-    }
-
-    const token = match[0];
-    let type: keyof typeof TOKEN_CLASS_MAP = 'punct';
-
-    if (token.startsWith('"')) {
-      const nextChar = line[regex.lastIndex] ?? '';
-      type = nextChar === ':' ? 'key' : 'string';
-    } else if (/^\d/.test(token)) {
-      type = 'number';
-    }
-
-    tokens.push({ type, value: token });
-    lastIndex = regex.lastIndex;
-  }
-
-  if (lastIndex < line.length) {
-    tokens.push({ type: 'plain', value: line.slice(lastIndex) });
-  }
-
-  return tokens;
-}
-
+const RESPONSE_LINES: CodeLine[] = [
+  { type: "output", content: "{" },
+  { type: "output", content: "  \"id\": \"sig_99283_lx\"," },
+  { type: "output", content: "  \"timestamp\": \"2025-11-19T14:32:01Z\"," },
+  { type: "output", content: "  \"regime\": \"volatility_expansion\"," },
+  { type: "output", content: "  \"propagation_risk\": 0.87," },
+  { type: "output", content: "  \"affected_nodes\": [" },
+  { type: "output", content: "    { \"ticker\": \"NVDA\", \"lag\": \"0ms\" }," },
+  { type: "output", content: "    { \"ticker\": \"AMD\", \"lag\": \"+42ms\" }," },
+  { type: "output", content: "    { \"ticker\": \"TSM\", \"lag\": \"+110ms\" }" },
+  { type: "output", content: "  ]" },
+  { type: "output", content: "}" },
+];
 
 export function FeatureApiPreview({ className = "" }: { className?: string }) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
     <div
-      className={`relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-950/65 via-zinc-900/50 to-zinc-950/60 p-7 shadow-[0_30px_80px_-45px_rgba(176,102,255,0.5)] ${className}`}
+      className={`relative overflow-hidden rounded-3xl border border-white/10 bg-[#0B0C15] p-0 shadow-2xl shadow-purple-900/10 ${className}`}
     >
-      <div className="absolute inset-3 rounded-3xl border border-white/5 bg-black/30 backdrop-blur-sm" />
-
-      <div className="relative z-10 grid gap-5">
-        <div className="rounded-2xl border border-white/5 bg-black/40 p-4">
-          <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-[0.28em] text-zinc-100">
-            <span>Request</span>
-            <span className="rounded-full bg-white/5 px-8 py-0.5 font-semibold text-[10px] uppercase text-zinc-300">
-              curl
-            </span>
-          </div>
-
-          <div className="font-mono text-[11px] text-zinc-300">
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[rgba(176,102,255,0.25)] px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgba(176,102,255,0.9)]">
-                {REQUEST.method}
-              </span>
-              <span className="text-zinc-100">{`${REQUEST.path}${REQUEST.query}`}</span>
-            </div>
-          </div>
+      {/* Window Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-[#151725]">
+        <div className="flex items-center gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+          <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+          <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
         </div>
+        <div className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">api_stream.json</div>
+        <div className="w-8" /> {/* Spacer for balance */}
+      </div>
 
-        <div className="rounded-2xl border border-white/5 bg-black/40 p-4">
-          <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-[0.28em] text-zinc-100">
-            <span>Response</span>
-            <span className="rounded-full bg-white/5 px-8 py-0.5 font-semibold text-[10px] uppercase text-zinc-300">
-              200 OK
-            </span>
+      <div className="p-6 font-mono text-xs md:text-[13px] leading-relaxed overflow-x-auto">
+        
+        {/* Request Section */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="px-1.5 py-0.5 rounded bg-[#B066FF]/10 text-[#B066FF] text-[10px] font-bold uppercase tracking-wider">POST</div>
+            <div className="text-zinc-600 text-[10px] uppercase tracking-wider">Request Payload</div>
           </div>
-
-          <div className="relative rounded-2xl border border-white/5 bg-black/50 p-4 font-mono text-[11px] text-zinc-200">
-            {/* <div className="absolute left-4 top-4 flex gap-1 text-[rgba(176,102,255,0.45)]">
-              <span className="inline-block h-2 w-2 rounded-full bg-[rgba(176,102,255,0.6)]" />
-              <span className="inline-block h-2 w-2 rounded-full bg-[rgba(255,255,255,0.45)]" />
-              <span className="inline-block h-2 w-2 rounded-full bg-[rgba(255,255,255,0.25)]" />
-            </div> */}
-            <div className="space-y-1 text-left whitespace-pre -ml-4">
-              {RESPONSE_LINES.map((line, index) => {
-                const tokens = tokenizeJsonLine(line);
-                return (
-                  <motion.div
-                    key={`${line}-${index}`}
-                    initial={{ opacity: 0, x: -6 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={shouldReduceMotion ? undefined : { delay: 0.2 + index * 0.05, duration: 0.25, ease: 'easeOut' }}
-                  >
-                    {tokens.map((token, tokenIndex) => (
-                      <span key={tokenIndex} className={TOKEN_CLASS_MAP[token.type]}>
-                        {token.value}
-                      </span>
+          <div className="space-y-1 pl-1">
+            {REQUEST_LINES.map((line, idx) => (
+              <div key={`req-${idx}`} className="flex whitespace-pre">
+                {line.type === 'code' && (
+                  <span>
+                    {line.content.map((token, i) => (
+                      <span key={i} className={token.color}>{token.text}</span>
                     ))}
-                  </motion.div>
-                );
-              })}
-            </div>
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
+
+        {/* Response Section */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider">
+              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+              200 OK
+            </div>
+            <div className="text-zinc-600 text-[10px] uppercase tracking-wider">Real-time Stream</div>
+          </div>
+          <div className="space-y-1 border-l-2 border-white/10 pl-4">
+            {RESPONSE_LINES.map((line, idx) => (
+              <motion.div 
+                key={`res-${idx}`}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={shouldReduceMotion ? { duration: 0 } : { delay: 0.3 + idx * 0.05 }}
+                className="text-zinc-300 whitespace-pre"
+              >
+                {line.content}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );

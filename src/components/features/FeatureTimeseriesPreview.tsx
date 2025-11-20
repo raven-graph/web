@@ -3,117 +3,84 @@
 import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-const CONTROL_POINTS = [
-  { x: 0, y: 70 },
-  { x: 8, y: 64 },
-  { x: 16, y: 60 },
-  { x: 24, y: 68 },
-  { x: 34, y: 50 },
-  { x: 46, y: 44 },
-  { x: 56, y: 32 },
-  { x: 66, y: 42 },
-  { x: 78, y: 28 },
-  { x: 88, y: 30 },
-  { x: 100, y: 18 },
+const POINTS = [
+  { x: 0, y: 70 }, { x: 10, y: 65 }, { x: 20, y: 68 }, 
+  { x: 30, y: 50 }, { x: 40, y: 55 }, { x: 50, y: 40 }, 
+  { x: 60, y: 45 }, { x: 70, y: 30 }, { x: 80, y: 35 }, 
+  { x: 90, y: 20 }, { x: 100, y: 15 }
 ];
 
-function buildSmoothPath(points: { x: number; y: number }[]) {
-  const [first, ...rest] = points;
-  if (!first) return "";
-
-  const path: string[] = [`M ${first.x} ${first.y}`];
-
-  for (let i = 0; i < rest.length; i++) {
-    const current = points[i];
-    const next = rest[i];
-    if (!current || !next) continue;
-
-    const cx = (current.x + next.x) / 2;
-    const cy = (current.y + next.y) / 2;
-    path.push(`Q ${current.x} ${current.y} ${cx} ${cy}`);
-  }
-
-  path.push(`T ${points.at(-1)?.x ?? first.x} ${points.at(-1)?.y ?? first.y}`);
-  return path.join(" ");
-}
-
-const PATH_D = buildSmoothPath(CONTROL_POINTS);
+const PATH = `M ${POINTS.map(p => `${p.x},${p.y}`).join(" L ")}`;
 
 export function FeatureTimeseriesPreview({ className = "" }: { className?: string }) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
     <div
-      className={`relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-950/60 via-zinc-900/50 to-zinc-950/60 p-7 shadow-[0_30px_80px_-45px_rgba(176,102,255,0.5)] ${className}`}
+      className={`relative overflow-hidden rounded-3xl border border-white/10 bg-[#0B0C15] p-8 ${className}`}
     >
-      <div className="absolute inset-x-4 inset-y-6 rounded-[2rem] border border-white/5 bg-black/25 backdrop-blur-sm" />
-      <motion.svg
-        viewBox="0 0 100 80"
-        className="relative z-10 h-full w-full text-white"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <defs>
-          <linearGradient id="feature-timeseries" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(176,102,255,0.55)" />
-            <stop offset="100%" stopColor="rgba(255,255,255,0.65)" />
-          </linearGradient>
-          <linearGradient id="feature-area" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="rgba(176,102,255,0.22)" />
-            <stop offset="100%" stopColor="rgba(176,102,255,0)" />
-          </linearGradient>
-        </defs>
+      <div className="absolute inset-0 bg-grid-pattern opacity-20" />
+      
+      <div className="relative z-10 h-full flex flex-col">
+        <div className="flex justify-between items-end mb-4">
+          <div>
+            <div className="text-zinc-400 text-xs uppercase tracking-widest mb-1">Volatility Index</div>
+            <div className="text-2xl text-white font-display font-semibold">94.2 <span className="text-[#D8B4FE] text-sm font-normal">+4.2%</span></div>
+          </div>
+          <div className="flex gap-1">
+            <div className="w-1 h-4 bg-[#B066FF]/40 rounded-sm" />
+            <div className="w-1 h-6 bg-[#B066FF]/60 rounded-sm" />
+            <div className="w-1 h-3 bg-[#B066FF]/80 rounded-sm" />
+            <div className="w-1 h-8 bg-[#D8B4FE] rounded-sm animate-pulse" />
+          </div>
+        </div>
 
-        <g transform="translate(0, 6)">
-          <motion.path
-            d={`${PATH_D} L 100 80 L 0 80 Z`}
-            fill="url(#feature-area)"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }}
-            transition={{ duration: 1.1, ease: "easeOut" }}
+        <motion.svg
+          viewBox="0 0 100 80"
+          className="w-full flex-1 overflow-visible"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient id="fillGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(176,102,255,0.3)" />
+              <stop offset="100%" stopColor="rgba(176,102,255,0)" />
+            </linearGradient>
+          </defs>
+          
+          {/* Fill */}
+          <path
+            d={`${PATH} L 100 100 L 0 100 Z`}
+            fill="url(#fillGradient)"
           />
+          
+          {/* Line */}
           <motion.path
-            d={PATH_D}
-            stroke="url(#feature-timeseries)"
-            strokeWidth="1.1"
+            d={PATH}
             fill="none"
-            strokeLinecap="round"
+            stroke="#D8B4FE"
+            strokeWidth="1.5" // Thicker line
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
-            transition={{ duration: 1.6, ease: "easeInOut" }}
+            transition={{ duration: 2, ease: "easeInOut" }}
           />
-          {!shouldReduceMotion && (
+          
+          {/* Points */}
+          {POINTS.map((p, i) => (
             <motion.circle
-              r={1.7}
-              fill="#ffffff"
-              stroke="rgba(176,102,255,0.6)"
-              strokeWidth="0.6"
-              initial={false}
-              animate={{
-                cx: CONTROL_POINTS.map((p) => p.x),
-                cy: CONTROL_POINTS.map((p) => p.y),
-              }}
-              transition={{
-                duration: 6.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                repeatType: "mirror",
-              }}
+              key={i}
+              cx={p.x}
+              cy={p.y}
+              r={1.5}
+              fill="#0B0C15"
+              stroke="#D8B4FE"
+              strokeWidth="1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 + (i * 0.1) }}
             />
-          )}
-        </g>
-
-        <motion.g
-          className="text-[3px] font-medium"
-          fill="rgba(255,255,255,0.55)"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <text x="4" y="12">Structural pulse</text>
-          <text x="4" y="74">Now</text>
-          <text x="82" y="74">+6h</text>
-        </motion.g>
-      </motion.svg>
+          ))}
+        </motion.svg>
+      </div>
     </div>
   );
 }

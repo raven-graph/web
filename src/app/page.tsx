@@ -1,9 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Share2, Radar, Rocket, LogIn } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Menu,
+  X,
+  ArrowRight,
+  Play
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoginForm } from "@/components/LoginForm";
@@ -12,23 +16,75 @@ import { GeometricParticleField } from "@/components/GeometricParticleField";
 import { FeatureGraphPreview } from "@/components/features/FeatureGraphPreview";
 import { FeatureTimeseriesPreview } from "@/components/features/FeatureTimeseriesPreview";
 import { FeatureApiPreview } from "@/components/features/FeatureApiPreview";
+import Image from "next/image";
 
-const RavenLogo: React.FC<{ className?: string }> = ({ className }) => (
+// --- Components ---
+
+const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a 
+    href={href} 
+    className="text-sm font-sans font-medium text-zinc-400 hover:text-[#B066FF] transition-colors"
+  >
+    {children}
+  </a>
+);
+
+const FeatureSection = ({ 
+  title, 
+  subtitle,
+  description, 
+  children, 
+  align = "left",
+}: { 
+  title: string;
+  subtitle: string;
+  description: string; 
+  children: React.ReactNode; 
+  align?: "left" | "right";
+}) => {
+  return (
+    <section className="py-24 md:py-32 relative overflow-hidden border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        <div className={`grid lg:grid-cols-2 gap-16 items-center ${align === "right" ? "lg:grid-flow-dense" : ""}`}>
+          
+          {/* Text Content */}
+          <div className={`space-y-6 ${align === "right" ? "lg:col-start-2" : ""}`}>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#B066FF]/50"></span>
+              <span className="text-[#B066FF] font-sans text-xs uppercase tracking-widest font-semibold">{subtitle}</span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-white leading-tight">
+              {title}
+            </h2>
+            <p className="text-lg text-zinc-400 leading-relaxed font-light">
+              {description}
+            </p>
+            <div className="pt-4">
+               <button className="group flex items-center text-sm font-medium text-white hover:text-[#B066FF] transition-colors">
+                Read Documentation <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </button>
+            </div>
+          </div>
+
+          {/* Visual Content */}
+          <div className={`relative ${align === "right" ? "lg:col-start-1" : ""}`}>
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#B066FF]/20 to-purple-900/20 blur-2xl opacity-20" />
+            {children}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const RavenLogo = ({ className }: { className?: string }) => (
+  <div className={`relative ${className}`}>
   <Image 
     src="/icon-white-transparent.svg" 
     alt="RavenGraph"
-    width={32}
-    height={32}
-    className={className}
+      fill
+      className="object-contain"
     style={{ filter: "brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)" }}
-  />
-);
-
-const GradientOrb: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={`absolute blur-3xl opacity-25 ${className}`}>
-    <div
-      className="size-72 md:size-[28rem] rounded-full"
-      style={{ background: "radial-gradient(closest-side, #B066FF 0%, rgba(176,102,255,0.08) 60%, transparent 70%)" }}
     />
   </div>
 );
@@ -37,364 +93,222 @@ export default function LandingPage() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   const [showLogin, setShowLogin] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Redirect to dashboard if authenticated
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/dashboard');
     }
   }, [isAuthenticated, router]);
 
-  if (isAuthenticated) {
-    return null; // Will redirect to dashboard
-  }
+  if (isAuthenticated) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-950 to-zinc-900 text-zinc-100">
-      {/* Background ornaments */}
-      <GradientOrb className="-top-10 -left-10" />
-      <GradientOrb className="bottom-10 right-0" />
-
-      {/* NAVBAR */}
-      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/40">
-        <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-[#0B0C15] text-white font-sans selection:bg-[#B066FF]/30">
+      
+      {/* Navbar */}
+      <nav className="fixed top-0 w-full z-50 bg-[#0B0C15]/80 backdrop-blur-lg border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <RavenLogo className="w-8 h-8" />
-            <span className="font-semibold tracking-wide text-lg">RavenGraph</span>
+            <span className="font-display font-bold text-xl tracking-tight text-white">RavenGraph</span>
           </div>
-          <nav className="hidden items-center gap-6 text-sm text-zinc-300 md:flex">
-            <a href="#problem" className="transition-colors hover:text-white/90">Problem</a>
-            <a href="#solution" className="transition-colors hover:text-white/90">Solution</a>
-            <a href="#business" className="transition-colors hover:text-white/90">Business</a>
-            <a href="#access" className="transition-colors hover:text-white/90">Access</a>
-          </nav>
-          <div className="flex items-center gap-2">
-            <Button 
-              onClick={() => setShowLogin(true)}
-              className="rounded-2xl h-10"
-              style={{ backgroundColor: "#B066FF", borderColor: "#B066FF" }}
+
+          <div className="hidden md:flex items-center gap-8">
+            <NavLink href="#capabilities">Capabilities</NavLink>
+            <a 
+              href="#integration"
+              onClick={(e) => {
+                e.preventDefault();
+                const element = document.getElementById('integration');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="text-sm font-sans font-medium text-zinc-400 hover:text-[#B066FF] transition-colors"
             >
-              <LogIn className="w-4 h-4 mr-2" />
-              Sign In
-            </Button>
-            <a href="#access">
-              <Button variant="outline" className="rounded-2xl border-white/20 hover:bg-zinc-800/50 bg-transparent h-10 text-zinc-200">
-                Join the waitlist
-              </Button>
+              Integration
             </a>
           </div>
-        </div>
-      </header>
 
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <GeometricParticleField className="z-0" />
-        <div className="relative z-10 mx-auto max-w-4xl px-4 py-32 md:py-40 text-center space-y-6">
-          <motion.h1
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="text-[2.75rem] md:text-[3.75rem] font-semibold tracking-tight leading-[1.05]"
-          >
-            Reveal the invisible fabric of global markets.
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.05 }}
-            className="text-lg md:text-xl text-zinc-300/90 max-w-3xl mx-auto"
-          >
-            RavenGraph maps how information flows between stocks, sectors, and macro signals, turning market complexity into real-time, usable intelligence.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3"
-          >
-            <Button
-              className="rounded-full px-6 py-3 text-sm font-semibold"
-              style={{ backgroundColor: "#B066FF", borderColor: "#B066FF" }}
+          <div className="hidden md:flex items-center gap-6">
+            <button 
               onClick={() => setShowLogin(true)}
+              className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
             >
-              Request early access
+              Log In
+            </button>
+            <Button 
+              onClick={() => setShowLogin(true)}
+              className="bg-[#B066FF] hover:bg-[#9d4edd] text-white rounded-full px-6 h-10 text-sm font-semibold shadow-[0_0_20px_-5px_rgba(176,102,255,0.4)]"
+            >
+              Request Access
             </Button>
-            <div className="text-sm font-semibold text-zinc-300 transition-colors hover:text-white/90">
-              <a href="#problem">Why RavenGraph?</a>
+          </div>
+
+          <button 
+            className="md:hidden text-white"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-x-0 top-20 z-40 bg-[#0B0C15] border-b border-white/10 p-6 md:hidden"
+          >
+            <div className="flex flex-col gap-6 font-display text-xl">
+              <a href="#capabilities" onClick={() => setMobileMenuOpen(false)}>Capabilities</a>
+              <a href="#integration" onClick={() => {
+                setMobileMenuOpen(false);
+                const element = document.getElementById('integration');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}>Integration</a>
+              <Button onClick={() => setShowLogin(true)} className="w-full bg-[#B066FF] text-white mt-4 rounded-full">Get Started</Button>
             </div>
           </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-            className="text-xs uppercase tracking-[0.3em] text-zinc-500"
-          >
-            Now piloting with select funds; limited early-access seats.
-          </motion.p>
-        </div>
-      </section>
+        )}
+      </AnimatePresence>
 
-      {/* METRICS */}
-      <section className="py-16 border-t border-white/10">
-        <div className="mx-auto max-w-6xl px-4">
+      <main>
+        {/* Hero Section */}
+        <section className="relative min-h-screen flex flex-col justify-center pt-20 overflow-hidden">
+          <GeometricParticleField className="opacity-40" />
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 w-full">
+            <div className="flex flex-col items-center text-center gap-8 max-w-4xl mx-auto">
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
+              >
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B066FF] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B066FF]"></span>
+                </span>
+                <span className="text-zinc-300 text-xs font-medium tracking-wide">v2.4 Graph Model Live</span>
+              </motion.div>
+
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-6xl md:text-7xl lg:text-8xl font-display font-bold text-white tracking-tight leading-[1.1]"
+              >
+                Reveal the <br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B066FF] via-white to-[#B066FF]">
+                  Invisible
+                </span>
+              </motion.h1>
+
+          <motion.p
+                initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-xl text-zinc-400 max-w-2xl leading-relaxed font-light"
+          >
+                The market isn't just time-series. It's a complex network. We build <span className="text-white font-medium">Graph Intelligence</span> to map the dynamic fabric of financial reality.
+          </motion.p>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="grid gap-8 md:grid-cols-3"
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="flex flex-col sm:flex-row items-center gap-4 pt-4"
+              >
+                <Button 
+                  size="lg"
+                  onClick={() => {
+                    const element = document.getElementById('integration');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="h-12 px-8 bg-[#B066FF] hover:bg-[#9d4edd] text-white font-semibold text-base rounded-full shadow-[0_0_30px_-5px_rgba(176,102,255,0.6)]"
+                >
+                  Start Integration
+                </Button>
+              </motion.div>
+
+            </div>
+        </div>
+      </section>
+
+        {/* Metrics Strip */}
+        <section className="border-y border-white/5 bg-[#0B0C15]/50">
+          <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4">
+            {[
+              { label: "Latency", value: "< 50ms" },
+              { label: "Active Edges", value: "10M+" },
+              { label: "Assets", value: "3,000+" },
+              { label: "Alpha Lift", value: "24%" },
+            ].map((stat, i) => (
+              <div key={i} className="py-8 md:py-10 text-center border-r border-white/5 last:border-r-0">
+                <div className="text-3xl font-display font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-xs font-medium text-zinc-500 uppercase tracking-wider">{stat.label}</div>
+            </div>
+            ))}
+        </div>
+      </section>
+
+        {/* Features */}
+        <div id="capabilities">
+          <FeatureSection 
+            title="The Invisible Web"
+            subtitle="Graph Intelligence"
+            description="Markets are living networks. See how a shock in semiconductor supply chains propagates to automotive equities before the price moves. Our GNNs map hidden dependencies in real-time."
+            align="left"
           >
-            <div className="text-center space-y-2">
-              <div className="text-4xl md:text-5xl font-bold tracking-tight text-white">
-                10M<span style={{ color: "#B066FF" }}>+</span>
-              </div>
-              <p className="text-sm text-zinc-400 leading-relaxed">
-                market relationships trained
-              </p>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="text-4xl md:text-5xl font-bold tracking-tight text-white">
-                3,000<span style={{ color: "#B066FF" }}>+</span>
-              </div>
-              <p className="text-sm text-zinc-400 leading-relaxed">
-                symbols supported
-              </p>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="text-4xl md:text-5xl font-bold tracking-tight text-white">
-                50<span style={{ color: "#B066FF" }}>+</span>
-              </div>
-              <p className="text-sm text-zinc-400 leading-relaxed">
-                macro & sector signals integrated
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+            <FeatureGraphPreview />
+          </FeatureSection>
 
-      <section id="problem" className="py-20 border-t border-white/10">
-        <div className="mx-auto max-w-4xl px-4 text-center space-y-6">
-          <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1 text-xs font-semibold tracking-[0.28em] uppercase text-zinc-300">
-            Problem
-          </span>
-          <h2 className="text-3xl md:text-4xl font-semibold text-zinc-100 leading-tight">
-            Markets aren’t time series. They’re living networks.
-          </h2>
-          <p className="text-lg text-zinc-300/90">
-            Most stacks still treat each asset as an isolated stream. They miss how sectors ripple, how macro shocks cascade, and how sentiment shifts risk appetite—in real time.
-          </p>
-          <div className="grid gap-4 text-left text-sm text-zinc-300/90 md:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
-              <span className="font-semibold text-zinc-100">Structural blind spots</span>
-              <p className="mt-2 text-zinc-400">Models overlook cross-asset dependencies and how influence travels across the market graph.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
-              <span className="font-semibold text-zinc-100">Causality flattened</span>
-              <p className="mt-2 text-zinc-400">Lagging features blur lead–lag dynamics into noise.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
-              <span className="font-semibold text-zinc-100">Static pipelines</span>
-              <p className="mt-2 text-zinc-400">Streaming multi-source data overwhelms batch-era infrastructure.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* VALUE PROPOSITION */}
-      <section id="solution" className="relative overflow-hidden py-24 border-t border-white/10">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(176,102,255,0.08),transparent_70%)]" />
-        <div className="mx-auto max-w-6xl px-4">
-          <div id="overview" className="text-center mb-16 space-y-4">
-            <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1 text-xs font-semibold tracking-[0.28em] uppercase text-zinc-300">
-              Solution
-            </span>
-            <h2 className="text-3xl md:text-4xl font-semibold text-zinc-100 leading-tight max-w-4xl mx-auto">
-              Turn market structure into real-time, actionable intelligence.
-            </h2>
-            <p className="text-lg text-zinc-300 leading-relaxed max-w-3xl mx-auto">
-              A living graph of assets, macro, and sentiment feeds your desk with structural signals—surfacing shifts before they appear in returns. Graph ML frameworks and cloud GPUs have made real-time market graphs practical—the edge is moving from latency to understanding.
-            </p>
-          </div>
-
-          <div className="space-y-16">
-            <motion.div
-              className="grid gap-10 lg:grid-cols-2 lg:items-center"
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.45 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <div className="space-y-5">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-400">
-                  <Share2 className="h-4 w-4" style={{ color: "#B066FF" }} />
-                  Graph Layer
-                </div>
-                <h3 className="text-2xl font-semibold text-zinc-100 leading-tight">
-                  Living market graph
-                </h3>
-                <p className="text-base text-zinc-300 leading-relaxed">
-                  A continuously updated network of equities, sectors, macro indicators, commodities, and sentiment.
-                </p>
-                <p className="text-sm text-zinc-400 leading-relaxed">
-                  Every edge refreshes in real time, revealing how information flows through markets as it happens.
-                </p>
-                <p className="text-sm text-zinc-400 leading-relaxed">
-                  Watch clusters, correlations, and lead–lag paths form—the topology that explains why a move begins.
-                </p>
-              </div>
-              <FeatureGraphPreview className="max-w-[540px] min-h-[340px] justify-self-center lg:justify-self-end" />
-            </motion.div>
-
-            <motion.div
-              className="grid gap-10 lg:grid-cols-2 lg:items-center"
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.45 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-            >
-              <FeatureTimeseriesPreview className="min-h-[320px] lg:order-1" />
-              <div className="space-y-5 lg:order-2">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-400">
-                  <Radar className="h-4 w-4" style={{ color: "#B066FF" }} />
-                  Model Layer
-                </div>
-                <h3 className="text-2xl font-semibold text-zinc-100 leading-tight">
-                  Structure-aware intelligence
-                </h3>
-                <p className="text-base text-zinc-300 leading-relaxed">
-                  Temporal models track how influence ripples across the graph—identifying rising conviction, fading themes, and emerging risk pockets.
-                </p>
-                <p className="text-sm text-zinc-400 leading-relaxed">
-                  Delivered as clear, actionable signals: trend strength, propagation alerts, and optimal entry windows.
-                </p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="grid gap-10 lg:grid-cols-2 lg:items-center"
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.45 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            >
-              <div className="space-y-5">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-400">
-                  <Rocket className="h-4 w-4" style={{ color: "#B066FF" }} />
-                  Signal Layer
-                </div>
-                <h3 className="text-2xl font-semibold text-zinc-100 leading-tight">
-                  Seamless delivery
-                </h3>
-                <p className="text-base text-zinc-300 leading-relaxed">
-                  Stream embeddings, alerts, and graph-derived factors straight into your dashboards, notebooks, or automated strategies.
-                </p>
-                <p className="text-sm text-zinc-400 leading-relaxed">
-                  Accessible through APIs, webhooks, or export payloads—so your team stays focused on ideas, not integration.
-                </p>
-              </div>
-              <FeatureApiPreview className="min-h-[320px]" />
-            </motion.div>
-          </div>
-
-        </div>
-      </section>
-
-      <section id="business" className="py-20 border-t border-white/10">
-        <div className="mx-auto max-w-6xl px-4 space-y-12 text-center md:text-left">
-          <div className="space-y-3 text-center">
-            <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1 text-xs font-semibold tracking-[0.28em] uppercase text-zinc-300">
-              Business
-            </span>
-            <h2 className="text-3xl md:text-[2.6rem] font-semibold text-zinc-100 leading-tight">
-              Who It’s For
-            </h2>
-            <p className="text-lg text-zinc-300/90 max-w-3xl mx-auto text-center">
-              RavenGraph delivers real-time market intelligence to funds, fintechs, and institutional research teams — as live data, tailored insights, or embedded intelligence.
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3 text-left text-sm text-zinc-300/90">
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 space-y-2">
-              <h3 className="text-zinc-100 font-semibold">Structural Intelligence Feed</h3>
-              <p>Real-time embeddings, alerts, and propagation metrics streamed directly into your systems via API or data connector.</p>
-              <p className="text-zinc-400">Ideal for funds running internal models and automated strategies.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 space-y-2">
-              <h3 className="text-zinc-100 font-semibold">Research Access</h3>
-              <p>Custom model outputs, feature sets, and graph snapshots for institutional research and strategy development.</p>
-              <p className="text-zinc-400">Ideal for macro researchers and discretionary desks exploring new regimes.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 space-y-2">
-              <h3 className="text-zinc-100 font-semibold">Embedded Intelligence</h3>
-              <p>Fintech and analytics platforms integrate RavenGraph insights to power next-generation dashboards, portfolio tools, and client experiences.</p>
-              <p className="text-zinc-400">Ideal for product teams embedding structural awareness into their UX.</p>
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-zinc-900/60 p-8 space-y-6">
-            <div className="space-y-3">
-              <h3 className="text-base font-semibold text-zinc-100">Who Uses RavenGraph</h3>
-              <p className="text-sm text-zinc-300/90">
-                Portfolio managers, macro researchers, and systematic teams use RavenGraph to:
-              </p>
-              <div className="grid gap-3 text-sm text-zinc-300/90 sm:grid-cols-2">
-                <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#B066FF" }} />
-                  Surface cross-asset opportunities early
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#B066FF" }} />
-                  Identify regime transitions before consensus
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#B066FF" }} />
-                  Add structural explainability to risk overlays
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#B066FF" }} />
-                  Stream live propagation feeds into execution
-                </div>
-              </div>
-            </div>
-            <p className="text-xs text-zinc-500/80">
-              Next verticals: climate-linked commodities, credit risk networks, DeFi anomaly detection.
-            </p>
-          </div>
-        </div>
-      </section>
-
-
-      <section id="access" className="py-24 border-t border-white/10">
-        <div className="mx-auto max-w-3xl px-4 text-center space-y-4">
-          <h3 className="text-3xl md:text-4xl font-semibold text-white">See hidden connections.</h3>
-          <p className="text-lg text-zinc-400">Unlock financial network intelligence now.</p>
-          <Button
-            className="rounded-full px-6 py-3 text-sm font-semibold transition-colors"
-            style={{ backgroundColor: "#B066FF", borderColor: "#B066FF" }}
-            onClick={() => setShowLogin(true)}
+          <FeatureSection 
+            title="Regime Detection"
+            subtitle="Temporal Dynamics"
+            description="Identify volatility clusters and correlation breakdowns milliseconds after they begin. RavenGraph signals structural breaks that standard covariance models miss."
+            align="right"
           >
-            Request access
-          </Button>
-          <p className="text-xs text-zinc-500/80">Limited seats; we onboard 2–3 funds per month.</p>
-        </div>
-      </section>
+            <FeatureTimeseriesPreview />
+          </FeatureSection>
 
-
-      {/* FOOTER */}
-      <footer className="py-10 border-t border-white/10">
-        <div className="mx-auto max-w-6xl px-4 flex flex-col items-center gap-4 text-sm text-zinc-400 md:flex-row md:justify-between">
-          <div className="flex items-center gap-2 text-zinc-300">
-            <RavenLogo className="w-5 h-5" /> RavenGraph © {new Date().getFullYear()}
+          <FeatureSection 
+            title="Direct Neural Interface"
+            subtitle="Developer First"
+            description="Built for quants. Stream raw embeddings, adjacency matrices, or propagation signals directly into your execution engine via our low-latency API."
+            align="left"
+          >
+            <div id="integration" className="scroll-mt-24">
+              <FeatureApiPreview />
+            </div>
+          </FeatureSection>
           </div>
-          <div className="flex items-center gap-4">
-            <span>contact@ravengraph.com</span>
-            <span className="hidden h-4 w-px bg-white/10 md:inline-block" />
-            <span className="text-zinc-500">Private beta</span>
+
+        {/* Footer */}
+        <footer className="bg-[#05060A] py-20 border-t border-white/5">
+          <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-12">
+                <div className="flex items-center gap-2">
+              <RavenLogo className="w-6 h-6" />
+              <span className="font-display font-bold text-lg tracking-tight text-white">RavenGraph</span>
+            </div>
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 text-xs text-zinc-600 font-mono">
+              <p>© 2025 RavenGraph Inc.</p>
+              <p>SYSTEM: ONLINE</p>
           </div>
         </div>
       </footer>
+      </main>
 
-      {/* Login Modal */}
       {showLogin && <LoginForm />}
     </div>
   );
