@@ -19,10 +19,25 @@ import {
   Search,
   Bell,
   Settings,
-  Plus
+  Plus,
+  Menu,
+  X
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { GeometricParticleField } from '@/components/GeometricParticleField';
 
+// Reusable Logo Component matching landing page style
+const RavenLogo = ({ className }: { className?: string }) => (
+  <div className={`relative ${className}`}>
+    <Image 
+      src="/icon-white-transparent.svg" 
+      alt="RavenGraph"
+      fill
+      className="object-contain"
+      style={{ filter: "brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(246deg) brightness(104%) contrast(97%)" }}
+    />
+  </div>
+);
 
 // Signal Card Component
 const SignalCard: React.FC<{ 
@@ -35,8 +50,8 @@ const SignalCard: React.FC<{
   riskScore: number;
 }> = ({ ticker, signalType, probability, price, change, reason, riskScore }) => {
   const signalColors = {
-    bullish: { bg: 'bg-green-500/10', border: 'border-green-500/20', text: 'text-green-400', icon: TrendingUp },
-    bearish: { bg: 'bg-red-500/10', border: 'border-red-500/20', text: 'text-red-400', icon: TrendingDown },
+    bullish: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-400', icon: TrendingUp },
+    bearish: { bg: 'bg-rose-500/10', border: 'border-rose-500/20', text: 'text-rose-400', icon: TrendingDown },
     neutral: { bg: 'bg-yellow-500/10', border: 'border-yellow-500/20', text: 'text-yellow-400', icon: Minus }
   };
 
@@ -44,47 +59,44 @@ const SignalCard: React.FC<{
   const IconComponent = colors.icon;
 
   return (
-    <Card className={`rounded-xl border ${colors.border} ${colors.bg} hover:scale-105 transition-all duration-200`}>
-      <CardContent className="p-4">
+    <Card className={`rounded-xl border ${colors.border} bg-[#151725] hover:bg-[#1A1C2A] transition-all duration-200 group`}>
+      <CardContent className="p-5">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-lg ${colors.bg}`}>
               <IconComponent className={`w-4 h-4 ${colors.text}`} />
             </div>
             <div>
-              <h3 className="font-semibold text-zinc-100">{ticker}</h3>
-              <p className={`text-xs font-medium ${colors.text} capitalize`}>
-                {signalType} Signal
+              <h3 className="font-display font-bold text-white text-lg tracking-tight">{ticker}</h3>
+              <p className={`text-[10px] uppercase tracking-wider font-medium ${colors.text}`}>
+                {signalType}
               </p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-zinc-100 font-semibold">${price.toFixed(2)}</p>
-            <p className={`text-xs ${change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+            <p className="text-white font-mono font-medium">${price.toFixed(2)}</p>
+            <p className={`text-xs font-mono ${change >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
               {change >= 0 ? '+' : ''}{change.toFixed(2)}%
             </p>
           </div>
         </div>
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-xs text-zinc-400">{reason}</p>
-          <div className="flex items-center gap-1 group relative">
-            <div className="w-2 h-2 rounded-full bg-zinc-600" />
-            <span className="text-xs text-zinc-500 cursor-help">{probability}%</span>
-            {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-xs text-zinc-200 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-              Model confidence in this signal prediction
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-zinc-800"></div>
-            </div>
+        <div className="flex items-center justify-between mb-3 pt-2 border-t border-white/5">
+          <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2 pr-2">{reason}</p>
+          <div className="flex items-center gap-1.5 group/tooltip relative shrink-0">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#B066FF] animate-pulse" />
+            <span className="text-xs font-mono text-[#D8B4FE]">{probability}%</span>
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-zinc-500">Risk Score:</span>
-          <span className={`text-xs font-medium ${
-            riskScore <= 3 ? 'text-green-400' : 
-            riskScore <= 6 ? 'text-yellow-400' : 'text-red-400'
-          }`}>
-            {riskScore}/10
-          </span>
+        <div className="flex items-center justify-between pt-2">
+          <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-medium">Risk Score</span>
+          <div className="flex gap-0.5">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div 
+                key={i} 
+                className={`w-1 h-3 rounded-sm ${i < riskScore ? (riskScore > 7 ? 'bg-rose-500' : riskScore > 4 ? 'bg-yellow-500' : 'bg-emerald-500') : 'bg-white/10'}`}
+              />
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -201,10 +213,11 @@ const MarketNetwork: React.FC = () => {
 
 
   return (
-    <div className="relative w-full h-96 bg-zinc-900/60 rounded-2xl border border-white/20 p-4 overflow-hidden">
+    <div className="relative w-full h-96 bg-[#0B0C15] rounded-2xl border border-white/10 p-4 overflow-hidden shadow-inner">
+      <div className="absolute inset-0 bg-grid-pattern opacity-10" />
       <svg 
         viewBox="0 0 100 100" 
-        className="w-full h-full" 
+        className="w-full h-full relative z-10" 
         style={{ padding: 0, margin: 0 }}
         onClick={() => {
           setSelectedNode(null);
@@ -212,19 +225,14 @@ const MarketNetwork: React.FC = () => {
         }}
       >
         {/* Connections */}
-        <g stroke="#6B7280" strokeWidth="0.4" opacity="0.6">
+        <g stroke="#6B7280" strokeWidth="0.4" opacity="0.4">
           {(() => {
-            // Predefined connections to avoid hydration issues
+            // Predefined connections
             const connections = [
-              // Tech sector connections
               ['AAPL', 'NVDA'], ['AAPL', 'MSFT'], ['AAPL', 'GOOGL'], ['NVDA', 'GOOGL'], ['MSFT', 'GOOGL'],
-              // Finance sector connections
               ['JPM', 'BAC'], ['JPM', 'GS'], ['BAC', 'WFC'], ['GS', 'WFC'],
-              // Insurance sector connections
               ['BRK.B', 'AXP'], ['BRK.B', 'AIG'], ['AXP', 'AIG'],
-              // Energy sector connections
               ['XOM', 'CVX'], ['XOM', 'COP'], ['CVX', 'COP'],
-              // Cross-sector connections
               ['AAPL', 'SPY'], ['NVDA', 'SPY'], ['JPM', 'SPY'], ['BRK.B', 'SPY'],
               ['AAPL', 'VIX'], ['JPM', 'DXY'], ['BRK.B', 'DXY'], ['XOM', 'DXY'],
               ['AAPL', 'JPM'], ['NVDA', 'JPM'], ['GOOGL', 'BRK.B']
@@ -249,7 +257,7 @@ const MarketNetwork: React.FC = () => {
                 >
                   <animate
                     attributeName="opacity"
-                    values="0.3;0.7;0.3"
+                    values="0.2;0.5;0.2"
                     dur="5s"
                     begin={`${index * 0.3}s`}
                     repeatCount="indefinite"
@@ -268,7 +276,6 @@ const MarketNetwork: React.FC = () => {
           
           return (
             <g key={node.ticker}>
-              {/* Connection pulse for selected node */}
               {isSelected && (
                 <circle
                   cx={node.x}
@@ -294,7 +301,6 @@ const MarketNetwork: React.FC = () => {
                 </circle>
               )}
               
-              {/* Node circle */}
               <circle
                 cx={node.x}
                 cy={node.y}
@@ -324,15 +330,14 @@ const MarketNetwork: React.FC = () => {
                 />
               </circle>
               
-              {/* Ticker label - always visible */}
               <text
                 x={node.x}
                 y={node.y + 1}
                 textAnchor="middle"
-                className="fill-white font-semibold pointer-events-none"
-                fontSize="3.5"
+                className="fill-white font-semibold pointer-events-none font-sans"
+                fontSize="3"
                 style={{ 
-                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                  textShadow: '0px 2px 4px rgba(0,0,0,0.9)',
                   fontWeight: isSelected ? 'bold' : 'normal',
                   opacity: shouldDim ? "0.3" : "1"
                 }}
@@ -347,84 +352,51 @@ const MarketNetwork: React.FC = () => {
       {/* Node info panel */}
       {selectedNode && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="absolute top-4 right-4 bg-zinc-800/95 backdrop-blur-sm rounded-xl border border-white/20 p-4 min-w-48"
+          initial={{ opacity: 0, scale: 0.95, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          className="absolute top-4 right-4 bg-[#151725]/95 backdrop-blur-md rounded-xl border border-white/20 p-4 min-w-56 shadow-xl z-20"
         >
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/5">
             <div 
-              className="w-3 h-3 rounded-full" 
+              className="w-2 h-2 rounded-full" 
               style={{ backgroundColor: nodes.find(n => n.ticker === selectedNode)?.color }}
             />
-            <h4 className="font-semibold text-zinc-100">{selectedNode}</h4>
+            <h4 className="font-display font-bold text-white text-lg">{selectedNode}</h4>
           </div>
           
           {(() => {
             const info = getNodeInfo(selectedNode);
             const node = nodes.find(n => n.ticker === selectedNode);
             return (
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Price:</span>
-                  <span className="text-zinc-100">${info.price.toFixed(2)}</span>
+              <div className="space-y-2 text-xs font-medium">
+                <div className="flex justify-between items-center">
+                  <span className="text-zinc-500 uppercase tracking-wider text-[10px]">Price</span>
+                  <span className="text-white font-mono">${info.price.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Change:</span>
-                  <span className={info.change >= 0 ? "text-green-400" : "text-red-400"}>
+                <div className="flex justify-between items-center">
+                  <span className="text-zinc-500 uppercase tracking-wider text-[10px]">Change</span>
+                  <span className={`font-mono ${info.change >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                     {info.change >= 0 ? '+' : ''}{info.change.toFixed(2)}%
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Volume:</span>
-                  <span className="text-zinc-100">{info.volume}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Sector:</span>
-                  <span className="text-zinc-100 capitalize">{node?.sector}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Sentiment:</span>
-                  <span className={`font-medium capitalize ${
-                    node?.sentiment === 'bullish' ? 'text-green-400' :
-                    node?.sentiment === 'bearish' ? 'text-red-400' : 'text-yellow-400'
+                <div className="flex justify-between items-center">
+                  <span className="text-zinc-500 uppercase tracking-wider text-[10px]">Sentiment</span>
+                  <span className={`capitalize ${
+                    node?.sentiment === 'bullish' ? 'text-emerald-400' :
+                    node?.sentiment === 'bearish' ? 'text-rose-400' : 'text-yellow-400'
                   }`}>
                     {node?.sentiment}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Risk Score:</span>
-                  <span className={`font-medium ${
-                    (node?.riskScore || 0) <= 3 ? 'text-green-400' : 
-                    (node?.riskScore || 0) <= 6 ? 'text-yellow-400' : 'text-red-400'
-                  }`}>
-                    {node?.riskScore}/10
-                  </span>
-                </div>
-                <div className="pt-2 border-t border-zinc-700/50">
-                  <div className="flex justify-between items-start">
-                    <span className="text-zinc-400 text-xs">Influences:</span>
-                    <div className="flex flex-wrap gap-1 ml-2">
-                      {node?.influences && node.influences.length > 0 ? (
-                        node.influences.map((influence) => {
-                          const influenceNode = nodes.find(n => n.ticker === influence);
-                          return (
-                            <span
-                              key={influence}
-                              className="px-2 py-1 text-xs rounded-md font-medium"
-                              style={{ 
-                                backgroundColor: `${influenceNode?.color}20`,
-                                color: influenceNode?.color,
-                                border: `1px solid ${influenceNode?.color}40`
-                              }}
-                            >
-                              {influence}
-                            </span>
-                          );
-                        })
-                      ) : (
-                        <span className="text-xs text-zinc-500 italic">None detected</span>
-                      )}
-                    </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-zinc-500 uppercase tracking-wider text-[10px]">Risk</span>
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <div 
+                        key={i}
+                        className={`w-1 h-2 rounded-full ${i < (node?.riskScore || 0) / 2 ? 'bg-[#B066FF]' : 'bg-zinc-700'}`} 
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
@@ -436,10 +408,10 @@ const MarketNetwork: React.FC = () => {
 
       {/* Legend */}
       <div className="absolute bottom-4 right-4">
-        <div className="flex flex-wrap gap-2 text-xs">
+        <div className="flex flex-wrap gap-3 text-[10px] bg-[#0B0C15]/80 p-2 rounded-lg border border-white/5 backdrop-blur-sm">
           {Object.entries(sectorColors).map(([sector, color]) => (
-            <div key={sector} className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+            <div key={sector} className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
               <span className="text-zinc-400 capitalize">{sector}</span>
             </div>
           ))}
@@ -455,12 +427,12 @@ const Sidebar: React.FC<{ isOpen: boolean; onToggle: () => void }> = ({ isOpen, 
     { name: 'Dashboard', href: '/dashboard', status: 'active' },
     { name: 'Graph Visualizer', href: '#', status: 'soon' },
     { name: 'Signals Explorer', href: '#', status: 'soon' },
-    { name: 'Portfolio Risk Score', href: '#', status: 'soon' },
+    { name: 'Portfolio Risk', href: '#', status: 'soon' },
     { name: 'Regime Detection', href: '#', status: 'soon' },
-    { name: 'Embeddings Explorer', href: '#', status: 'soon' },
+    { name: 'Embeddings', href: '#', status: 'soon' },
     { name: 'Model Performance', href: '#', status: 'soon' },
     { name: 'API Playground', href: '#', status: 'soon' },
-    { name: 'Documentation', href: '#', status: 'soon' }
+    { name: 'Docs', href: '#', status: 'soon' }
   ];
 
   return (
@@ -468,7 +440,7 @@ const Sidebar: React.FC<{ isOpen: boolean; onToggle: () => void }> = ({ isOpen, 
       {/* Mobile Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
           onClick={onToggle}
         />
       )}
@@ -478,54 +450,57 @@ const Sidebar: React.FC<{ isOpen: boolean; onToggle: () => void }> = ({ isOpen, 
         fixed left-0 top-0 h-screen overflow-y-auto z-50 transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:relative lg:translate-x-0 lg:z-auto lg:flex-shrink-0
-        w-64 bg-zinc-900/95 border-r border-white/10
+        w-64 bg-[#0B0C15] border-r border-white/5
       `}>
         <div className="p-6">
           {/* Header with Close Button */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-3">
-            <Image 
-              src="/icon-white-transparent.svg" 
-              alt="RavenGraph Logo" 
-              width={32}
-              height={32}
-              className="w-8 h-8"
-            />
-              <span className="text-xl font-semibold text-zinc-100">RavenGraph</span>
+              <RavenLogo className="w-7 h-7" />
+              <span className="text-lg font-display font-bold text-white tracking-tight">RavenGraph</span>
             </div>
             <button
               onClick={onToggle}
-              className="lg:hidden p-2 rounded-lg hover:bg-zinc-800/50 transition-colors"
+              className="lg:hidden p-1 text-zinc-400 hover:text-white"
             >
-              <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X className="w-5 h-5" />
             </button>
           </div>
 
         {/* Navigation */}
-        <nav className="space-y-2">
+        <nav className="space-y-1">
           {navigationItems.map((item) => (
             <a
               key={item.name}
               href={item.href}
-              className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+              className={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group ${
                 item.status === 'active'
-                  ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'
+                  ? 'bg-[#B066FF]/10 text-[#B066FF]'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <div className="flex items-center justify-between">
-                <span>{item.name}</span>
-                {item.status === 'soon' && (
-                  <span className="text-xs px-2 py-1 rounded-full bg-zinc-700/50 text-zinc-500 border border-zinc-600/50">
-                    Soon
-                  </span>
-                )}
-              </div>
+              <span className="font-sans">{item.name}</span>
+              {item.status === 'soon' && (
+                <span className="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-zinc-500 border border-white/5 group-hover:border-white/10 transition-colors">
+                  Soon
+                </span>
+              )}
             </a>
           ))}
         </nav>
+        </div>
+        
+        <div className="absolute bottom-6 left-6 right-6">
+          <div className="p-4 rounded-xl bg-gradient-to-br from-[#151725] to-[#0B0C15] border border-white/5">
+            <div className="text-xs font-medium text-white mb-1">API Usage</div>
+            <div className="w-full bg-zinc-800 h-1.5 rounded-full mb-2 overflow-hidden">
+              <div className="bg-[#B066FF] h-full w-3/4 rounded-full" />
+            </div>
+            <div className="flex justify-between text-[10px] text-zinc-500">
+              <span>75k / 100k calls</span>
+              <span>75%</span>
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -572,27 +547,29 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-950 to-zinc-900 text-zinc-100">
-      <div className="lg:flex">
-        {/* Sidebar */}
-        <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
-        
-        {/* Main Content */}
-        <div className="flex-1 lg:ml-0 transition-all duration-300">
+    <div className="min-h-screen bg-[#0B0C15] text-white font-sans selection:bg-[#B066FF]/30 overflow-hidden flex">
+      
+      {/* Background Atmosphere */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+         <GeometricParticleField className="opacity-20" />
+      </div>
+
+      {/* Sidebar */}
+      <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
+      
+      {/* Main Content */}
+      <div className="flex-1 lg:ml-0 transition-all duration-300 relative z-10 flex flex-col h-screen overflow-hidden">
         {/* Header */}
-        <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/40 border-b border-white/10">
-          <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {/* Mobile Menu Button */}
+        <header className="sticky top-0 z-30 bg-[#0B0C15]/80 backdrop-blur-md border-b border-white/5">
+          <div className="px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-4">
               <button
                 onClick={toggleSidebar}
-                className="lg:hidden p-2 rounded-lg hover:bg-zinc-800/50 transition-colors"
+                className="lg:hidden p-2 text-zinc-400 hover:text-white"
               >
-                <svg className="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <Menu className="w-6 h-6" />
               </button>
-              <span className="font-semibold tracking-wide text-lg">Dashboard</span>
+              <h1 className="font-display font-semibold text-lg tracking-tight">Market Intelligence</h1>
             </div>
             
             <div className="flex items-center gap-4">
@@ -601,437 +578,264 @@ export default function Dashboard() {
                 <input
                   type="text"
                   placeholder="Search signals..."
-                  className="pl-10 pr-4 py-2 w-64 rounded-xl border border-white/20 bg-zinc-900/70 text-zinc-100 placeholder:text-zinc-500 text-sm"
+                  className="pl-10 pr-4 py-2 w-64 rounded-full border border-white/10 bg-[#151725] text-white placeholder:text-zinc-600 text-sm focus:outline-none focus:ring-1 focus:ring-[#B066FF]/50 transition-all"
                 />
               </div>
               
-              <button className="p-2 rounded-xl hover:bg-zinc-800/50 transition-colors">
+              <button className="p-2 rounded-full hover:bg-white/5 transition-colors relative">
                 <Bell className="w-5 h-5 text-zinc-400" />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-[#B066FF] rounded-full border-2 border-[#0B0C15]" />
               </button>
               
-              <button className="p-2 rounded-xl hover:bg-zinc-800/50 transition-colors">
-                <Settings className="w-5 h-5 text-zinc-400" />
-              </button>
+              <div className="h-6 w-px bg-white/10" />
               
               <Button 
                 onClick={handleLogout}
-              variant="outline" 
-              className="rounded-xl border-white/20 hover:bg-zinc-800/50 bg-transparent"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
+                variant="ghost" 
+                className="text-zinc-400 hover:text-white hover:bg-white/5 rounded-full text-xs"
+              >
+                <LogOut className="w-3.5 h-3.5 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-8">
-        {/* Welcome Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <h1 className="text-3xl font-semibold text-zinc-100 mb-2">
-            Welcome back, Ralph
-          </h1>
-          <p className="text-zinc-400">
-            Market intelligence powered by RavenGraph&apos;s network analysis
-          </p>
-        </motion.div>
-
-        {/* Hero Overview - Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <Card className="rounded-2xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300">
-              <CardContent className="pt-1 px-6 pb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-zinc-400 mb-1">Market Sentiment</p>
-                    <p className="text-2xl font-semibold text-zinc-100">Bullish</p>
-                    <p className="text-xs text-green-400 mt-1">+12% from yesterday</p>
-                  </div>
-                  <div className="p-3 rounded-xl" style={{ backgroundColor: "rgba(176,102,255,0.1)" }}>
-                    <TrendingUp className="w-6 h-6" style={{ color: "#B066FF" }} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Card className="rounded-2xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300">
-              <CardContent className="pt-1 px-6 pb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-zinc-400 mb-1">Volatility Regime</p>
-                    <p className="text-2xl font-semibold text-zinc-100">Low</p>
-                    <p className="text-xs text-blue-400 mt-1">Stable conditions</p>
-                  </div>
-                  <div className="p-3 rounded-xl" style={{ backgroundColor: "rgba(176,102,255,0.1)" }}>
-                    <Activity className="w-6 h-6" style={{ color: "#B066FF" }} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <Card className="rounded-2xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300">
-              <CardContent className="pt-1 px-6 pb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-zinc-400 mb-1">Signals Today</p>
-                    <p className="text-2xl font-semibold text-zinc-100">247</p>
-                    <p className="text-xs text-purple-400 mt-1">+18 new alerts</p>
-                  </div>
-                  <div className="p-3 rounded-xl" style={{ backgroundColor: "rgba(176,102,255,0.1)" }}>
-                    <Zap className="w-6 h-6" style={{ color: "#B066FF" }} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <Card className="rounded-2xl border-white/20 bg-zinc-900/80 hover:bg-zinc-900/90 transition-all duration-300">
-              <CardContent className="pt-1 px-6 pb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-zinc-400 mb-1">Model Accuracy</p>
-                    <p className="text-2xl font-semibold text-zinc-100">87.3%</p>
-                    <p className="text-xs text-green-400 mt-1">30-day rolling</p>
-                  </div>
-                  <div className="p-3 rounded-xl" style={{ backgroundColor: "rgba(176,102,255,0.1)" }}>
-                    <Target className="w-6 h-6" style={{ color: "#B066FF" }} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        {/* Main Dashboard Grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column - Signals & Market Network */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Market Network Visualization */}
+        {/* Scrollable Content Area */}
+        <main className="flex-1 overflow-y-auto p-6">
+          <div className="max-w-7xl mx-auto space-y-8">
+            
+            {/* Welcome Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              transition={{ duration: 0.6 }}
+              className="flex items-end justify-between"
             >
-              <Card className="rounded-2xl border-white/20 bg-zinc-900/80">
-                <CardContent className="pt-1 px-6 pb-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold text-zinc-100">Live Market Network</h3>
-                    <div className="flex items-center gap-2 text-sm" style={{ color: "#B066FF" }}>
-                      <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#B066FF" }} />
-                      RavenPulse™ Active
-                    </div>
-                  </div>
-                  <MarketNetwork />
-                </CardContent>
-              </Card>
+              <div>
+                <h2 className="text-3xl font-display font-bold text-white mb-1">
+                  Welcome back, Ralph
+                </h2>
+                <p className="text-zinc-400 font-light">
+                  Market signals detected: <span className="text-emerald-400 font-medium">24 high confidence</span>
+                </p>
+              </div>
+              <div className="hidden md:flex items-center gap-2 text-xs text-zinc-500 font-mono">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                SYSTEM ONLINE • v2.4
+              </div>
             </motion.div>
 
-            {/* Buy/Sell/Neutral Signals */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <Card className="rounded-2xl border-white/20 bg-zinc-900/80">
-                <CardContent className="pt-1 px-6 pb-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold text-zinc-100">Probabilistic Signal Feed</h3>
-                    <Button className="rounded-xl" style={{ backgroundColor: "#B066FF", borderColor: "#B066FF" }}>
-                      <Network className="w-4 h-4 mr-2" />
-                      Explore Graph
-                    </Button>
-                  </div>
+            {/* Hero Overview - Key Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {[
+                { label: "Market Sentiment", value: "Bullish", sub: "+12% vs yesterday", icon: TrendingUp, color: "#10B981" },
+                { label: "Volatility Regime", value: "Low", sub: "Stable conditions", icon: Activity, color: "#3B82F6" },
+                { label: "Active Signals", value: "247", sub: "+18 new alerts", icon: Zap, color: "#B066FF" },
+                { label: "Model Accuracy", value: "87.3%", sub: "30-day rolling", icon: Target, color: "#F59E0B" }
+              ].map((metric, i) => (
+                <motion.div
+                  key={metric.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                >
+                  <Card className="rounded-2xl border-white/5 bg-[#151725] hover:border-white/10 transition-all duration-300">
+                    <CardContent className="p-5">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="p-2.5 rounded-xl bg-white/5">
+                          <metric.icon className="w-5 h-5" style={{ color: metric.color }} />
+                        </div>
+                        <span className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider bg-white/5 px-2 py-1 rounded-md">
+                          Live
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-display font-bold text-white mb-1">{metric.value}</p>
+                        <p className="text-sm text-zinc-400 font-medium mb-1">{metric.label}</p>
+                        <p className="text-xs text-zinc-500 font-mono">{metric.sub}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Main Dashboard Grid */}
+            <div className="grid lg:grid-cols-3 gap-6">
+              {/* Left Column - Signals & Market Network */}
+              <div className="lg:col-span-2 space-y-6">
+                {/* Market Network Visualization */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  <Card className="rounded-2xl border-white/5 bg-[#151725] overflow-hidden">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h3 className="text-lg font-display font-bold text-white">Live Market Network</h3>
+                          <p className="text-xs text-zinc-400">Real-time causal discovery graph</p>
+                        </div>
+                        <Button variant="outline" size="sm" className="border-white/10 bg-white/5 hover:bg-white/10 text-xs font-medium h-8 rounded-full">
+                          <Network className="w-3.5 h-3.5 mr-2 text-[#B066FF]" />
+                          Full Graph
+                        </Button>
+                      </div>
+                      <MarketNetwork />
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                {/* Buy/Sell/Neutral Signals */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                >
+                  <h3 className="text-lg font-display font-bold text-white mb-4 px-1">Probabilistic Feed</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {signals.map((signal) => (
+                    {signals.map((signal, idx) => (
                       <motion.div
                         key={signal.ticker}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: 0.7 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: 0.6 + (idx * 0.05) }}
                       >
                         <SignalCard {...signal} />
                       </motion.div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
+                </motion.div>
+              </div>
 
-          {/* Right Column - Sidebar */}
-          <div className="space-y-6">
-            {/* Daily Insights */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-            >
-              <Card className="rounded-2xl border-white/20 bg-zinc-900/80">
-                <CardContent className="pt-1 px-6 pb-6">
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-4">Daily Insights</h3>
-                  <div className="space-y-4">
-                    <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                      <p className="text-sm text-blue-400 font-medium mb-2">Volatility Clustering Detected</p>
-                      <p className="text-xs text-zinc-300 leading-relaxed">
-                        Volatility clustering detected in Energy sector; correlation to Tech increasing. Cross-sector influence coefficient up 23% in the last 2 hours.
-                      </p>
-                    </div>
-                    <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
-                      <p className="text-sm text-green-400 font-medium mb-2">Lead-Lag Relationship</p>
-                      <p className="text-xs text-zinc-300 leading-relaxed">
-                        Gold futures now leading tech sector by ~3.5 minutes. Historical accuracy: 78%. Monitor GLD → XLK signal propagation.
-                      </p>
-                    </div>
-                    <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20">
-                      <p className="text-sm text-purple-400 font-medium mb-2">Embedding Space Shift</p>
-                      <p className="text-xs text-zinc-300 leading-relaxed">
-                        Healthcare sector clustering pattern changed. Stocks moving from &quot;defensive&quot; to &quot;growth&quot; embedding space.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Portfolio Watchlist */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-            >
-              <Card className="rounded-2xl border-white/20 bg-zinc-900/80">
-                <CardContent className="pt-1 px-6 pb-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-zinc-100">Watchlist</h3>
-                    <div className="flex gap-2">
-                      <Input
-                        value={newTicker}
-                        onChange={(e) => setNewTicker(e.target.value)}
-                        placeholder="Ticker"
-                        className="w-20 h-8 text-xs border-white/20 bg-zinc-800/50"
-                        onKeyPress={(e) => e.key === 'Enter' && addToWatchlist()}
-                      />
-                      <Button
-                        onClick={addToWatchlist}
-                        size="sm"
-                        className="h-8 px-2"
-                        style={{ backgroundColor: "#B066FF", borderColor: "#B066FF" }}
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    {watchlist.map((ticker) => (
-                      <div key={ticker} className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                        <div>
-                          <p className="font-semibold text-zinc-100">{ticker}</p>
-                          <p className="text-xs text-zinc-400">Next-day outlook: +2.3%</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs text-green-400 font-medium">87% probability</p>
-                          <p className="text-xs text-zinc-500">Bullish signal</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Sector Outlook */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.9 }}
-            >
-              <Card className="rounded-2xl border-white/20 bg-zinc-900/80">
-                <CardContent className="pt-1 px-6 pb-6">
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-4">Sector Outlook</h3>
-                  <div className="space-y-3">
-                    {sectorOutlook.map((sector) => (
-                      <div key={sector.name} className="flex items-center justify-between">
-                        <span className="text-sm text-zinc-300">{sector.name}</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-2 bg-zinc-700 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full transition-all duration-500 ${
-                                sector.outlook === 'bullish' ? 'bg-green-500' :
-                                sector.outlook === 'bearish' ? 'bg-red-500' : 'bg-yellow-500'
-                              }`}
-                              style={{ width: `${sector.strength}%` }}
-                            />
+              {/* Right Column - Sidebar */}
+              <div className="space-y-6">
+                {/* Daily Insights */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                >
+                  <Card className="rounded-2xl border-white/5 bg-[#151725]">
+                    <CardContent className="p-6">
+                      <h3 className="text-base font-display font-bold text-white mb-4">Daily Insights</h3>
+                      <div className="space-y-3">
+                        {[
+                          { title: "Volatility Clustering", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/10", desc: "Energy sector clustering detected; correlation to Tech increasing." },
+                          { title: "Lead-Lag Relationship", color: "text-[#B066FF]", bg: "bg-[#B066FF]/10", border: "border-[#B066FF]/10", desc: "Gold futures leading tech sector by ~3.5 minutes." },
+                          { title: "Embedding Shift", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/10", desc: "Healthcare stocks moving from 'defensive' to 'growth' space." }
+                        ].map((insight, i) => (
+                          <div key={i} className={`p-4 rounded-xl ${insight.bg} border ${insight.border}`}>
+                            <p className={`text-xs font-bold uppercase tracking-wide mb-1.5 ${insight.color}`}>{insight.title}</p>
+                            <p className="text-xs text-zinc-300 leading-relaxed font-light">
+                              {insight.desc}
+                            </p>
                           </div>
-                          <span className="text-xs text-zinc-400 w-8 text-right">{sector.strength}%</span>
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-            {/* API Integration */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.0 }}
-            >
-              <Card className="rounded-2xl border-white/20 bg-zinc-900/80">
-                <CardContent className="pt-1 px-6 pb-6">
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-4">API Integration</h3>
-                  <div className="space-y-4">
-                    <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-green-400" />
-                          <span className="text-xs font-medium text-zinc-300">GET /signals</span>
-                        </div>
-                        <span className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">
-                          Live
-                        </span>
+                {/* Portfolio Watchlist */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                >
+                  <Card className="rounded-2xl border-white/5 bg-[#151725]">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-base font-display font-bold text-white">Watchlist</h3>
+                        <Button
+                            onClick={addToWatchlist}
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 w-6 p-0 rounded-full hover:bg-white/10"
+                          >
+                            <Plus className="w-4 h-4 text-zinc-400" />
+                          </Button>
                       </div>
-                      <p className="text-xs text-zinc-400 font-mono">/signals?symbol=AAPL&timeframe=1d</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-blue-400" />
-                          <span className="text-xs font-medium text-zinc-300">GET /embeddings</span>
-                        </div>
-                        <span className="text-xs px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                          Beta
-                        </span>
+                      
+                      <div className="relative mb-4">
+                         <Input
+                            value={newTicker}
+                            onChange={(e) => setNewTicker(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && addToWatchlist()}
+                            placeholder="Add ticker..."
+                            className="h-9 bg-[#0B0C15] border-white/5 text-xs rounded-lg placeholder:text-zinc-600 focus-visible:ring-[#B066FF]/50"
+                          />
                       </div>
-                      <p className="text-xs text-zinc-400 font-mono">/embeddings?sector=tech</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-purple-400" />
-                          <span className="text-xs font-medium text-zinc-300">GET /correlations</span>
-                        </div>
-                        <span className="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                          Stable
-                        </span>
-                      </div>
-                      <p className="text-xs text-zinc-400 font-mono">/correlations?lead=AAPL&lag=SPY</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-orange-400" />
-                          <span className="text-xs font-medium text-zinc-300">GET /risk-score</span>
-                        </div>
-                        <span className="text-xs px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                          Beta
-                        </span>
-                      </div>
-                      <p className="text-xs text-zinc-400 font-mono">/risk-score?portfolio=AAPL,TSLA,NVDA</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                    <p className="text-xs text-blue-400">
-                      All signals available via API & dashboards. Plug into your strategy.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
 
-            {/* System Performance */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.1 }}
-            >
-              <Card className="rounded-2xl border-white/20 bg-zinc-900/80">
-                <CardContent className="pt-1 px-6 pb-6">
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-4">Model Performance</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-300">Directional Accuracy</span>
-                      <span className="text-sm font-semibold text-green-400">87.3%</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-300">Sharpe Ratio</span>
-                      <span className="text-sm font-semibold text-blue-400">2.41</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-300">Lift vs Baseline</span>
-                      <span className="text-sm font-semibold text-purple-400">+23%</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-300">Top Feature</span>
-                      <span className="text-xs text-zinc-400">Sector Correlation</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </div>
-      </main>
+                      <div className="space-y-2">
+                        {watchlist.map((ticker) => (
+                          <div key={ticker} className="flex items-center justify-between p-3 rounded-lg bg-[#0B0C15] border border-white/5 hover:border-white/10 transition-colors group cursor-pointer">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <p className="font-bold text-sm text-white">{ticker}</p>
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              </div>
+                              <p className="text-[10px] text-zinc-500 font-mono mt-0.5">Vol: Low • Sent: Bull</p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-xs text-emerald-400 font-mono font-medium">+2.3%</p>
+                              <p className="text-[10px] text-zinc-500">87% Prob.</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-      {/* Footer */}
-      <div className="border-t border-white/10 bg-zinc-900/80">
-        <div className="mx-auto max-w-7xl px-4 py-6">
-          {/* Disclaimer */}
-          <div className="text-center mb-6">
-            <p className="text-xs text-zinc-500">
-              <strong className="text-zinc-400">Disclaimer:</strong> RavenGraph provides market analytics and probabilistic signals for informational purposes only. 
-              Not investment advice. All data and signals are for research and analysis purposes.
-            </p>
-          </div>
-          
-          {/* Trademark Footer */}
-          <div className="flex items-center justify-center gap-3 pt-4 border-t border-zinc-800/50">
-            <Image 
-              src="/logo-no-background 2.svg" 
-              alt="RavenGraph Logo" 
-              width={64}
-              height={64}
-              className="w-16 h-16 opacity-80"
-            />
-            <div className="text-center">
-              <p className="text-xs text-zinc-600">
-                &copy; 2025 RavenGraph. All rights reserved.
-              </p>
-              <p className="text-xs text-zinc-600">
-                RavenGraph&trade; and RavenPulse&trade; are trademarks of RavenGraph Inc.
-              </p>
+                {/* API Integration */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                >
+                  <Card className="rounded-2xl border-white/5 bg-[#151725]">
+                    <CardContent className="p-6">
+                      <h3 className="text-base font-display font-bold text-white mb-4">Quick API</h3>
+                      <div className="space-y-2 font-mono text-[10px]">
+                        {[
+                          { method: "GET", path: "/signals", color: "text-emerald-400", bg: "bg-emerald-500/20" },
+                          { method: "GET", path: "/embeddings", color: "text-blue-400", bg: "bg-blue-500/20" },
+                          { method: "GET", path: "/correlations", color: "text-[#B066FF]", bg: "bg-[#B066FF]/20" },
+                        ].map((api, i) => (
+                          <div key={i} className="flex items-center justify-between p-2 rounded bg-[#0B0C15] border border-white/5">
+                             <span className="text-zinc-400">{api.path}</span>
+                             <span className={`px-1.5 py-0.5 rounded ${api.bg} ${api.color} font-bold`}>{api.method}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-white/5">
+                        <p className="text-[10px] text-zinc-500 leading-relaxed">
+                          Use your API key to stream these signals directly into your execution engine.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-        </div>
+          
+           {/* Footer */}
+            <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-zinc-600 font-mono">
+              <div className="flex items-center gap-2">
+                 <RavenLogo className="w-4 h-4 opacity-50" />
+                 <span>© 2025 RavenGraph Inc.</span>
+              </div>
+              <div className="flex gap-4">
+                <span>SYSTEM: ONLINE</span>
+                <span>LATENCY: 42ms</span>
+              </div>
+            </div>
+        </main>
       </div>
     </div>
   );
