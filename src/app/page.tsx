@@ -251,7 +251,7 @@ export default function LandingPage() {
               { label: "Latency", value: "< 50ms" },
               { label: "Active Edges", value: "10M+" },
               { label: "Assets", value: "3,000+" },
-              { label: "Alpha Lift", value: "24%" },
+              { label: "Sectors", value: "50+" },
             ].map((stat, i) => (
               <div key={i} className="py-8 md:py-10 text-center border-r border-white/5 last:border-r-0">
                 <div className="text-3xl font-display font-bold text-white mb-1">{stat.value}</div>
