@@ -17,6 +17,9 @@ import { FeatureTimeseriesPreview } from "@/components/features/FeatureTimeserie
 import { FeatureApiPreview } from "@/components/features/FeatureApiPreview";
 import Image from "next/image";
 
+import { IntroReveal } from "@/components/IntroReveal";
+import { ScrollReveal } from "@/components/ScrollReveal";
+
 // --- Components ---
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
@@ -47,7 +50,7 @@ const FeatureSection = ({
         <div className={`grid lg:grid-cols-2 gap-16 items-center ${align === "right" ? "lg:grid-flow-dense" : ""}`}>
           
           {/* Text Content */}
-          <div className={`space-y-6 ${align === "right" ? "lg:col-start-2" : ""}`}>
+          <ScrollReveal className={`space-y-6 ${align === "right" ? "lg:col-start-2" : ""}`}>
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-[#B066FF]/50"></span>
               <span className="text-[#B066FF] font-sans text-xs uppercase tracking-widest font-semibold">{subtitle}</span>
@@ -63,13 +66,13 @@ const FeatureSection = ({
                 Read Documentation <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Visual Content */}
-          <div className={`relative ${align === "right" ? "lg:col-start-1" : ""}`}>
+          <ScrollReveal delay={0.2} className={`relative ${align === "right" ? "lg:col-start-1" : ""}`}>
             <div className="absolute -inset-1 bg-gradient-to-r from-[#B066FF]/20 to-purple-900/20 blur-2xl opacity-20" />
             {children}
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
@@ -179,6 +182,7 @@ export default function LandingPage() {
       </AnimatePresence>
 
       <main>
+        <IntroReveal />
         {/* Hero Section */}
         <section className="relative min-h-screen flex flex-col justify-center pt-20 overflow-hidden">
           <GeometricParticleField className="opacity-40" />
@@ -186,6 +190,7 @@ export default function LandingPage() {
           <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 w-full">
             <div className="flex flex-col items-center text-center gap-8 max-w-4xl mx-auto">
               
+              <ScrollReveal>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -198,7 +203,9 @@ export default function LandingPage() {
                 </span>
                 <span className="text-zinc-300 text-xs font-medium tracking-wide">v2.4 Graph Model Live</span>
               </motion.div>
+              </ScrollReveal>
 
+              <ScrollReveal delay={0.1}>
               <motion.h1 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -210,7 +217,9 @@ export default function LandingPage() {
                   Invisible
                 </span>
               </motion.h1>
+              </ScrollReveal>
 
+          <ScrollReveal delay={0.2}>
           <motion.p
                 initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -219,7 +228,9 @@ export default function LandingPage() {
           >
                 The market isn&apos;t just time-series. It&apos;s a complex network. We build <span className="text-white font-medium">Graph Intelligence</span> to map the dynamic fabric of financial reality.
           </motion.p>
+          </ScrollReveal>
 
+          <ScrollReveal delay={0.3}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -239,6 +250,7 @@ export default function LandingPage() {
                   Start Integration
                 </Button>
               </motion.div>
+              </ScrollReveal>
 
             </div>
         </div>
