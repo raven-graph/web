@@ -7,9 +7,6 @@ import {
   Menu,
   X,
   ArrowRight,
-  Code2,
-  Network,
-  Cpu,
   Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

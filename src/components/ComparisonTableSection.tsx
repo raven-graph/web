@@ -36,9 +36,9 @@ export const ComparisonTableSection = () => {
                                         Implied Sharpe
                                         <div className="text-[10px] text-zinc-500 font-normal uppercase tracking-wide mt-1">Downstream Signal Quality Proxy</div>
                                     </td>
-                                    <td className="p-6 text-zinc-400 text-right font-mono">0.62</td>
+                                    <td className="p-6 text-zinc-400 text-right font-mono">1.10</td>
                                     <td className="p-6 text-white text-right font-mono font-bold">2.45</td>
-                                    <td className="p-6 text-green-400 text-right font-mono">+1.83</td>
+                                    <td className="p-6 text-green-400 text-right font-mono">+1.35</td>
                                 </tr>
 
                                 <tr className="group hover:bg-white/5 transition-colors">
