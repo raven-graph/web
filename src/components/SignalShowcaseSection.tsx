@@ -55,8 +55,8 @@ export const SignalShowcaseSection = () => {
                     <h3 className="text-3xl md:text-5xl font-display font-bold text-white">
                         Predict the Ripple
                     </h3>
-                    <p className="text-zinc-400 mt-4 max-w-2xl mx-auto">
-                        Markets have memory. RavenGraph detects causal lead-lag relationships that covariance matrices miss.
+                    <p className="text-lg text-zinc-400 mt-4 max-w-2xl mx-auto font-light leading-relaxed">
+                        Traditional models see isolated time series. We see the <span className="text-white font-medium">causal graph</span>.
                     </p>
                 </ScrollReveal>
 
