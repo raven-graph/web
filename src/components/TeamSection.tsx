@@ -2,8 +2,7 @@
 
 import React from "react";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { motion } from "framer-motion";
-import { Linkedin } from "lucide-react";
+
 
 interface TeamMember {
   name: string;

@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { motion, AnimatePresence } from "framer-motion";
-import { Clock, TrendingUp, AlertTriangle, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { Clock, TrendingUp, AlertTriangle } from "lucide-react";
 
 export const SignalShowcaseSection = () => {
     const [phase, setPhase] = useState<"idle" | "shock" | "transit" | "impact">("idle");

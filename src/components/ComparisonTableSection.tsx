@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { Check, Minus } from "lucide-react";
+import { Check } from "lucide-react";
 
 export const ComparisonTableSection = () => {
     return (

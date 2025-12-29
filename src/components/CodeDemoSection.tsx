@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal, Play, Copy, Check, Cpu, Code2 } from "lucide-react";
+import { Terminal, Copy, Check, Cpu, Code2 } from "lucide-react";
 
 export const CodeDemoSection = () => {
     const [activeTab, setActiveTab] = useState<"cpp" | "python">("cpp");
@@ -108,8 +108,8 @@ export const CodeDemoSection = () => {
                                     <div className="space-y-1">
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">1</span><span className="text-[#B066FF]">import</span> <span className="text-white ml-2">ravengraph</span> <span className="text-[#B066FF] ml-2">as</span> <span className="text-white ml-2">rg</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">2</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">3</span><span className="text-zinc-500"># streaming realtime signals</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">4</span><span className="text-white">client</span> <span className="text-zinc-400">=</span> <span className="text-white">rg.Client(</span><span className="text-green-400">"api_key_..."</span><span className="text-white">)</span></div>
+                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">3</span><span className="text-zinc-500">{"# streaming realtime signals"}</span></div>
+                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">4</span><span className="text-white">client</span> <span className="text-zinc-400">=</span> <span className="text-white">rg.Client(</span><span className="text-green-400">&quot;api_key_...&quot;</span><span className="text-white">)</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">5</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">6</span><span className="text-[#B066FF]">for</span> <span className="text-white ml-2">signal</span> <span className="text-[#B066FF] ml-2">in</span> <span className="text-white ml-2">client.stream_signals():</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">7</span><span className="text-white ml-4">if signal.is_shock_event():</span></div>
@@ -119,11 +119,11 @@ export const CodeDemoSection = () => {
                                     <div className="space-y-1">
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">1</span><span className="text-[#B066FF]">#include</span> <span className="text-green-400">&lt;ravengraph/client.h&gt;</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">2</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">3</span><span className="text-zinc-500">// Initialize gRPC channel</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">4</span><span className="text-blue-400">auto</span> <span className="text-white">channel = grpc::CreateChannel(</span><span className="text-green-400">"api.ravengraph.com"</span><span className="text-white">);</span></div>
+                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">3</span><span className="text-zinc-500">{"// Initialize gRPC channel"}</span></div>
+                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">4</span><span className="text-blue-400">auto</span> <span className="text-white">channel = grpc::CreateChannel(</span><span className="text-green-400">&quot;api.ravengraph.com&quot;</span><span className="text-white">);</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">5</span><span className="text-blue-400">auto</span> <span className="text-white">stub = RavenGraph::NewStub(channel);</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">6</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">7</span><span className="text-zinc-500">// High-frequency signal loop</span></div>
+                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">7</span><span className="text-zinc-500">{"// High-frequency signal loop"}</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">8</span><span className="text-[#B066FF]">while</span> <span className="text-white">(stream-&gt;Read(&signal)) {"{"}</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">9</span><span className="text-white ml-4">if (signal.confidence() &gt; </span><span className="text-orange-400">0.95</span><span className="text-white">) {"{"}</span></div>
                                         <div className="flex"><span className="text-zinc-600 w-8 select-none">10</span><span className="text-white ml-8">Execution::SubmitOrder(signal.asset_id());</span></div>
