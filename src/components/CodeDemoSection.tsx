@@ -1,21 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { motion, AnimatePresence } from "framer-motion";
-import { Terminal, Copy, Check, Cpu, Code2 } from "lucide-react";
+import { Copy, Check, Calendar, Layers, Database } from "lucide-react";
 
 export const CodeDemoSection = () => {
-    const [activeTab, setActiveTab] = useState<"cpp" | "python">("cpp");
-    const [step, setStep] = useState(0);
+    const [activeTab, setActiveTab] = useState<"python" | "cpp">("python");
     const [copied, setCopied] = useState(false);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setStep((prev) => (prev + 1) % 4);
-        }, 4000);
-        return () => clearInterval(timer);
-    }, []);
 
     const copyCode = () => {
         setCopied(true);
@@ -35,33 +26,53 @@ export const CodeDemoSection = () => {
                     <ScrollReveal className="space-y-8 lg:sticky lg:top-24">
                         <div className="flex items-center gap-3 mb-6">
                             <span className="h-px w-8 bg-[#B066FF]/50"></span>
-                            <span className="text-[#B066FF] font-sans text-xs uppercase tracking-widest font-semibold">Production Ready</span>
+                            <span className="text-[#B066FF] font-sans text-xs uppercase tracking-widest font-semibold">Research Integration</span>
                         </div>
                         <h2 className="text-4xl md:text-5xl font-display font-bold text-white leading-tight">
                             Built for <br />
-                            <span className="text-zinc-500">Low Latency</span>
+                            <span className="text-zinc-500">Feature Integration</span>
                         </h2>
                         <p className="text-lg text-zinc-400 leading-relaxed font-light">
-                            Whether you are backtesting strategies in Python or executing live in C++, RavenGraph provides standardized, low-latency access to the global graph structure.
+                            Retrieve leakage-safe graph embeddings and join them directly into existing models.
                         </p>
 
-                        <div className="flex flex-col gap-4">
-                            <div className="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#B066FF]/30 transition-colors">
-                                <div className="w-10 h-10 rounded-full bg-[#B066FF]/10 flex items-center justify-center text-[#B066FF]">
-                                    <Cpu className="w-5 h-5" />
+                        <div className="space-y-8 mt-8">
+                            {/* Bullet 1 */}
+                            <div className="flex gap-4">
+                                <div className="mt-1 w-10 h-10 rounded-full bg-[#B066FF]/10 flex items-center justify-center text-[#B066FF] shrink-0">
+                                    <Calendar className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <div className="text-white font-medium">C++ gRPC Client</div>
-                                    <div className="text-sm text-zinc-500">Sub-millisecond signal retrieval for HFT systems</div>
+                                    <h4 className="text-white font-medium text-lg">Point-in-Time Embeddings</h4>
+                                    <p className="text-zinc-500 leading-relaxed mt-1">
+                                        Embeddings are generated as-of a specific timestamp and horizon. No future data. No normalization leakage.
+                                    </p>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/10 hover:border-[#B066FF]/30 transition-colors">
-                                <div className="w-10 h-10 rounded-full bg-[#B066FF]/10 flex items-center justify-center text-[#B066FF]">
-                                    <Code2 className="w-5 h-5" />
+
+                            {/* Bullet 2 */}
+                            <div className="flex gap-4">
+                                <div className="mt-1 w-10 h-10 rounded-full bg-[#B066FF]/10 flex items-center justify-center text-[#B066FF] shrink-0">
+                                    <Layers className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <div className="text-white font-medium">Python Research SDK</div>
-                                    <div className="text-sm text-zinc-500">Seemless integration with pandas and PyTorch</div>
+                                    <h4 className="text-white font-medium text-lg">Model-Agnostic</h4>
+                                    <p className="text-zinc-500 leading-relaxed mt-1">
+                                        Designed to plug into existing research pipelines (XGBoost, linear models, neural nets).
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Bullet 3 */}
+                            <div className="flex gap-4">
+                                <div className="mt-1 w-10 h-10 rounded-full bg-[#B066FF]/10 flex items-center justify-center text-[#B066FF] shrink-0">
+                                    <Database className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h4 className="text-white font-medium text-lg">Offline First</h4>
+                                    <p className="text-zinc-500 leading-relaxed mt-1">
+                                        Evaluate via Parquet artifacts before any live integration.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -72,16 +83,16 @@ export const CodeDemoSection = () => {
                         {/* Language Tabs */}
                         <div className="flex items-center gap-2 mb-4">
                             <button
-                                onClick={() => setActiveTab("cpp")}
-                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "cpp" ? "bg-[#B066FF] text-white" : "bg-white/5 text-zinc-400 hover:text-white"}`}
-                            >
-                                C++ (Production)
-                            </button>
-                            <button
                                 onClick={() => setActiveTab("python")}
                                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "python" ? "bg-[#B066FF] text-white" : "bg-white/5 text-zinc-400 hover:text-white"}`}
                             >
                                 Python (Research)
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("cpp")}
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "cpp" ? "bg-[#B066FF] text-white" : "bg-white/5 text-zinc-400 hover:text-white"}`}
+                            >
+                                C++ (Production)
                             </button>
                         </div>
 
@@ -95,7 +106,7 @@ export const CodeDemoSection = () => {
                                     <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
                                 </div>
                                 <div className="text-zinc-500 text-xs text-center absolute left-0 right-0 pointer-events-none">
-                                    {activeTab === "cpp" ? "execution_engine.cpp" : "strategy_backtest.py"}
+                                    {activeTab === "python" ? "research_notebook.ipynb" : "production_loader.cpp"}
                                 </div>
                                 <button onClick={copyCode} className="text-zinc-500 hover:text-white transition-colors">
                                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -103,73 +114,48 @@ export const CodeDemoSection = () => {
                             </div>
 
                             {/* Code Content */}
-                            <div className="p-6 overflow-x-auto min-h-[300px]">
-                                {activeTab === "python" ? (
-                                    <div className="space-y-1">
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">1</span><span className="text-[#B066FF]">import</span> <span className="text-white ml-2">ravengraph</span> <span className="text-[#B066FF] ml-2">as</span> <span className="text-white ml-2">rg</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">2</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">3</span><span className="text-zinc-500">{"# streaming realtime signals"}</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">4</span><span className="text-white">client</span> <span className="text-zinc-400">=</span> <span className="text-white">rg.Client(</span><span className="text-green-400">&quot;api_key_...&quot;</span><span className="text-white">)</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">5</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">6</span><span className="text-[#B066FF]">for</span> <span className="text-white ml-2">signal</span> <span className="text-[#B066FF] ml-2">in</span> <span className="text-white ml-2">client.stream_signals():</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">7</span><span className="text-white ml-4">if signal.is_shock_event():</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">8</span><span className="text-white ml-8">print(signal.propagation_path)</span></div>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-1">
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">1</span><span className="text-[#B066FF]">#include</span> <span className="text-green-400">&lt;ravengraph/client.h&gt;</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">2</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">3</span><span className="text-zinc-500">{"// Initialize gRPC channel"}</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">4</span><span className="text-blue-400">auto</span> <span className="text-white">channel = grpc::CreateChannel(</span><span className="text-green-400">&quot;api.ravengraph.com&quot;</span><span className="text-white">);</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">5</span><span className="text-blue-400">auto</span> <span className="text-white">stub = RavenGraph::NewStub(channel);</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">6</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">7</span><span className="text-zinc-500">{"// High-frequency signal loop"}</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">8</span><span className="text-[#B066FF]">while</span> <span className="text-white">(stream-&gt;Read(&signal)) {"{"}</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">9</span><span className="text-white ml-4">if (signal.confidence() &gt; </span><span className="text-orange-400">0.95</span><span className="text-white">) {"{"}</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">10</span><span className="text-white ml-8">Execution::SubmitOrder(signal.asset_id());</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">11</span><span className="text-white ml-4">{"}"}</span></div>
-                                        <div className="flex"><span className="text-zinc-600 w-8 select-none">12</span><span className="text-white">{"}"}</span></div>
-                                    </div>
-                                )}
+                            <div className="p-6 overflow-y-auto" style={{ height: '380px' }}>
+                                <div className="space-y-1 font-mono text-sm">
+                                    {activeTab === "python" ? (
+                                        <>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">1</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-[#B066FF]">from</span> <span className="text-white">ravengraph</span> <span className="text-[#B066FF]">import</span> <span className="text-white">Client</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">2</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-[#B066FF]">import</span> <span className="text-white">pandas</span> <span className="text-[#B066FF]">as</span> <span className="text-white">pd</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">3</span><div></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">4</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white">rg</span> <span className="text-zinc-400">=</span> <span className="text-white">Client(api_key=API_KEY)</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">5</span><div></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">6</span><span className="text-zinc-500">{"# Point-in-time graph embeddings (leakage-safe)"}</span></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">7</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white">embeddings</span> <span className="text-zinc-400">=</span> <span className="text-white">rg.embeddings.get(</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">8</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white pl-4">universe=</span><span className="text-green-400">&quot;dynamic_sp500&quot;</span><span className="text-white">,</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">9</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white pl-4">asof=</span><span className="text-green-400">&quot;2024-11-15&quot;</span><span className="text-white">,</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">10</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white pl-4">horizon=</span><span className="text-green-400">&quot;1d&quot;</span><span className="text-white">,</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">11</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white pl-4">dims=</span><span className="text-orange-400">64</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">12</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white">)</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">13</span><div></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">14</span><span className="text-zinc-500">{"# Join with existing feature matrix"}</span></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">15</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white">X</span> <span className="text-zinc-400">=</span> <span className="text-white">price_features.join(embeddings, on=</span><span className="text-green-400">&quot;ticker&quot;</span><span className="text-white">)</span></div></div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">1</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-[#B066FF]">EmbeddingsRequest</span> <span className="text-white">req;</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">2</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white">req.set_universe(</span><span className="text-green-400">&quot;dynamic_sp500&quot;</span><span className="text-white">);</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">3</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white">req.set_asof(</span><span className="text-green-400">&quot;2024-11-15&quot;</span><span className="text-white">);</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">4</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white">req.set_horizon(</span><span className="text-green-400">&quot;1d&quot;</span><span className="text-white">);</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">5</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-white">req.set_dims(</span><span className="text-orange-400">64</span><span className="text-white">);</span></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">6</span><div></div></div>
+                                            <div className="grid grid-cols-[2rem_1fr]"><span className="text-zinc-600 select-none">7</span><div className="text-zinc-100 whitespace-pre-wrap break-words"><span className="text-blue-400">auto</span> <span className="text-white">embeddings = client.GetEmbeddings(req);</span></div></div>
+                                        </>
+                                    )}
+                                </div>
                             </div>
 
-                            {/* Terminal Output Simulation */}
-                            <div className="border-t border-white/10 bg-black/50 p-4 font-mono text-xs">
-                                <div className="flex items-center gap-2 mb-2 text-zinc-500 uppercase tracking-wider font-bold text-[10px]">
-                                    <Terminal className="w-3 h-3" /> System Output
-                                </div>
-                                <div className="space-y-2">
-                                    <AnimatePresence mode="wait">
-                                        <motion.div
-                                            key={step}
-                                            initial={{ opacity: 0, y: 5 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0 }}
-                                            className="font-mono"
-                                        >
-                                            {step === 0 && (
-                                                <div className="text-zinc-400">Initializing secure connection...</div>
-                                            )}
-                                            {step >= 1 && (
-                                                <div className="text-green-400">
-                                                    [OK] gRPC Channel Established (3ms)
-                                                </div>
-                                            )}
-                                            {step >= 2 && (
-                                                <div className="mt-1">
-                                                    <span className="text-blue-400">[STREAM] 10,402 edges/sec </span>
-                                                </div>
-                                            )}
-                                            {step >= 3 && (
-                                                <div className="mt-1 pl-4 border-l border-zinc-700">
-                                                    <div className="text-zinc-400">Propagation Signal</div>
-                                                    <div className="text-[#B066FF]">&gt; BUY 200 NVDA (Confidence 0.98)</div>
-                                                    <div className="text-zinc-600 text-[10px]">Lat: 1.2ms | Id: 0x8F2A</div>
-                                                </div>
-                                            )}
-                                        </motion.div>
-                                    </AnimatePresence>
-                                </div>
+                            {/* Micro-copy */}
+                            <div className="border-t border-white/10 bg-black/50 p-4 text-center">
+                                <p className="text-zinc-400 text-xs font-medium">
+                                    Private Preview · Offline Evaluation · Parquet + Schema Included
+                                </p>
+                                <p className="text-zinc-600 text-[10px] mt-1">
+                                    Embeddings updated daily and intraday depending on horizon.
+                                </p>
                             </div>
                         </div>
                     </ScrollReveal>
