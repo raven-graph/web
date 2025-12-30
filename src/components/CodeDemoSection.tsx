@@ -32,7 +32,7 @@ export const CodeDemoSection = () => {
                 <div className="grid lg:grid-cols-2 gap-16 items-start">
 
                     {/* Context Side */}
-                    <ScrollReveal className="space-y-8 sticky top-24">
+                    <ScrollReveal className="space-y-8 lg:sticky lg:top-24">
                         <div className="flex items-center gap-3 mb-6">
                             <span className="h-px w-8 bg-[#B066FF]/50"></span>
                             <span className="text-[#B066FF] font-sans text-xs uppercase tracking-widest font-semibold">Production Ready</span>
