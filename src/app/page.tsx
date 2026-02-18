@@ -72,10 +72,12 @@ export default function LandingPage() {
           </div>
 
           <div className="hidden md:flex items-center gap-8">
+            <NavLink href="/partnership">Partnership</NavLink>
             <NavLink href="#signals">Signals</NavLink>
             <NavLink href="#specs">Specifications</NavLink>
             <NavLink href="#api">Api</NavLink>
           </div>
+
 
           <div className="hidden md:flex items-center gap-6">
             <button
@@ -111,11 +113,13 @@ export default function LandingPage() {
             className="fixed inset-x-0 top-20 z-40 bg-[#0B0C15] border-b border-white/10 p-6 md:hidden"
           >
             <div className="flex flex-col gap-6 font-display text-xl">
+              <a href="/partnership" onClick={() => setMobileMenuOpen(false)}>Partnership</a>
               <a href="#signals" onClick={() => setMobileMenuOpen(false)}>Signals</a>
               <a href="#specs" onClick={() => setMobileMenuOpen(false)}>Specifications</a>
               <a href="#api" onClick={() => setMobileMenuOpen(false)}>Api</a>
               <Button onClick={() => setShowLogin(true)} className="w-full bg-[#B066FF] text-white mt-4 rounded-full">Request Data</Button>
             </div>
+
           </motion.div>
         )}
       </AnimatePresence>
