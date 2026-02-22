@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export function LoginForm() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +26,9 @@ export function LoginForm() {
     // Simulate network delay
     setTimeout(() => {
       const success = login(email, password);
-      if (!success) {
+      if (success) {
+        router.push('/graph');
+      } else {
         setError('Invalid credentials');
       }
       setIsLoading(false);

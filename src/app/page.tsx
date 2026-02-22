@@ -53,12 +53,8 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/dashboard');
-    }
+    // Reserved for future use
   }, [isAuthenticated, router]);
-
-  if (isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-[#0B0C15] text-white font-sans selection:bg-[#B066FF]/30">
