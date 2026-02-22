@@ -200,6 +200,13 @@ export function GraphCanvas({
     return () => { sim.stop(); };
   }, []);
 
+  // ── Reset camera when switching views ──────────────────────────
+  useEffect(() => {
+    const defaultCam = { x: 0, y: 0, scale: 0.85 };
+    cameraRef.current = { ...defaultCam };
+    cameraTargetRef.current = { ...defaultCam };
+  }, [view]);
+
   // ── §8b: Cluster click zoom — compute camera target ────────────
   useEffect(() => {
     if (view !== "topology") return;
@@ -222,13 +229,14 @@ export function GraphCanvas({
     const container = containerRef.current;
     if (!container) return;
     const rect = container.getBoundingClientRect();
-    const pad = 2.5; // generous padding so nodes + labels fit
+    const pad = 2.5;
     const bw = (maxX - minX) * pad || 300;
     const bh = (maxY - minY) * pad || 300;
     const cx = (minX + maxX) / 2;
     const cy = (minY + maxY) / 2;
-    const scale = Math.min(rect.width / bw, rect.height / bh) * 0.6;
-    cameraTargetRef.current = { x: -cx * scale, y: -cy * scale, scale: Math.max(0.85, Math.min(scale, 1.6)) };
+    const rawScale = Math.min(rect.width / bw, rect.height / bh) * 0.6;
+    const scale = Math.max(0.85, Math.min(rawScale, 1.6));
+    cameraTargetRef.current = { x: -cx * scale, y: -cy * scale, scale };
   }, [selectedClusterId, view]);
 
   // ── Render loop ─────────────────────────────────────────────────
