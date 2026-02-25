@@ -31,7 +31,10 @@ export function TopNav({ view, onViewChange }: TopNavProps) {
       }}
     >
       {/* Logo */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <a
+        href="https://ravengraph.com"
+        style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
+      >
         <div style={{ position: "relative", width: 24, height: 24 }}>
           <Image
             src="/icon-white-transparent.svg"
@@ -54,7 +57,7 @@ export function TopNav({ view, onViewChange }: TopNavProps) {
         >
           RavenGraph
         </span>
-      </div>
+      </a>
 
       {/* View Tabs */}
       <div style={{ display: "flex", gap: 0, position: "relative" }}>
