@@ -5,7 +5,7 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Clock3, Radar } from "lucide-react";
 import { SIGNAL_THESES, formatReturn, getNodeById, oilShockResult, signals } from "@/lib/graph/data";
-import type { PropagationHop, Signal } from "@/lib/graph/types";
+import type { Signal } from "@/lib/graph/types";
 
 const CONFIDENCE_ORDER: Record<Signal["confidence"], number> = {
     High: 0,
@@ -13,21 +13,18 @@ const CONFIDENCE_ORDER: Record<Signal["confidence"], number> = {
     Low: 2,
 };
 
-const PROPAGATION_PREVIEW_HOPS = [1, 2, 4, 5]
-    .map((hopNumber) => oilShockResult.hops.find((hop) => hop.hop_number === hopNumber))
-    .filter((hop): hop is PropagationHop => Boolean(hop));
-
 const NODE_LAYOUT: Record<string, { x: number; y: number }> = {
     WTI_CRUDE: { x: 90, y: 170 },
     JETS: { x: 290, y: 120 },
     XLE: { x: 290, y: 220 },
-    DAL: { x: 510, y: 95 },
-    XOM: { x: 510, y: 245 },
+    DAL: { x: 510, y: 80 },
+    UAL: { x: 510, y: 125 },
+    AAL: { x: 510, y: 170 },
+    XOM: { x: 510, y: 230 },
 };
 
 export const SignalShowcaseSection = () => {
-    const [activeHopIndex, setActiveHopIndex] = useState(0);
-    const [activeSignalIndex, setActiveSignalIndex] = useState(0);
+    const [activeStepIndex, setActiveStepIndex] = useState(0);
 
     const featuredSignals = useMemo(() => {
         return [...signals]
@@ -43,19 +40,55 @@ export const SignalShowcaseSection = () => {
         return Math.max(0.001, ...featuredSignals.map((sig) => Math.abs(sig.delta)));
     }, [featuredSignals]);
 
-    const activeHop = PROPAGATION_PREVIEW_HOPS[activeHopIndex] ?? null;
+    const hopsBySignal = useMemo(() => {
+        return featuredSignals.map((sig) =>
+            sig.transmission_path.filter((hop) => NODE_LAYOUT[hop.source_id] && NODE_LAYOUT[hop.target_id]),
+        );
+    }, [featuredSignals]);
+
+    const previewSteps = useMemo(
+        () =>
+            hopsBySignal.flatMap((signalHops, signalIndex) =>
+                signalHops.map((_, hopIndex) => ({ signalIndex, hopIndex })),
+            ),
+        [hopsBySignal],
+    );
+
+    const firstStepBySignalIndex = useMemo(() => {
+        const lookup = new Map<number, number>();
+        previewSteps.forEach((step, idx) => {
+            if (!lookup.has(step.signalIndex)) lookup.set(step.signalIndex, idx);
+        });
+        return lookup;
+    }, [previewSteps]);
+
+    const activeStep = previewSteps[activeStepIndex] ?? null;
+    const activeSignalIndex = activeStep?.signalIndex ?? 0;
     const activeSignal = featuredSignals[activeSignalIndex] ?? null;
+    const propagationPreviewHops = activeSignal ? hopsBySignal[activeSignalIndex] ?? [] : [];
+    const activeHopIndex = activeStep?.hopIndex ?? 0;
+    const activeHop = propagationPreviewHops[activeHopIndex] ?? null;
     const sourcePoint = activeHop ? NODE_LAYOUT[activeHop.source_id] : undefined;
     const targetPoint = activeHop ? NODE_LAYOUT[activeHop.target_id] : undefined;
+    const visibleNodeIds = useMemo(() => {
+        const ids = new Set<string>();
+        propagationPreviewHops.forEach((hop) => {
+            ids.add(hop.source_id);
+            ids.add(hop.target_id);
+        });
+        ids.add(oilShockResult.shock.source_node_id);
+        return ids;
+    }, [propagationPreviewHops]);
 
     useEffect(() => {
-        if (PROPAGATION_PREVIEW_HOPS.length === 0 || featuredSignals.length === 0) return;
+        if (previewSteps.length === 0 || featuredSignals.length === 0) return;
+
+        setActiveStepIndex((idx) => idx % previewSteps.length);
         const timer = window.setInterval(() => {
-            setActiveHopIndex((idx) => (idx + 1) % PROPAGATION_PREVIEW_HOPS.length);
-            setActiveSignalIndex((idx) => (idx + 1) % featuredSignals.length);
+            setActiveStepIndex((idx) => (idx + 1) % previewSteps.length);
         }, 2200);
         return () => window.clearInterval(timer);
-    }, [featuredSignals.length]);
+    }, [featuredSignals.length, previewSteps.length]);
 
     return (
         <section className="py-24 bg-[#0B0C15] border-t border-white/5 relative overflow-hidden">
@@ -102,7 +135,7 @@ export const SignalShowcaseSection = () => {
 
                             <div className="rounded-xl border border-white/10 bg-[#090B12] overflow-hidden">
                                 <svg viewBox="0 0 620 320" className="w-full h-[280px]">
-                                    {PROPAGATION_PREVIEW_HOPS.map((hop) => {
+                                    {propagationPreviewHops.map((hop) => {
                                         const start = NODE_LAYOUT[hop.source_id];
                                         const end = NODE_LAYOUT[hop.target_id];
                                         if (!start || !end) return null;
@@ -154,15 +187,17 @@ export const SignalShowcaseSection = () => {
                                         const activeNode =
                                             activeHop &&
                                             (activeHop.source_id === nodeId || activeHop.target_id === nodeId);
+                                        const isPathNode = visibleNodeIds.has(nodeId);
+                                        const nodeOpacity = activeNode ? 1 : isPathNode ? 0.78 : 0.32;
                                         const isShockSource = nodeId === oilShockResult.shock.source_node_id;
 
                                         return (
-                                            <g key={`node-${nodeId}`}>
+                                            <g key={`node-${nodeId}`} opacity={nodeOpacity}>
                                                 {isShockSource && (
                                                     <motion.circle
                                                         cx={point.x}
                                                         cy={point.y}
-                                                        r="19"
+                                                        r="21"
                                                         fill="transparent"
                                                         stroke="#F59E0B"
                                                         strokeWidth="1.3"
@@ -174,7 +209,7 @@ export const SignalShowcaseSection = () => {
                                                 <circle
                                                     cx={point.x}
                                                     cy={point.y}
-                                                    r="16"
+                                                    r="18"
                                                     fill={activeNode ? "#181D2C" : "#111827"}
                                                     stroke={activeNode ? "#B066FF" : "#374151"}
                                                     strokeWidth="1.6"
@@ -185,7 +220,7 @@ export const SignalShowcaseSection = () => {
                                                     textAnchor="middle"
                                                     fill="#F4F4F5"
                                                     fontFamily="var(--font-mono), monospace"
-                                                    fontSize="10"
+                                                    fontSize="11"
                                                     fontWeight="600"
                                                 >
                                                     {node?.ticker ?? nodeId}
@@ -197,7 +232,7 @@ export const SignalShowcaseSection = () => {
                             </div>
 
                             <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                                {PROPAGATION_PREVIEW_HOPS.map((hop, idx) => {
+                                {propagationPreviewHops.map((hop, idx) => {
                                     const isActive = idx === activeHopIndex;
                                     const source = getNodeById(hop.source_id)?.ticker ?? hop.source_id;
                                     const target = getNodeById(hop.target_id)?.ticker ?? hop.target_id;
@@ -206,7 +241,12 @@ export const SignalShowcaseSection = () => {
                                     return (
                                         <button
                                             key={`hop-card-${hop.hop_number}`}
-                                            onClick={() => setActiveHopIndex(idx)}
+                                            onClick={() => {
+                                                const matchingStepIndex = previewSteps.findIndex(
+                                                    (step) => step.signalIndex === activeSignalIndex && step.hopIndex === idx,
+                                                );
+                                                if (matchingStepIndex >= 0) setActiveStepIndex(matchingStepIndex);
+                                            }}
                                             className={`text-left rounded-lg border px-3 py-2.5 transition-colors ${
                                                 isActive
                                                     ? "bg-white/10 border-white/25"
@@ -258,7 +298,10 @@ export const SignalShowcaseSection = () => {
                                 return (
                                     <button
                                         key={sig.id}
-                                        onClick={() => setActiveSignalIndex(idx)}
+                                        onClick={() => {
+                                            const stepIdx = firstStepBySignalIndex.get(idx);
+                                            if (stepIdx !== undefined) setActiveStepIndex(stepIdx);
+                                        }}
                                         className={`w-full text-left rounded-lg border p-3 transition-colors ${
                                             isActive
                                                 ? "bg-white/10 border-white/25"
