@@ -24,8 +24,8 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "RavenGraph",
-  description: "Where signals hide in structure.",
+  title: "RavenGraph — A graph-native hedge fund",
+  description: "Markets are networks, not time series. We trade the structure.",
   icons: {
     icon: "/noun-raven-1040402.png",
     shortcut: "/noun-raven-1040402.png",

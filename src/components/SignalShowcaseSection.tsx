@@ -91,17 +91,11 @@ export const SignalShowcaseSection = () => {
     }, [featuredSignals.length, previewSteps.length]);
 
     return (
-        <section className="py-24 bg-[#0B0C15] border-t border-white/5 relative overflow-hidden">
+        <section className="relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
-                <ScrollReveal className="text-center mb-16">
-                    <h2 className="text-sm font-bold text-[#B066FF] tracking-widest uppercase mb-4">
-                        Graph Intelligence Preview
-                    </h2>
-                    <h3 className="text-3xl md:text-5xl font-display font-bold text-white">
-                        From Shock To Signal
-                    </h3>
-                    <p className="text-lg text-zinc-400 mt-4 max-w-2xl mx-auto font-light leading-relaxed">
-                        Track how shocks propagate across connected assets, then inspect the ranked long/short signals produced from that structure.
+                <ScrollReveal className="mb-6">
+                    <p className="text-sm text-zinc-500 font-mono leading-relaxed max-w-2xl">
+                        A +8% WTI move propagating through the learned graph — each edge a calibrated weight and lag.
                     </p>
                 </ScrollReveal>
 
@@ -140,7 +134,7 @@ export const SignalShowcaseSection = () => {
                                         const end = NODE_LAYOUT[hop.target_id];
                                         if (!start || !end) return null;
                                         const isActive = activeHop?.hop_number === hop.hop_number;
-                                        const strokeColor = hop.direction === "positive" ? "#22C55E" : "#EF4444";
+                                        const strokeColor = hop.direction === "positive" ? "#2DD4BF" : "#F87171";
 
                                         return (
                                             <g key={`edge-${hop.hop_number}`}>
@@ -171,7 +165,7 @@ export const SignalShowcaseSection = () => {
                                         <motion.circle
                                             key={`pulse-${activeHop.hop_number}-${activeHopIndex}`}
                                             r="5"
-                                            fill={activeHop.direction === "positive" ? "#22C55E" : "#EF4444"}
+                                            fill={activeHop.direction === "positive" ? "#2DD4BF" : "#F87171"}
                                             initial={{ cx: sourcePoint.x, cy: sourcePoint.y, opacity: 0 }}
                                             animate={{
                                                 cx: targetPoint.x,
@@ -236,7 +230,7 @@ export const SignalShowcaseSection = () => {
                                     const isActive = idx === activeHopIndex;
                                     const source = getNodeById(hop.source_id)?.ticker ?? hop.source_id;
                                     const target = getNodeById(hop.target_id)?.ticker ?? hop.target_id;
-                                    const directionClass = hop.direction === "positive" ? "text-emerald-400" : "text-rose-400";
+                                    const directionClass = hop.direction === "positive" ? "text-teal-300" : "text-rose-400";
 
                                     return (
                                         <button
@@ -279,7 +273,7 @@ export const SignalShowcaseSection = () => {
                             </div>
                             <div className="inline-flex items-center gap-1.5 text-xs text-zinc-400 font-mono">
                                 <Radar className="w-3.5 h-3.5 text-[#B066FF]" />
-                                Live ranking
+                                Ranked feed
                             </div>
                         </div>
 
@@ -288,11 +282,11 @@ export const SignalShowcaseSection = () => {
                                 const isActive = idx === activeSignalIndex;
                                 const confidenceColor =
                                     sig.confidence === "High"
-                                        ? "text-emerald-400"
+                                        ? "text-teal-300"
                                         : sig.confidence === "Medium"
                                             ? "text-amber-400"
                                             : "text-zinc-400";
-                                const directionColor = sig.direction === "LONG" ? "text-emerald-400" : "text-rose-400";
+                                const directionColor = sig.direction === "LONG" ? "text-teal-300" : "text-rose-400";
                                 const barWidth = Math.max((Math.abs(sig.delta) / maxDelta) * 100, 10);
 
                                 return (
@@ -314,13 +308,13 @@ export const SignalShowcaseSection = () => {
                                                 <span className={`text-[11px] font-mono ${directionColor}`}>{sig.direction}</span>
                                                 <span className={`text-[11px] font-mono ${confidenceColor}`}>{sig.confidence}</span>
                                             </div>
-                                            <span className={`text-sm font-mono ${sig.delta >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                                            <span className={`text-sm font-mono ${sig.delta >= 0 ? "text-teal-300" : "text-rose-400"}`}>
                                                 {formatReturn(sig.delta)}
                                             </span>
                                         </div>
                                         <div className="mt-2 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
                                             <div
-                                                className={`h-full ${sig.delta >= 0 ? "bg-emerald-500/80" : "bg-rose-500/80"}`}
+                                                className={`h-full ${sig.delta >= 0 ? "bg-teal-500/80" : "bg-rose-500/80"}`}
                                                 style={{ width: `${barWidth}%` }}
                                             />
                                         </div>
