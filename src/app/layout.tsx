@@ -9,7 +9,13 @@ import { Analytics } from "@vercel/analytics/next";
 // User disliked Space Grotesk. 
 // Let's use "Outfit" for headings (Geometric, high-end) and "Plus Jakarta Sans" for body.
 
-import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Outfit,
+  Plus_Jakarta_Sans,
+  Spectral,
+  IBM_Plex_Sans,
+  IBM_Plex_Mono,
+} from "next/font/google";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -20,6 +26,30 @@ const outfit = Outfit({
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-body",
+  display: "swap",
+});
+
+// Landing page type system: Spectral (display/serif), IBM Plex Sans (body/UI),
+// IBM Plex Mono (labels, data, tickers).
+const spectral = Spectral({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-spectral",
+  display: "swap",
+});
+
+const plexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-plex-sans",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
@@ -41,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${outfit.variable} ${jakarta.variable} antialiased bg-background text-foreground selection:bg-cyan-500/30 selection:text-cyan-100`}
+        className={`${outfit.variable} ${jakarta.variable} ${spectral.variable} ${plexSans.variable} ${plexMono.variable} antialiased bg-background text-foreground selection:bg-cyan-500/30 selection:text-cyan-100`}
       >
         <AuthProvider>
           {children}
