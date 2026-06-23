@@ -84,6 +84,15 @@
   50%      { opacity: 1; }
 }
 
+/* Top bar: drop secondary mono labels on narrow screens so the wordmark
+   and the "Get in touch" button always fit without wrapping. */
+@media (max-width: 760px) {
+  .rg-topbar-tag { display: none !important; }
+}
+@media (max-width: 560px) {
+  .rg-topbar-status { display: none !important; }
+}
+
 @layer utilities {
   .bg-grid-pattern {
     background-image: 

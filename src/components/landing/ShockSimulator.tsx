@@ -434,12 +434,18 @@ export function ShockSimulator() {
                   borderRadius: 10,
                   border: "1px solid rgba(255,255,255,0.06)",
                   background: "#0C0D14",
-                  overflow: "hidden",
+                  overflowX: "auto",
+                  overflowY: "hidden",
                 }}
               >
                 <svg
                   viewBox="0 0 720 380"
-                  style={{ width: "100%", height: "auto", display: "block" }}
+                  style={{
+                    width: "100%",
+                    minWidth: 640,
+                    height: "auto",
+                    display: "block",
+                  }}
                 >
                   {/* origin ring */}
                   <circle

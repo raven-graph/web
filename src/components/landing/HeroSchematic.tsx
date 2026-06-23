@@ -15,9 +15,10 @@ export function HeroSchematic() {
   };
 
   return (
+    <div style={{ overflowX: "auto" }}>
     <svg
       viewBox="0 0 500 372"
-      style={{ width: "100%", height: "auto", display: "block" }}
+      style={{ width: "100%", minWidth: 480, height: "auto", display: "block" }}
     >
       {HEDGES.map((e, i) => {
         const s = HNODES[e[0]];
@@ -82,5 +83,6 @@ export function HeroSchematic() {
         );
       })}
     </svg>
+    </div>
   );
 }

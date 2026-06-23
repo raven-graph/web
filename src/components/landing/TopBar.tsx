@@ -35,27 +35,34 @@ export function TopBar() {
             RavenGraph
           </span>
           <span
-            style={{
-              width: 1,
-              height: 15,
-              background: "rgba(255,255,255,0.14)",
-              margin: "0 3px",
-            }}
-          />
-          <span
-            style={{
-              fontFamily: FONT.mono,
-              fontSize: 10.5,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "#5C606F",
-            }}
+            className="rg-topbar-tag"
+            style={{ display: "flex", alignItems: "center" }}
           >
-            Graph-native hedge fund
+            <span
+              style={{
+                width: 1,
+                height: 15,
+                background: "rgba(255,255,255,0.14)",
+                margin: "0 3px",
+              }}
+            />
+            <span
+              style={{
+                fontFamily: FONT.mono,
+                fontSize: 10.5,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "#5C606F",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Graph-native hedge fund
+            </span>
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <span
+            className="rg-topbar-status"
             style={{
               fontFamily: FONT.mono,
               fontSize: 11,
@@ -64,6 +71,7 @@ export function TopBar() {
               display: "inline-flex",
               alignItems: "center",
               gap: 7,
+              whiteSpace: "nowrap",
             }}
           >
             <span
@@ -82,7 +90,7 @@ export function TopBar() {
             height={38}
             padding="0 18px"
             fontSize={14}
-            style={{ gap: 0 }}
+            style={{ gap: 0, flex: "none", whiteSpace: "nowrap" }}
           >
             Get in touch
           </CtaLink>

@@ -129,11 +129,16 @@ export function PerformanceChart() {
   }
 
   return (
-    <div onPointerMove={onMove} onPointerLeave={onLeave} style={{ touchAction: "none", cursor: "crosshair" }}>
-      <svg
-        viewBox="0 0 760 300"
-        style={{ width: "100%", height: "auto", display: "block" }}
+    <div style={{ overflowX: "auto", overflowY: "hidden" }}>
+      <div
+        onPointerMove={onMove}
+        onPointerLeave={onLeave}
+        style={{ minWidth: 700, cursor: "crosshair" }}
       >
+        <svg
+          viewBox="0 0 760 300"
+          style={{ width: "100%", height: "auto", display: "block" }}
+        >
         {GRID.map((gv, i) => (
           <g key={`gr${i}`}>
             <line
@@ -212,7 +217,8 @@ export function PerformanceChart() {
         </text>
         {hoverMarks}
         {tooltip}
-      </svg>
+        </svg>
+      </div>
     </div>
   );
 }
