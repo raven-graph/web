@@ -1,4 +1,3 @@
-import React from "react";
 import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
 
 interface Edge {
@@ -17,25 +16,41 @@ const EDGES: Edge[] = [
   { from: "10Y", to: "XLF", beta: 0.45, lag: 10 },
 ];
 
-function Track() {
+function Track({ ariaHidden }: { ariaHidden?: boolean }) {
+  // One seamless copy of the readouts. Spacing comes from CSS margins/padding,
+  // not whitespace text nodes (runs of spaces collapse to one space in HTML,
+  // which made the edges blur together).
   return (
-    <span style={{ paddingRight: 0 }}>
+    <span
+      aria-hidden={ariaHidden}
+      style={{ display: "inline-flex", alignItems: "center" }}
+    >
       {EDGES.map((e, i) => {
         const pos = e.beta >= 0;
         return (
-          <React.Fragment key={i}>
-            {e.from}
-            {"→"}
-            {e.to}
-            {"  "}
-            <span style={{ color: pos ? COLOR.teal : COLOR.rose }}>
+          <span
+            key={i}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              paddingRight: 34,
+            }}
+          >
+            <span style={{ color: "#8A8E9C" }}>
+              {e.from}
+              <span style={{ color: "#5C606F", margin: "0 3px" }}>{"→"}</span>
+              {e.to}
+            </span>
+            <span
+              style={{ marginLeft: 10, color: pos ? COLOR.teal : COLOR.rose }}
+            >
               {"β"}
               {pos ? "+" : "−"}
               {Math.abs(e.beta).toFixed(2)}
             </span>
-            {" · "}
-            {e.lag}m{"    "}
-          </React.Fragment>
+            <span style={{ marginLeft: 8, color: "#4C4F5C" }}>{"·"}</span>
+            <span style={{ marginLeft: 8 }}>{e.lag}m</span>
+          </span>
         );
       })}
     </span>
@@ -96,7 +111,7 @@ export function EdgeTape() {
             }}
           >
             <Track />
-            <Track />
+            <Track ariaHidden />
           </div>
         </div>
       </div>

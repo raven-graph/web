@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{ margin:0; background:#0B0C11; }
+    @keyframes rgring { 0%,100%{ opacity:.22; transform:scale(1);} 50%{ opacity:.8; transform:scale(1.16);} }
+    @keyframes rgtape { from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+    @keyframes rgblink { 0%,100%{ opacity:.35;} 50%{ opacity:1;} }
+  </style>
+</helmet>
+
+<div style="background:#0B0C11; color:#ECEDF1; font-family:'IBM Plex Sans',-apple-system,sans-serif; min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;">
+
+  <!-- TOP BAR -->
+  <div style="border-bottom:1px solid rgba(255,255,255,0.06);">
+    <div style="max-width:1240px; margin:0 auto; padding:0 32px; height:64px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <div style="display:flex; align-items:center; gap:11px;">
+        <img src="public/icon-white-transparent.svg" alt="RavenGraph" style="width:22px; height:22px; opacity:0.95;">
+        <span style="font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:18px; letter-spacing:-0.01em; color:#ECEDF1;">RavenGraph</span>
+        <span style="width:1px; height:15px; background:rgba(255,255,255,0.14); margin:0 3px;"></span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#5C606F;">Graph-native hedge fund</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:18px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em; color:#5C606F; display:inline-flex; align-items:center; gap:7px;">
+          <span style="width:6px; height:6px; border-radius:50%; background:#3FB98C; animation:rgblink 2.4s ease-in-out infinite;"></span>SYSTEM LIVE
+        </span>
+        <a href="mailto:gabriel@ravengraph.com" style="display:inline-flex; align-items:center; height:38px; padding:0 18px; border-radius:8px; background:#2D5BFF; color:#fff; font-weight:600; font-size:14px; text-decoration:none; transition:background .2s;" style-hover="background:#1E47E0;">Get in touch</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRAPH TAPE -->
+  <div style="border-bottom:1px solid rgba(255,255,255,0.06); background:#0A0B0F; overflow:hidden;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 32px; height:38px; display:flex; align-items:center; gap:16px;">
+      <span style="flex:none; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.18em; color:#5C82FF; border:1px solid rgba(45,91,255,0.3); border-radius:5px; padding:3px 8px;">EDGES</span>
+      <div style="flex:1; overflow:hidden; position:relative; -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 4%,#000 92%,transparent);">
+        <div style="display:inline-flex; white-space:nowrap; animation:rgtape 38s linear infinite; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#6B6F7C;">
+          <span style="padding-right:0;">WTI&#8594;XLE&nbsp;&nbsp;<span style="color:#3FB98C;">&beta;+0.62</span>&nbsp;&middot;&nbsp;8m&nbsp;&nbsp;&nbsp;&nbsp;WTI&#8594;JETS&nbsp;&nbsp;<span style="color:#E2606E;">&beta;&minus;0.48</span>&nbsp;&middot;&nbsp;15m&nbsp;&nbsp;&nbsp;&nbsp;10Y&#8594;XLK&nbsp;&nbsp;<span style="color:#E2606E;">&beta;&minus;0.55</span>&nbsp;&middot;&nbsp;12m&nbsp;&nbsp;&nbsp;&nbsp;VIX&#8594;SPY&nbsp;&nbsp;<span style="color:#E2606E;">&beta;&minus;0.42</span>&nbsp;&middot;&nbsp;6m&nbsp;&nbsp;&nbsp;&nbsp;XLK&#8594;NVDA&nbsp;&nbsp;<span style="color:#3FB98C;">&beta;+0.88</span>&nbsp;&middot;&nbsp;5m&nbsp;&nbsp;&nbsp;&nbsp;10Y&#8594;XLF&nbsp;&nbsp;<span style="color:#3FB98C;">&beta;+0.45</span>&nbsp;&middot;&nbsp;10m&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <span style="padding-right:0;">WTI&#8594;XLE&nbsp;&nbsp;<span style="color:#3FB98C;">&beta;+0.62</span>&nbsp;&middot;&nbsp;8m&nbsp;&nbsp;&nbsp;&nbsp;WTI&#8594;JETS&nbsp;&nbsp;<span style="color:#E2606E;">&beta;&minus;0.48</span>&nbsp;&middot;&nbsp;15m&nbsp;&nbsp;&nbsp;&nbsp;10Y&#8594;XLK&nbsp;&nbsp;<span style="color:#E2606E;">&beta;&minus;0.55</span>&nbsp;&middot;&nbsp;12m&nbsp;&nbsp;&nbsp;&nbsp;VIX&#8594;SPY&nbsp;&nbsp;<span style="color:#E2606E;">&beta;&minus;0.42</span>&nbsp;&middot;&nbsp;6m&nbsp;&nbsp;&nbsp;&nbsp;XLK&#8594;NVDA&nbsp;&nbsp;<span style="color:#3FB98C;">&beta;+0.88</span>&nbsp;&middot;&nbsp;5m&nbsp;&nbsp;&nbsp;&nbsp;10Y&#8594;XLF&nbsp;&nbsp;<span style="color:#3FB98C;">&beta;+0.45</span>&nbsp;&middot;&nbsp;10m&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section style="position:relative; border-bottom:1px solid rgba(255,255,255,0.06); overflow:hidden;">
+    <div style="position:absolute; inset:0; z-index:0; pointer-events:none; -webkit-mask-image:radial-gradient(ellipse 66% 72% at 31% 47%, transparent 8%, #000 66%); mask-image:radial-gradient(ellipse 66% 72% at 31% 47%, transparent 8%, #000 66%);">{{ networkBg }}</div>
+    <div style="position:relative; z-index:1; max-width:1240px; margin:0 auto; padding:0 32px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); gap:56px; align-items:center; min-height:calc(100vh - 102px); padding:72px 0;">
+
+        <div style="display:flex; flex-direction:column; gap:26px; max-width:560px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="width:22px; height:1px; background:#2D5BFF;"></span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#5C82FF;">Graph-native hedge fund</span>
+          </div>
+          <h1 style="margin:0; font-family:'Spectral',serif; font-weight:500; font-size:clamp(40px,5.6vw,76px); line-height:1.0; letter-spacing:-0.01em; color:#F1F2F5;">Markets are networks.<br><span style="font-style:italic; color:#C9CCD6;">We trade the structure.</span></h1>
+          <p style="margin:0; max-width:460px; font-size:clamp(16px,1.4vw,19px); line-height:1.6; color:#9CA0B0; font-weight:300;">RavenGraph models the market as a living graph of stocks, sectors, macro and commodities. <span style="color:#ECEDF1; font-weight:500;">The graph is the asset.</span></p>
+          <div style="display:flex; flex-direction:column; gap:18px; margin-top:4px;">
+            <a href="mailto:gabriel@ravengraph.com" style="display:inline-flex; align-self:flex-start; align-items:center; gap:9px; height:50px; padding:0 26px; border-radius:8px; background:#2D5BFF; color:#fff; font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:16px; text-decoration:none; transition:background .2s;" style-hover="background:#1E47E0;">Get in touch <span style="font-size:18px;">&#8594;</span></a>
+            <div style="display:flex; flex-wrap:wrap; gap:10px 18px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#5C606F;">
+              <span>Live, micro-size</span><span style="color:#2E3140;">/</span><span>~38% YTD equities</span><span style="color:#2E3140;">/</span><span>graph layer in build</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- INSTRUMENT PANEL -->
+        <div style="border:1px solid rgba(255,255,255,0.08); border-radius:14px; background:#0E0F17; overflow:hidden;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 16px; border-bottom:1px solid rgba(255,255,255,0.06);">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#9CA0B0;">Fig. 0 &middot; Market graph</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.12em; color:#5C606F; display:inline-flex; align-items:center; gap:6px;"><span style="width:5px; height:5px; border-radius:50%; background:#5C82FF;"></span>SCHEMATIC</span>
+          </div>
+          <div style="padding:10px 12px 4px; background:#0A0B11;">
+            {{ heroGraph }}
+          </div>
+          <div style="padding:14px 16px; display:flex; flex-direction:column; gap:8px; border-top:1px solid rgba(255,255,255,0.06);">
+            <div style="display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:12px;"><span style="color:#C7CAD3;">10Y &#8594; XLF</span><span style="color:#9CA0B0;">&beta; +0.41 &middot; 20m</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:12px;"><span style="color:#C7CAD3;">WTI &#8594; JETS</span><span style="color:#9CA0B0;">&beta; &minus;0.48 &middot; 15m</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:12px;"><span style="color:#C7CAD3;">SMH &#8594; NVDA</span><span style="color:#9CA0B0;">&beta; +0.83 &middot; 6m</span></div>
+          </div>
+          <div style="padding:11px 16px; border-top:1px solid rgba(255,255,255,0.06); font-family:'IBM Plex Mono',monospace; font-size:10px; line-height:1.5; color:#4C4F5C;">Nodes: assets, sectors, macro, commodities. Edges: calibrated lead&ndash;lag. Illustrative of the model in build.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FIG.1 CASCADE -->
+  <section style="position:relative;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 32px;">
+      <div style="padding:86px 0 0;">
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:22px;">
+          <span style="width:22px; height:1px; background:#2D5BFF;"></span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#5C82FF;">Demonstration</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:28px 56px; align-items:end; margin-bottom:38px;">
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:500; font-size:clamp(30px,4.6vw,52px); line-height:1.06; letter-spacing:-0.01em; color:#F1F2F5;">Watch a shock <span style="font-style:italic; color:#C9CCD6;">propagate.</span></h2>
+          <p style="margin:0; font-size:17px; line-height:1.6; color:#9CA0B0; font-weight:300;">A shock enters the graph at its origin and cascades through calibrated edges — weights and lags learned from history. Pick a scenario, set the severity, scrub the timeline.</p>
+        </div>
+
+        <div ref="{{ graphRef }}" style="display:flex; flex-wrap:wrap; gap:18px; align-items:stretch;">
+
+          <div style="flex:1 1 600px; min-width:300px; border:1px solid rgba(255,255,255,0.07); border-radius:14px; background:#14161F; padding:20px;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#5C606F;">{{ figTitle }}</div>
+                <div style="font-family:'Spectral',serif; font-size:21px; color:#ECEDF1; margin-top:4px;">{{ figSubtitle }}</div>
+              </div>
+              <div style="display:inline-flex; align-items:center; gap:8px; padding:7px 13px; border-radius:8px; border:1px solid rgba(45,91,255,0.3); background:rgba(45,91,255,0.09); font-family:'IBM Plex Mono',monospace; font-size:12px; color:#5C82FF; white-space:nowrap;">
+                <span style="width:6px; height:6px; border-radius:50%; background:#2D5BFF;"></span>{{ clockLabel }}
+              </div>
+            </div>
+
+            <div style="margin-top:16px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:#0C0D14; overflow:hidden;">
+              {{ graph }}
+            </div>
+
+            <div style="margin-top:18px; display:flex; flex-direction:column; gap:14px;">
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#5C606F;">Scenario</span>
+                <sc-for list="{{ scenarioBtns }}" as="b" hint-placeholder-count="3">
+                  <button onClick="{{ b.onClick }}" style="padding:8px 13px; border-radius:8px; font-family:'IBM Plex Mono',monospace; font-size:12px; cursor:pointer; transition:all .15s; background:{{ b.bg }}; color:{{ b.color }}; border:{{ b.border }};">{{ b.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+                <button onClick="{{ fire }}" style="display:inline-flex; align-items:center; gap:8px; height:42px; padding:0 20px; border:none; border-radius:8px; background:#2D5BFF; color:#fff; font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:14px; cursor:pointer; transition:background .2s;" style-hover="background:#1E47E0;">{{ fireLabel }}</button>
+                <div style="display:flex; align-items:center; gap:9px;">
+                  <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#5C606F;">Severity</span>
+                  <sc-for list="{{ severityBtns }}" as="b" hint-placeholder-count="3">
+                    <button onClick="{{ b.onClick }}" style="padding:7px 12px; border-radius:8px; font-family:'IBM Plex Mono',monospace; font-size:12px; cursor:pointer; transition:all .15s; background:{{ b.bg }}; color:{{ b.color }}; border:{{ b.border }};">{{ b.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#5C606F; white-space:nowrap;">T+0</span>
+                <div onPointerDown="{{ onTrackDown }}" onPointerMove="{{ onTrackMove }}" onPointerUp="{{ onTrackUp }}" style="position:relative; flex:1; height:26px; display:flex; align-items:center; cursor:pointer; touch-action:none;">
+                  <div style="position:absolute; left:0; right:0; height:4px; border-radius:999px; background:rgba(255,255,255,0.09);"></div>
+                  <div style="position:absolute; left:0; height:4px; border-radius:999px; background:#2D5BFF; width:{{ playFillW }};"></div>
+                  <div style="position:absolute; top:50%; transform:translate(-50%,-50%); width:13px; height:13px; border-radius:50%; background:#fff; box-shadow:0 0 0 4px rgba(45,91,255,0.25); left:{{ playHeadL }};"></div>
+                </div>
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#9CA0B0; white-space:nowrap; min-width:54px; text-align:right;">{{ clockLabel }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1 1 280px; min-width:260px; display:flex; flex-direction:column; gap:14px;">
+            <div style="border:1px solid rgba(255,255,255,0.07); border-radius:14px; background:#14161F; padding:20px;">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#5C606F;">Headline path</div>
+              <div style="display:flex; flex-direction:column; gap:9px; margin-top:14px;">
+                <sc-for list="{{ pathChips }}" as="p" hint-placeholder-count="3">
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:11px 13px; border-radius:10px; border:1px solid rgba(255,255,255,0.07); background:#0F1119; opacity:{{ p.dim }};">
+                    <div style="display:flex; flex-direction:column; gap:3px;">
+                      <span style="font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:14px; color:#ECEDF1;">{{ p.ticker }}</span>
+                      <span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:#5C606F;">{{ p.sub }}</span>
+                    </div>
+                    <span style="font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:16px; color:{{ p.color }};">{{ p.val }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border:1px solid rgba(255,255,255,0.07); border-radius:14px; background:#14161F; padding:20px;">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#5C606F;">Read</div>
+              <p style="margin:11px 0 0; font-size:15px; line-height:1.6; color:#B6BAC6;">{{ takeaway }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:18px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.55; color:#4C4F5C;">Fig. 1 &mdash; Edge weights and lags are calibrated examples, not live signals. The graph-powered model is in build.</div>
+        <div style="height:96px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 BLIND SPOT -->
+  <section style="position:relative; border-top:1px solid rgba(255,255,255,0.06);">
+    <div style="max-width:1240px; margin:0 auto; padding:0 32px;">
+      <div style="padding:100px 0;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:22px;">
+          <span style="width:22px; height:1px; background:#2D5BFF;"></span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#5C82FF;">The blind spot</span>
+        </div>
+        <div style="max-width:820px; display:flex; flex-direction:column; gap:22px;">
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:500; font-size:clamp(30px,4.8vw,54px); line-height:1.08; letter-spacing:-0.01em; color:#F1F2F5;">Everyone trades the same <span style="font-style:italic; color:#C9CCD6;">isolated</span> time series.</h2>
+          <p style="margin:0; font-size:clamp(17px,2vw,21px); line-height:1.6; color:#9CA0B0; font-weight:300;">Price, volume, a handful of factors — one ticker at a time. The relationships <em style="font-style:italic; color:#C9CCD6;">between</em> assets — who leads, who follows, how a shock spreads — never enter the model. That structure is where the edge is.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin-top:44px;">
+          <div style="border:1px solid rgba(255,255,255,0.07); border-radius:14px; background:#0E0F17; padding:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:#9CA0B0;">Isolated time series</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#5C606F;">consensus view</span>
+            </div>
+            {{ blindIsolated }}
+            <p style="margin:8px 2px 0; font-size:13px; line-height:1.5; color:#7B7F8E;">Each ticker modeled alone — moving on its own clock.</p>
+          </div>
+          <div style="border:1px solid rgba(45,91,255,0.28); border-radius:14px; background:#0E0F17; padding:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:#9DB4FF;">The graph</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#5C82FF;">our view</span>
+            </div>
+            {{ blindGraph }}
+            <p style="margin:8px 2px 0; font-size:13px; line-height:1.5; color:#9CA0B0;">One move, propagating through the structure.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 AI-NATIVE -->
+  <section style="position:relative; border-top:1px solid rgba(255,255,255,0.06);">
+    <div style="max-width:1240px; margin:0 auto; padding:0 32px;">
+      <div style="padding:100px 0;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:22px;">
+          <span style="width:22px; height:1px; background:#2D5BFF;"></span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#5C82FF;">AI-native</span>
+        </div>
+        <h2 style="margin:0 0 46px; max-width:880px; font-family:'Spectral',serif; font-weight:500; font-size:clamp(30px,4.8vw,54px); line-height:1.08; letter-spacing:-0.01em; color:#F1F2F5;">Agents research. <span style="font-style:italic; color:#C9CCD6;">Validated models trade.</span></h2>
+
+        <div style="display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));">
+          <div style="border:1px solid rgba(255,255,255,0.07); border-radius:14px; background:#14161F; padding:30px;">
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#5C82FF; margin-bottom:18px;">Research</div>
+            <h3 style="margin:0 0 12px; font-family:'Spectral',serif; font-weight:500; font-size:26px; letter-spacing:-0.01em; color:#F1F2F5;">Agents do the research.</h3>
+            <p style="margin:0; font-size:16px; line-height:1.6; color:#9CA0B0; font-weight:300;">They generate hypotheses, extract features from filings and news, and query the graph directly. Two people ship like twenty — the system scales without a floor of analysts.</p>
+          </div>
+          <div style="border:1px solid rgba(255,255,255,0.07); border-radius:14px; background:#14161F; padding:30px;">
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#3FB98C; margin-bottom:18px;">Execution</div>
+            <h3 style="margin:0 0 12px; font-family:'Spectral',serif; font-weight:500; font-size:26px; letter-spacing:-0.01em; color:#F1F2F5;">Validated models make the trades.</h3>
+            <p style="margin:0; font-size:16px; line-height:1.6; color:#9CA0B0; font-weight:300;">Features flow into neural models and graph embeddings to produce a signal — walk-forward validated before a dollar moves. No agent ever touches an order.</p>
+          </div>
+        </div>
+
+        <blockquote style="margin:54px 0 0; max-width:940px; font-family:'Spectral',serif; font-style:italic; font-weight:500; font-size:clamp(26px,4vw,44px); line-height:1.22; letter-spacing:-0.01em; color:#F1F2F5;">
+          <span style="color:#2D5BFF; font-style:normal;">&ldquo;</span>An LLM is a great feature extractor and a terrible portfolio manager.<span style="color:#2D5BFF; font-style:normal;">&rdquo;</span>
+          <span style="display:block; margin-top:16px; font-style:normal; font-size:16px; color:#7B7F8E; font-family:'IBM Plex Sans',sans-serif; font-weight:400;">We never confuse the two.</span>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 STATUS -->
+  <section style="position:relative; border-top:1px solid rgba(255,255,255,0.06);">
+    <div style="max-width:1240px; margin:0 auto; padding:0 32px;">
+      <div style="padding:100px 0;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:22px;">
+          <span style="width:22px; height:1px; background:#2D5BFF;"></span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#5C82FF;">Status</span>
+        </div>
+        <h2 style="margin:0 0 18px; max-width:820px; font-family:'Spectral',serif; font-weight:500; font-size:clamp(30px,4.8vw,54px); line-height:1.08; letter-spacing:-0.01em; color:#F1F2F5;">Early, live, and <span style="font-style:italic; color:#C9CCD6;">honest</span> about it.</h2>
+
+        <div style="margin:34px 0 10px; border:1px solid rgba(255,255,255,0.07); border-radius:14px; background:#0E0F17; padding:22px 22px 16px;">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+            <div>
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#5C606F;">Fig. 2 &middot; Cumulative return</div>
+              <div style="font-family:'Spectral',serif; font-size:20px; color:#ECEDF1; margin-top:4px;">Live equity book vs. S&P 500</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px; font-family:'IBM Plex Mono',monospace; font-size:11px;">
+              <span style="display:inline-flex; align-items:center; gap:7px; color:#C7CAD3;"><span style="width:14px; height:2px; background:#2D5BFF;"></span>RavenGraph</span>
+              <span style="display:inline-flex; align-items:center; gap:7px; color:#9CA0B0;"><span style="width:14px; height:2px; background:#6B6F7C;"></span>S&P 500</span>
+            </div>
+          </div>
+          <div onPointerMove="{{ onChartMove }}" onPointerLeave="{{ onChartLeave }}" style="touch-action:none; cursor:crosshair;">
+            {{ perfChart }}
+          </div>
+          <div style="margin-top:10px; font-family:'IBM Plex Mono',monospace; font-size:10px; line-height:1.5; color:#4C4F5C;">Feb&ndash;Jun 2026 &middot; small own book &middot; placeholder data, illustrative.</div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:minmax(120px,190px) 1fr; gap:24px; padding:30px 0; border-top:1px solid rgba(255,255,255,0.08);">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#2D5BFF; padding-top:6px;">Equities</div>
+          <p style="margin:0; font-size:clamp(18px,2.2vw,24px); line-height:1.5; color:#D7DAE2; font-weight:300;">Up <span style="color:#F1F2F5; font-weight:500;">~38% year-to-date</span>, roughly 27 points ahead of the S&P 500. Live trading, on a small own book.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:minmax(120px,190px) 1fr; gap:24px; padding:30px 0; border-top:1px solid rgba(255,255,255,0.08);">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#3FB98C; padding-top:6px;">Crypto</div>
+          <p style="margin:0; font-size:clamp(18px,2.2vw,24px); line-height:1.5; color:#D7DAE2; font-weight:300;">Live on Hyperliquid in a pilot with <span style="color:#F1F2F5; font-weight:500;">Avant Protocol</span>, our DeFi design partner. Micro-size, with performance shared weekly.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:minmax(120px,190px) 1fr; gap:24px; padding:30px 0; border-top:1px solid rgba(255,255,255,0.08); border-bottom:1px solid rgba(255,255,255,0.08);">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#D8A23B; padding-top:6px;">The graph layer</div>
+          <p style="margin:0; font-size:clamp(18px,2.2vw,24px); line-height:1.5; color:#D7DAE2; font-weight:300;">Still in build — the core bet, and the hard part. Today&rsquo;s results come from the baseline model.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="position:relative; border-top:1px solid rgba(255,255,255,0.06); background:#08090D;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 32px;">
+      <div style="padding:118px 0 0; display:flex; flex-direction:column; gap:30px; max-width:760px;">
+        <h2 style="margin:0; font-family:'Spectral',serif; font-weight:500; font-size:clamp(32px,5vw,60px); line-height:1.06; letter-spacing:-0.01em; color:#F1F2F5;">The market is a graph.<br><span style="font-style:italic; color:#C9CCD6;">We&rsquo;re trading on it first.</span></h2>
+        <a href="mailto:gabriel@ravengraph.com" style="display:inline-flex; align-self:flex-start; align-items:center; gap:9px; height:52px; padding:0 28px; border-radius:8px; background:#2D5BFF; color:#fff; font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:16px; text-decoration:none; transition:background .2s;" style-hover="background:#1E47E0;">Get in touch <span style="font-size:18px;">&#8594;</span></a>
+      </div>
+      <div style="margin:90px 0 0; padding:26px 0; border-top:1px solid rgba(255,255,255,0.06); display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <img src="public/icon-white-transparent.svg" alt="RavenGraph" style="width:20px; height:20px; opacity:0.9;">
+          <span style="font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:16px; letter-spacing:-0.01em; color:#E8E9EE;">RavenGraph</span>
+        </div>
+        <a href="mailto:gabriel@ravengraph.com" style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#5C606F; text-decoration:none;">gabriel@ravengraph.com</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;autoFire&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;showEdgeLabels&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot; }
+}">
+class Component extends DCLogic {
+  graphRef = React.createRef();
+  state = { fired:false, playing:false, t:0, scenarioId:'oil', mult:1, bgPhase:0, hoverIdx:null };
+  onChartMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const vx = (e.clientX - rect.left) / rect.width * 760;
+    const N = this.buildPerf().N;
+    let i = Math.round((vx - 46) / 696 * (N - 1));
+    i = Math.max(0, Math.min(N - 1, i));
+    if(i !== this.state.hoverIdx) this.setState({ hoverIdx:i });
+  };
+  onChartLeave = () => { if(this.state.hoverIdx != null) this.setState({ hoverIdx:null }); };
+  PERIOD_BG = 11000;
+  NET = (() => {
+    const W = 1200, H = 760, cols = 11, rows = 8;
+    const seed = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+    const nodes = [];
+    let id = 0;
+    for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++){
+      const baseX = (c + 0.5) / cols * W, baseY = (r + 0.5) / rows * H;
+      const ox = (seed(id) - 0.5) * 70, oy = (seed(id + 99) - 0.5) * 60;
+      nodes.push({ id, x: baseX + ox, y: baseY + oy });
+      id++;
+    }
+    const ix = (c, r) => r * cols + c;
+    const edges = [];
+    for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++){
+      if(c < cols - 1) edges.push([ix(c, r), ix(c + 1, r)]);
+      if(r < rows - 1) edges.push([ix(c, r), ix(c, r + 1)]);
+      if(c < cols - 1 && r < rows - 1 && (c + r) % 3 === 0) edges.push([ix(c, r), ix(c + 1, r + 1)]);
+    }
+    return { nodes, edges, W, H };
+  })();
+  _bgLoop = () => {
+    const now = performance.now();
+    if(!this._bgLast || now - this._bgLast >= 33){
+      this._bgLast = now;
+      this.setState({ bgPhase: (now / this.PERIOD_BG) % 1 });
+    }
+    this._bgRaf = requestAnimationFrame(this._bgLoop);
+  };
+
+  FNODES = {
+    VIX:  { x:58,  y:70,  t:'VIX',  d:'vol' },
+    TNX:  { x:58,  y:196, t:'10Y',  d:'rates' },
+    WTI:  { x:92,  y:330, t:'WTI',  d:'crude' },
+    SPY:  { x:372, y:56,  t:'SPY',  d:'index' },
+    JETS: { x:232, y:150, t:'JETS', d:'airlines' },
+    XLE:  { x:250, y:300, t:'XLE',  d:'energy' },
+    XOM:  { x:388, y:338, t:'XOM',  d:'exxon' },
+    DAL:  { x:392, y:120, t:'DAL',  d:'delta' },
+    UAL:  { x:392, y:186, t:'UAL',  d:'united' },
+    AAL:  { x:300, y:226, t:'AAL',  d:'american' },
+    XLF:  { x:520, y:300, t:'XLF',  d:'financials' },
+    JPM:  { x:660, y:322, t:'JPM',  d:'jpmorgan' },
+    XLK:  { x:548, y:92,  t:'XLK',  d:'tech' },
+    NVDA: { x:672, y:150, t:'NVDA', d:'nvidia' },
+    SMH:  { x:628, y:226, t:'SMH',  d:'semis' },
+  };
+  SCENARIOS = {
+    oil: {
+      key:'oil', label:'Oil \u00b7 WTI', title:'Fig. 1 \u00b7 Oil-shock transmission', subtitle:'WTI crude \u2192 sector network',
+      origin:'WTI', originBase:8, unit:'%', shock:8,
+      hops:[
+        { s:'WTI', t:'XLE',  w: 0.62, lag:8 },
+        { s:'XLE', t:'XOM',  w: 0.78, lag:12 },
+        { s:'WTI', t:'JETS', w:-0.48, lag:15 },
+        { s:'JETS',t:'DAL',  w: 0.71, lag:11 },
+        { s:'JETS',t:'UAL',  w: 0.66, lag:13 },
+        { s:'JETS',t:'AAL',  w: 0.69, lag:14 },
+      ],
+      path:['WTI','JETS','DAL'],
+    },
+    rates: {
+      key:'rates', label:'Rates \u00b7 10Y', title:'Fig. 1 \u00b7 Rates-shock transmission', subtitle:'10Y yield \u2192 equity clusters',
+      origin:'TNX', originBase:50, unit:'bps', shock:3.0,
+      hops:[
+        { s:'TNX', t:'XLF',  w: 0.45, lag:10 },
+        { s:'XLF', t:'JPM',  w: 0.82, lag:6 },
+        { s:'TNX', t:'XLK',  w:-0.55, lag:12 },
+        { s:'XLK', t:'NVDA', w: 0.88, lag:5 },
+        { s:'XLK', t:'SMH',  w: 0.80, lag:6 },
+        { s:'TNX', t:'SPY',  w:-0.18, lag:14 },
+      ],
+      path:['TNX','XLK','NVDA'],
+    },
+    vol: {
+      key:'vol', label:'Vol \u00b7 VIX', title:'Fig. 1 \u00b7 Vol-spike transmission', subtitle:'VIX \u2192 broad market',
+      origin:'VIX', originBase:12, unit:'pts', shock:5.0,
+      hops:[
+        { s:'VIX', t:'SPY',  w:-0.42, lag:6 },
+        { s:'SPY', t:'XLK',  w: 0.95, lag:8 },
+        { s:'SPY', t:'XLF',  w: 0.88, lag:8 },
+        { s:'SPY', t:'JETS', w: 0.80, lag:10 },
+        { s:'SPY', t:'XLE',  w: 0.75, lag:10 },
+        { s:'XLK', t:'NVDA', w: 0.90, lag:5 },
+      ],
+      path:['VIX','SPY','XLK'],
+    },
+  };
+
+  HNODES = {
+    SPY:  { x:250, y:46,  t:'SPY',  hub:true },
+    DXY:  { x:60,  y:92,  t:'DXY' },
+    TNX:  { x:46,  y:178, t:'10Y' },
+    VIX:  { x:74,  y:262, t:'VIX' },
+    WTI:  { x:118, y:330, t:'WTI',  shock:true },
+    NG:   { x:192, y:320, t:'NG' },
+    XLE:  { x:210, y:250, t:'XLE' },
+    XOM:  { x:276, y:322, t:'XOM' },
+    JETS: { x:236, y:150, t:'JETS' },
+    DAL:  { x:312, y:92,  t:'DAL' },
+    UAL:  { x:344, y:150, t:'UAL' },
+    AAL:  { x:318, y:214, t:'AAL' },
+    XLF:  { x:300, y:280, t:'XLF' },
+    JPM:  { x:382, y:300, t:'JPM' },
+    XLK:  { x:398, y:96,  t:'XLK' },
+    NVDA: { x:452, y:150, t:'NVDA' },
+    SMH:  { x:438, y:226, t:'SMH' },
+  };
+  HEDGES = [
+    ['DXY','TNX'],['TNX','VIX'],['VIX','SPY'],['SPY','DXY'],
+    ['WTI','XLE'],['XLE','XOM'],['WTI','NG'],['NG','XLE'],
+    ['WTI','JETS'],['JETS','DAL'],['JETS','UAL'],['JETS','AAL'],
+    ['TNX','XLF'],['XLF','JPM'],['JPM','SPY'],
+    ['SPY','XLK'],['XLK','NVDA'],['XLK','SMH'],['NVDA','SMH'],
+    ['SPY','XLE'],['SPY','JETS'],['DXY','WTI'],
+  ];
+  SPEED = 14;
+  C = { teal:'#3FB98C', rose:'#E2606E', amber:'#D8A23B' };
+
+  buildModel(sc, mult){
+    const val = {}, lag = {};
+    val[sc.origin] = sc.shock * mult;
+    lag[sc.origin] = 0;
+    for(const e of sc.hops){
+      val[e.t] = (val[e.s] ?? 0) * e.w;
+      lag[e.t] = (lag[e.s] ?? 0) + e.lag;
+    }
+    return { val, lag };
+  }
+  get activeScenario(){ return this.SCENARIOS[this.state.scenarioId] || this.SCENARIOS.oil; }
+  get MAXLAG(){ const { lag } = this.buildModel(this.activeScenario, 1); return Math.max.apply(null, Object.values(lag)); }
+  get MAXT(){ return this.MAXLAG + 6; }
+  lerp(a,b,f){ return a + (b-a)*f; }
+  buildPerf(){
+    if(this._perf) return this._perf;
+    const rg = [0,0,0.18,1.3,1.45,-0.03,-0.21,1.15,0.43,1.74,1.17,0.11,-2.53,-2.94,-1.24,0.64,0.06,1.05,2.48,3.45,5.51,5.7,6.91,6.92,7.14,7.07,7.11,7.99,8.58,8.57,9.21,8.95,9.24,9.61,8.97,9.82,7.95,7.77,11.15,14.59,14.62,15.11,14.12,12.84,12.62,11.88,10.47,9.11,8.77,9.01,7.33,7.23,7.43,5.34,4.76,2.63,3.57,2.63,3.12,5.15,6.72,6.72,10.03,14.79,13.66,17.91,18.61,16.69,18.93,19.86,17.93,17.46,17.31,21.15,22.78,25.81,31.58,30.34,32.5,34.99,36.58,37.79,44.36,43.06,32.36,36.22,33.4,30.44,36.39,32.56,37.1,32.85,33.71,37.8];
+    const ndx = [0,1.96,1.96,2.17,2.12,0.55,0.62,0.62,1.29,1.04,1.77,1.77,1.46,2.31,1.75,1.29,1.29,0.42,1.14,0.58,-0.74,-0.74,-0.05,-0.16,-1.68,-2.23,-2.23,-0.99,-2.35,-2.59,-4.01,-4.01,-3.31,-2.79,-4.51,-6.15,-6.15,-3.77,-3.02,-2.93,-2.93,-2.42,0.06,0.64,0.56,0.56,2.78,3.58,3.84,5.11,5.11,4.2,5.27,4.86,5.69,5.69,5.35,5.33,6.34,6.65,6.65,7.13,8.61,8.28,9.17,9.17,9.27,9.88,10.74,9.4,9.4,8.62,9.73,9.94,10.38,10.38,11.11,11.71,11.96,11.96,12.42,11.64,12.05,9.16,9.16,9.1,7.4,9.19,9.78,9.78,11.1,9.69,10.82,10.82];
+    const dates = ["Feb 5","Feb 6","Feb 7","Feb 10","Feb 11","Feb 12","Feb 13","Feb 14","Feb 18","Feb 19","Feb 20","Feb 21","Feb 24","Feb 25","Feb 26","Feb 27","Feb 28","Mar 3","Mar 4","Mar 5","Mar 6","Mar 7","Mar 10","Mar 11","Mar 12","Mar 13","Mar 14","Mar 17","Mar 18","Mar 19","Mar 20","Mar 21","Mar 24","Mar 25","Mar 26","Mar 27","Mar 28","Mar 31","Apr 1","Apr 2","Apr 3","Apr 7","Apr 8","Apr 9","Apr 10","Apr 11","Apr 14","Apr 15","Apr 16","Apr 17","Apr 18","Apr 21","Apr 22","Apr 23","Apr 24","Apr 25","Apr 28","Apr 29","Apr 30","May 1","May 2","May 5","May 6","May 7","May 8","May 9","May 12","May 13","May 14","May 15","May 16","May 19","May 20","May 21","May 22","May 23","May 27","May 28","May 29","May 30","Jun 2","Jun 3","Jun 4","Jun 5","Jun 6","Jun 9","Jun 10","Jun 11","Jun 12","Jun 13","Jun 16","Jun 17","Jun 18","Jun 19"];
+    const ticks = [[0,"Feb"],[17,"Mar"],[38,"Apr"],[59,"May"],[80,"Jun"]];
+    this._perf = { N: rg.length, rg, ndx, dates, ticks };
+    return this._perf;
+  }
+
+  _loop = (now) => {
+    const dt = (now - this._last) / 1000; this._last = now;
+    let t = this.state.t + dt * this.SPEED;
+    if(t >= this.MAXT){ t = this.MAXT; this.setState({ t, playing:false }); this._raf = null; return; }
+    this.setState({ t });
+    this._raf = requestAnimationFrame(this._loop);
+  };
+  startLoop(){ this.stopLoop(); this._last = performance.now(); this.setState({ playing:true }); this._raf = requestAnimationFrame(this._loop); }
+  stopLoop(){ if(this._raf){ cancelAnimationFrame(this._raf); this._raf = null; } }
+
+  fire = () => { this.setState({ fired:true, t:0 }); this.startLoop(); };
+  setScenario = (key) => () => { this.setState({ scenarioId:key, fired:true, t:0 }); this.startLoop(); };
+  setMult = (m) => () => { this.setState({ mult:m }); };
+  seek = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const frac = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    this.stopLoop();
+    this.setState({ fired:true, playing:false, t: frac * this.MAXT });
+  };
+  onTrackDown = (e) => { this._dragging = true; try { e.currentTarget.setPointerCapture(e.pointerId); } catch(_) {} this.seek(e); };
+  onTrackMove = (e) => { if(this._dragging) this.seek(e); };
+  onTrackUp = () => { this._dragging = false; };
+
+  componentDidMount(){
+    const auto = this.props.autoFire ?? true;
+    if(auto && this.graphRef.current && typeof IntersectionObserver !== 'undefined'){
+      this._io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => { if(en.isIntersecting && !this.state.fired){ this.fire(); } });
+      }, { threshold:0.4 });
+      this._io.observe(this.graphRef.current);
+    }
+    this._bgRaf = requestAnimationFrame(this._bgLoop);
+  }
+  componentWillUnmount(){ this.stopLoop(); if(this._io) this._io.disconnect(); if(this._bgRaf) cancelAnimationFrame(this._bgRaf); }
+
+  renderVals(){
+    const C = this.C;
+    const h = React.createElement;
+    const mono = "'IBM Plex Mono', monospace";
+    const sc = this.activeScenario;
+    const mult = this.state.mult ?? 1;
+    const { val, lag } = this.buildModel(sc, mult);
+    const t = this.state.t;
+    const fired = this.state.fired;
+    const showLabels = (this.props.showEdgeLabels ?? true);
+    const participants = new Set([sc.origin, ...sc.hops.map((e) => e.t)]);
+    const RAMP = 4, RING = 5;
+    const ease = (p) => p <= 0 ? 0 : (p >= 1 ? 1 : 1 - Math.pow(1 - p, 2));
+    const fmt = (v) => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+    const fmtUnit = (x, u) => u === '%' ? ((x >= 0 ? '+' : '') + x.toFixed(1) + '%') : ((x >= 0 ? '+' : '') + Math.round(x) + ' ' + u);
+    const FN = this.FNODES;
+
+    const nodeData = Object.keys(FN).map((k) => {
+      const n = FN[k];
+      const part = participants.has(k);
+      const L = lag[k]; const v = val[k];
+      const isOrigin = k === sc.origin;
+      const reached = part && fired && t >= L - 0.001;
+      const prog = reached ? ease((t - L) / RAMP) : 0;
+      const pos = (v ?? 0) >= 0;
+      let stroke = 'rgba(255,255,255,0.08)', fill = '#10121A', tickerColor = '#4C4F5C', strokeW = 1.2, valueColor = '#4C4F5C', valueLabel = '';
+      if(part){ stroke = 'rgba(255,255,255,0.18)'; fill = '#14161F'; tickerColor = '#9CA0B0'; valueLabel = '\u00b7'; }
+      if(reached){
+        if(isOrigin){ stroke = C.amber; fill = '#1C1608'; valueColor = C.amber; valueLabel = fmtUnit(sc.originBase * mult * prog, sc.unit); }
+        else if(pos){ stroke = C.teal; fill = '#0F1A16'; valueColor = C.teal; valueLabel = fmt(v * prog); }
+        else { stroke = C.rose; fill = '#1B1014'; valueColor = C.rose; valueLabel = fmt(v * prog); }
+        tickerColor = '#F1F2F5'; strokeW = 2.2;
+      }
+      let ring = null;
+      if(reached){
+        const rp = (t - L) / RING;
+        if(rp >= 0 && rp <= 1){
+          ring = { r: 19 + rp * 18, opacity: (1 - rp) * 0.5, color: isOrigin ? C.amber : (pos ? C.teal : C.rose) };
+        }
+      }
+      return { id:k, ticker:n.t, cx:n.x, cy:n.y, stroke, fill, tickerColor, strokeW, valueColor, valueLabel, tickerY:n.y + 3.5, valueY:n.y + 34, ring, opacity: part ? 1 : 0.45 };
+    });
+
+    const edgeData = sc.hops.map((e) => {
+      const s = FN[e.s], g = FN[e.t];
+      const charged = fired && t >= lag[e.t] - 0.001;
+      const col = val[e.t] >= 0 ? C.teal : C.rose;
+      return {
+        x1:s.x, y1:s.y, x2:g.x, y2:g.y,
+        stroke: charged ? col : 'rgba(255,255,255,0.12)', width: charged ? 2.2 : 1.2,
+        lx:(s.x + g.x) / 2, ly:(s.y + g.y) / 2 - 8,
+        label: '\u03b2 ' + (e.w >= 0 ? '+' : '') + e.w.toFixed(2) + ' \u00b7 ' + e.lag + 'm',
+        labelColor: charged ? '#C3C6D0' : '#5C606F',
+        labelOpacity: showLabels ? (charged ? 1 : 0.42) : 0,
+      };
+    });
+
+    const pulses = [];
+    if(fired){
+      for(const e of sc.hops){
+        const a = lag[e.s], b = lag[e.t];
+        if(t >= a && t < b){
+          const f = (t - a) / (b - a);
+          const s = FN[e.s], g = FN[e.t];
+          pulses.push({ x:this.lerp(s.x, g.x, f), y:this.lerp(s.y, g.y, f), color: val[e.t] >= 0 ? C.teal : C.rose });
+        }
+      }
+    }
+
+    const clockLabel = 'T + ' + (fired ? Math.round(Math.min(t, this.MAXLAG)) : 0) + 'm';
+
+    const pathChips = sc.path.map((id, idx) => {
+      const v = val[id], L = lag[id], reached = fired && t >= L - 0.001, isO = id === sc.origin;
+      const prog = reached ? ease((t - L) / RAMP) : 0;
+      const pos = (v ?? 0) >= 0;
+      const col = isO ? C.amber : (pos ? C.teal : C.rose);
+      const valStr = !reached ? '\u2014' : (isO ? fmtUnit(sc.originBase * mult * prog, sc.unit) : fmt(v * prog));
+      return { ticker:FN[id].t, sub:(idx === 0 ? 'origin' : FN[id].d) + ' \u00b7 T+' + L + 'm', val:valStr, color: reached ? col : '#5C606F', dim: reached ? 1 : 0.45 };
+    });
+
+    const oLab = fmtUnit(sc.originBase * mult, sc.unit);
+    let takeaway;
+    if(sc.key === 'oil') takeaway = 'A ' + oLab + ' crude shock prices a ' + fmt(val.DAL) + ' move into DAL within ~' + lag.DAL + ' minutes — down through the airline cluster, before the tape reflects it.';
+    else if(sc.key === 'rates') takeaway = 'A ' + oLab + ' rates surprise reprices NVDA ' + fmt(val.NVDA) + ' within ~' + lag.NVDA + ' minutes — rate-sensitivity flowing through the tech cluster.';
+    else takeaway = 'A ' + oLab + ' VIX spike pulls XLK ' + fmt(val.XLK) + ' within ~' + lag.XLK + ' minutes — correlations snapping toward one across the market.';
+
+    const originN = FN[sc.origin];
+    const graph = h('svg', { viewBox:'0 0 720 380', style:{ width:'100%', height:'auto', display:'block' } }, [
+      h('circle', { key:'ring', cx:originN.x, cy:originN.y, r:30, fill:'none', stroke:'#D8A23B', strokeWidth:1.2, style:{ transformBox:'fill-box', transformOrigin:'center', animation:'rgring 2.6s ease-in-out infinite' } }),
+      ...edgeData.map((e, i) => h('g', { key:'e' + i }, [
+        h('line', { key:'l', x1:e.x1, y1:e.y1, x2:e.x2, y2:e.y2, stroke:e.stroke, strokeWidth:e.width, strokeLinecap:'round' }),
+        h('text', { key:'t', x:e.lx, y:e.ly, textAnchor:'middle', fill:e.labelColor, opacity:e.labelOpacity, fontFamily:mono, fontSize:9 }, e.label),
+      ])),
+      ...nodeData.filter((n) => n.ring).map((n, i) => h('circle', { key:'rg' + i, cx:n.cx, cy:n.cy, r:n.ring.r, fill:'none', stroke:n.ring.color, strokeWidth:1.5, opacity:n.ring.opacity })),
+      ...pulses.map((p, i) => h('g', { key:'p' + i }, [
+        h('circle', { key:'a', cx:p.x, cy:p.y, r:8, fill:p.color, opacity:0.18 }),
+        h('circle', { key:'b', cx:p.x, cy:p.y, r:4, fill:p.color }),
+      ])),
+      ...nodeData.map((n, i) => h('g', { key:'n' + i, opacity:n.opacity }, [
+        h('circle', { key:'c', cx:n.cx, cy:n.cy, r:19, fill:n.fill, stroke:n.stroke, strokeWidth:n.strokeW }),
+        h('text', { key:'tk', x:n.cx, y:n.tickerY, textAnchor:'middle', fill:n.tickerColor, fontFamily:mono, fontSize:10.5, fontWeight:600 }, n.ticker),
+        n.valueLabel ? h('text', { key:'v', x:n.cx, y:n.valueY, textAnchor:'middle', fill:n.valueColor, fontFamily:mono, fontSize:10, fontWeight:600 }, n.valueLabel) : null,
+      ])),
+    ]);
+
+    // hero schematic graph (broad market graph, static)
+    const HN = this.HNODES;
+    const hFront = -70 + this.state.bgPhase * 640;
+    const hAct = (x) => { const d = (x - hFront) / 85; return Math.exp(-d * d); };
+    const heroEdgeEls = this.HEDGES.map((e, i) => {
+      const s = HN[e[0]], g = HN[e[1]];
+      const a = (hAct(s.x) + hAct(g.x)) / 2;
+      return h('line', { key:'he' + i, x1:s.x, y1:s.y, x2:g.x, y2:g.y, stroke:'#2D5BFF', strokeWidth:1 + a * 0.7, opacity:0.22 + a * 0.5 });
+    });
+    const heroNodeEls = Object.keys(HN).map((k, i) => {
+      const n = HN[k];
+      const a = hAct(n.x);
+      const r = n.hub ? 15 : 12.5;
+      const stroke = n.shock ? '#5C82FF' : (n.hub ? 'rgba(255,255,255,0.34)' : 'rgba(255,255,255,0.2)');
+      const tcol = n.shock ? '#D7E0FF' : (n.hub ? '#D7DAE2' : '#9CA0B0');
+      return h('g', { key:'hn' + i }, [
+        a > 0.05 ? h('circle', { key:'halo', cx:n.x, cy:n.y, r:r + 4, fill:'none', stroke:'#5C82FF', strokeWidth:1.2, opacity:a * 0.55 }) : null,
+        h('circle', { key:'c', cx:n.x, cy:n.y, r, fill:'#11131C', stroke, strokeWidth:n.shock ? 1.8 : 1.2 }),
+        h('text', { key:'t', x:n.x, y:n.y + 3, textAnchor:'middle', fill:tcol, fontFamily:mono, fontSize:8.5, fontWeight:600 }, n.t),
+      ]);
+    });
+    const heroGraph = h('svg', { viewBox:'0 0 500 372', style:{ width:'100%', height:'auto', display:'block' } }, [...heroEdgeEls, ...heroNodeEls]);
+
+    const net = this.NET;
+    const bgFront = -200 + this.state.bgPhase * (net.W + 400);
+    const bgAct = (x) => { const d = (x - bgFront) / 185; return Math.exp(-d * d); };
+    const bgEdges = net.edges.map((e, i) => {
+      const s = net.nodes[e[0]], g2 = net.nodes[e[1]];
+      const a = (bgAct(s.x) + bgAct(g2.x)) / 2;
+      return h('line', { key:'bge' + i, x1:s.x, y1:s.y, x2:g2.x, y2:g2.y, stroke:'#2D5BFF', strokeWidth:1, opacity:0.04 + a * 0.32 });
+    });
+    const bgNodes = net.nodes.map((n) => {
+      const a = bgAct(n.x);
+      return h('circle', { key:'bgn' + n.id, cx:n.x, cy:n.y, r:1.5 + a * 1.8, fill:'#2D5BFF', opacity:0.08 + a * 0.38 });
+    });
+    const networkBg = h('svg', { viewBox:'0 0 ' + net.W + ' ' + net.H, preserveAspectRatio:'xMidYMid slice', style:{ position:'absolute', inset:0, width:'100%', height:'100%' } }, [...bgEdges, ...bgNodes]);
+
+    // --- blind-spot before/after viz ---
+    const bp = this.state.bgPhase;
+    const gp = (bp * 3) % 1;
+    const isoTk = ['AAPL','XOM','JPM'];
+    const isoWave = (lane, x) => {
+      const f1 = [0.9,1.4,0.7][lane], f2 = [1.7,2.3,1.2][lane], ph = [0,2,4][lane];
+      const tt = x * 0.05 + bp * 6.2832 + ph;
+      return Math.sin(tt * f1) + 0.5 * Math.sin(tt * f2 + 1);
+    };
+    const blindIsolated = h('svg', { viewBox:'0 0 300 200', style:{ width:'100%', height:'auto', display:'block' } },
+      isoTk.map((tk, li) => {
+        const cyl = 44 + li * 56;
+        const pts = [];
+        for(let xx = 44; xx <= 290; xx += 6){ pts.push(xx + ',' + (cyl + isoWave(li, xx) * 13).toFixed(1)); }
+        return h('g', { key:'il' + li }, [
+          h('line', { key:'b', x1:44, y1:cyl, x2:290, y2:cyl, stroke:'rgba(255,255,255,0.05)', strokeWidth:1 }),
+          h('polyline', { key:'p', points:pts.join(' '), fill:'none', stroke:'#6B6F7C', strokeWidth:1.6, strokeLinecap:'round', strokeLinejoin:'round' }),
+          h('text', { key:'t', x:12, y:cyl + 3, fill:'#5C606F', fontFamily:mono, fontSize:9, fontWeight:600 }, tk),
+        ]);
+      })
+    );
+    const gN = { A:{x:54,y:100,o:true}, B:{x:138,y:54}, C:{x:138,y:150}, D:{x:236,y:44}, E:{x:248,y:108}, F:{x:228,y:166} };
+    const gE = [['A','B'],['A','C'],['B','D'],['B','E'],['C','E'],['C','F']];
+    const dA = {}; Object.keys(gN).forEach((k) => { dA[k] = Math.hypot(gN[k].x - gN.A.x, gN[k].y - gN.A.y); });
+    const gFront = gp * (Math.max.apply(null, Object.values(dA)) + 46);
+    const blindGraph = h('svg', { viewBox:'0 0 300 200', style:{ width:'100%', height:'auto', display:'block' } }, [
+      ...gE.map((e, i) => {
+        const s = gN[e[0]], g = gN[e[1]];
+        const lit = gFront >= Math.max(dA[e[0]], dA[e[1]]);
+        return h('line', { key:'be' + i, x1:s.x, y1:s.y, x2:g.x, y2:g.y, stroke: lit ? '#2D5BFF' : 'rgba(255,255,255,0.13)', strokeWidth: lit ? 1.8 : 1, opacity: lit ? 0.9 : 0.7 });
+      }),
+      ...Object.keys(gN).map((k, i) => {
+        const n = gN[k]; const reached = gFront >= dA[k]; const rp = reached ? Math.min(1, (gFront - dA[k]) / 46) : 0;
+        return h('g', { key:'bn' + i }, [
+          (reached && rp < 1) ? h('circle', { key:'r', cx:n.x, cy:n.y, r:9 + rp * 13, fill:'none', stroke:'#5C82FF', strokeWidth:1.3, opacity:(1 - rp) * 0.6 }) : null,
+          h('circle', { key:'c', cx:n.x, cy:n.y, r:9, fill: (n.o || reached) ? '#13203A' : '#11131C', stroke: (n.o || reached) ? '#5C82FF' : 'rgba(255,255,255,0.2)', strokeWidth: n.o ? 1.9 : 1.3 }),
+        ]);
+      }),
+    ]);
+
+    // --- status performance chart ---
+    const perf = this.buildPerf();
+    const PN = perf.N, rgA = perf.rg, ndA = perf.ndx;
+    const px0 = 46, py0 = 14, pw = 696, phh = 256, yMin = -3, yMax = 46;
+    const mx = (i) => px0 + i / (PN - 1) * pw;
+    const my = (v) => py0 + (1 - (v - yMin) / (yMax - yMin)) * phh;
+    const gridV = [0,10,20,30,40];
+    const moIdx = perf.ticks.map((tk) => tk[0]), moLab = perf.ticks.map((tk) => tk[1]);
+    const rgPts = rgA.map((v,i) => mx(i).toFixed(1) + ',' + my(v).toFixed(1)).join(' ');
+    const ndPts = ndA.map((v,i) => mx(i).toFixed(1) + ',' + my(v).toFixed(1)).join(' ');
+    const areaD = 'M' + px0 + ',' + my(0).toFixed(1) + ' ' + rgA.map((v,i) => 'L' + mx(i).toFixed(1) + ',' + my(v).toFixed(1)).join(' ') + ' L' + mx(PN-1).toFixed(1) + ',' + my(0).toFixed(1) + ' Z';
+    const sgn = (v) => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+    const hi = this.state.hoverIdx;
+    const pc = [
+      ...gridV.map((gv,i) => h('g', { key:'gr' + i }, [
+        h('line', { key:'l', x1:px0, y1:my(gv), x2:px0 + pw, y2:my(gv), stroke:'rgba(255,255,255,0.06)', strokeWidth:1 }),
+        h('text', { key:'t', x:px0 - 8, y:my(gv) + 3, textAnchor:'end', fill:'#5C606F', fontFamily:mono, fontSize:10 }, (gv > 0 ? '+' : '') + gv + '%'),
+      ])),
+      ...moIdx.map((mi,i) => h('text', { key:'mo' + i, x:mx(mi), y:294, textAnchor:'start', fill:'#5C606F', fontFamily:mono, fontSize:10 }, moLab[i])),
+      h('path', { key:'area', d:areaD, fill:'#2D5BFF', opacity:0.08 }),
+      h('polyline', { key:'nd', points:ndPts, fill:'none', stroke:'#6B6F7C', strokeWidth:1.6, strokeLinecap:'round', strokeLinejoin:'round' }),
+      h('polyline', { key:'rg', points:rgPts, fill:'none', stroke:'#2D5BFF', strokeWidth:2.2, strokeLinecap:'round', strokeLinejoin:'round' }),
+      h('circle', { key:'ndd', cx:mx(PN-1), cy:my(ndA[PN-1]), r:3.5, fill:'#9CA0B0' }),
+      h('circle', { key:'rgd', cx:mx(PN-1), cy:my(rgA[PN-1]), r:3.5, fill:'#2D5BFF' }),
+      h('text', { key:'rgl', x:mx(PN-1) - 8, y:my(rgA[PN-1]) - 9, textAnchor:'end', fill:'#9DB4FF', fontFamily:mono, fontSize:11, fontWeight:600 }, '+' + rgA[PN-1].toFixed(1) + '%'),
+      h('text', { key:'ndl', x:mx(PN-1) - 8, y:my(ndA[PN-1]) + 15, textAnchor:'end', fill:'#9CA0B0', fontFamily:mono, fontSize:11, fontWeight:600 }, '+' + ndA[PN-1].toFixed(1) + '%'),
+    ];
+    if(hi != null){
+      const hx = mx(hi), ttw = 168, ttx = Math.max(px0, Math.min(px0 + pw - ttw, hx + 12)), tty = 18;
+      pc.push(
+        h('line', { key:'hl', x1:hx, y1:py0, x2:hx, y2:py0 + phh, stroke:'rgba(255,255,255,0.22)', strokeWidth:1 }),
+        h('circle', { key:'hnd', cx:hx, cy:my(ndA[hi]), r:3.5, fill:'#0E0F17', stroke:'#9CA0B0', strokeWidth:1.5 }),
+        h('circle', { key:'hrg', cx:hx, cy:my(rgA[hi]), r:4, fill:'#0E0F17', stroke:'#2D5BFF', strokeWidth:2 }),
+        h('g', { key:'tt' }, [
+          h('rect', { key:'r', x:ttx, y:tty, width:ttw, height:64, rx:7, fill:'#14161F', stroke:'rgba(255,255,255,0.14)' }),
+          h('text', { key:'d', x:ttx + 13, y:tty + 20, fill:'#9CA0B0', fontFamily:mono, fontSize:10.5 }, perf.dates[hi] + ', 2026'),
+          h('text', { key:'a', x:ttx + 13, y:tty + 39, fill:'#9DB4FF', fontFamily:mono, fontSize:11, fontWeight:600 }, 'RavenGraph  ' + sgn(rgA[hi])),
+          h('text', { key:'b', x:ttx + 13, y:tty + 54, fill:'#9CA0B0', fontFamily:mono, fontSize:11, fontWeight:600 }, 'S&P 500  ' + sgn(ndA[hi])),
+        ])
+      );
+    }
+    const perfChart = h('svg', { viewBox:'0 0 760 300', style:{ width:'100%', height:'auto', display:'block' } }, pc);
+
+    const playFrac = Math.max(0, Math.min(1, t / this.MAXT));
+    const btnStyle = (active) => active
+      ? { bg:'rgba(45,91,255,0.16)', color:'#BAC9FF', border:'1px solid #2D5BFF' }
+      : { bg:'transparent', color:'#9CA0B0', border:'1px solid rgba(255,255,255,0.14)' };
+    const scenarioBtns = Object.keys(this.SCENARIOS).map((key) => {
+      const s = this.SCENARIOS[key];
+      const st = btnStyle(key === this.state.scenarioId);
+      return { label:s.label, onClick:this.setScenario(key), bg:st.bg, color:st.color, border:st.border };
+    });
+    const severityBtns = [['Mild', 0.6], ['Base', 1.0], ['Severe', 1.6]].map((pair) => {
+      const st = btnStyle(Math.abs(mult - pair[1]) < 0.01);
+      return { label:pair[0], onClick:this.setMult(pair[1]), bg:st.bg, color:st.color, border:st.border };
+    });
+
+    return {
+      graphRef:this.graphRef,
+      graph, heroGraph, networkBg, blindIsolated, blindGraph, perfChart,
+      onChartMove:this.onChartMove, onChartLeave:this.onChartLeave,
+      pathChips, scenarioBtns, severityBtns,
+      clockLabel, takeaway,
+      figTitle: sc.title, figSubtitle: sc.subtitle,
+      fireLabel: fired ? 'Replay' : 'Fire shock',
+      fire:this.fire,
+      onTrackDown:this.onTrackDown, onTrackMove:this.onTrackMove, onTrackUp:this.onTrackUp,
+      playFillW: (playFrac * 100).toFixed(2) + '%',
+      playHeadL: (playFrac * 100).toFixed(2) + '%',
+    };
+  }
+}
+</script>
+</body>
+</html>
