@@ -1,6 +1,5 @@
 import { FONT } from "@/lib/landing/tokens";
 import { TopBar } from "@/components/landing/TopBar";
-import { EdgeTape } from "@/components/landing/EdgeTape";
 import { Hero } from "@/components/landing/Hero";
 import { ShockSimulator } from "@/components/landing/ShockSimulator";
 import { BlindSpot } from "@/components/landing/BlindSpot";
@@ -21,7 +20,6 @@ export default function LandingPage() {
       }}
     >
       <TopBar />
-      <EdgeTape />
       <Hero />
       <ShockSimulator />
       <BlindSpot />

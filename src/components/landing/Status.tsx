@@ -76,7 +76,7 @@ export function Status() {
             about it.
           </h2>
 
-          {/* Fig. 2 chart card */}
+          {/* Fig. 3 chart card */}
           <div
             style={{
               margin: "34px 0 10px",
@@ -106,7 +106,7 @@ export function Status() {
                     color: "#5C606F",
                   }}
                 >
-                  Fig. 2 · Cumulative return
+                  Fig. 3 · Cumulative return
                 </div>
                 <div
                   style={{

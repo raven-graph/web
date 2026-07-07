@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { PERF } from "@/lib/landing/performance";
 import { COLOR, FONT } from "@/lib/landing/tokens";
 
-// Fig. 2 — cumulative-return chart (RavenGraph vs S&P 500), real data.
+// Fig. 3 — cumulative-return chart (RavenGraph vs S&P 500), real data.
 // viewBox 0 0 760 300.
 const PX0 = 46;
 const PY0 = 14;
