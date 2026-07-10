@@ -162,12 +162,12 @@ export function Status() {
                 color: "#4C4F5C",
               }}
             >
-              Feb–Jun 2026 · small own book · real track record.
+              Feb–Jul 2026 · small own book · real track record.
             </div>
           </div>
 
           <Row label="Equities" color={COLOR.cobalt}>
-            Up <span style={strong}>~38% year-to-date</span>, roughly 27 points
+            Up <span style={strong}>~38% year-to-date</span>, roughly 26 points
             ahead of the S&P 500. Live trading, on a small own book.
           </Row>
           <Row label="Crypto" color={COLOR.teal}>

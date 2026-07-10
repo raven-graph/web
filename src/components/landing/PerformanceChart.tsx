@@ -11,7 +11,7 @@ const PY0 = 14;
 const PW = 696;
 const PHH = 256;
 const Y_MIN = -3;
-const Y_MAX = 46;
+const Y_MAX = 50;
 const GRID = [0, 10, 20, 30, 40];
 
 export function PerformanceChart() {
