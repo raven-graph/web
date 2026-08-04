@@ -1,25 +1,30 @@
 "use client";
 
 import React, { useState } from "react";
-import { PERF } from "@/lib/landing/performance";
-import { COLOR, FONT } from "@/lib/landing/tokens";
+import type { PerfData } from "@/lib/landing/performance";
+import { FONT } from "@/lib/landing/tokens";
 
-// Fig. 3 — cumulative-return chart (RavenGraph vs S&P 500), real data.
+// Fig. 3 — cumulative-return chart (RavenGraph book vs benchmark), real data.
 // viewBox 0 0 760 300.
 const PX0 = 46;
 const PY0 = 14;
 const PW = 696;
 const PHH = 256;
-const Y_MIN = -3;
-const Y_MAX = 50;
-const GRID = [0, 10, 20, 30, 40];
 
-export function PerformanceChart() {
+export function PerformanceChart({
+  data,
+  accent,
+  accentLighter,
+}: {
+  data: PerfData;
+  accent: string;
+  accentLighter: string;
+}) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
-  const { N, rg, ndx, dates, ticks } = PERF;
+  const { N, rg, ndx, dates, ticks, benchLabel, yMin, yMax, grid } = data;
 
   const mx = (i: number) => PX0 + (i / (N - 1)) * PW;
-  const my = (v: number) => PY0 + (1 - (v - Y_MIN) / (Y_MAX - Y_MIN)) * PHH;
+  const my = (v: number) => PY0 + (1 - (v - yMin) / (yMax - yMin)) * PHH;
   const sgn = (v: number) => (v >= 0 ? "+" : "") + v.toFixed(1) + "%";
 
   const rgPts = rg.map((v, i) => mx(i).toFixed(1) + "," + my(v).toFixed(1)).join(" ");
@@ -79,7 +84,7 @@ export function PerformanceChart() {
           cy={my(rg[hi])}
           r={4}
           fill="#0E0F17"
-          stroke={COLOR.cobalt}
+          stroke={accent}
           strokeWidth={2}
         />
       </>
@@ -107,7 +112,7 @@ export function PerformanceChart() {
         <text
           x={ttx + 13}
           y={tty + 39}
-          fill={COLOR.cobaltLighter}
+          fill={accentLighter}
           fontFamily={FONT.mono}
           fontSize={11}
           fontWeight={600}
@@ -122,7 +127,7 @@ export function PerformanceChart() {
           fontSize={11}
           fontWeight={600}
         >
-          S&P 500  {sgn(ndx[hi])}
+          {benchLabel}  {sgn(ndx[hi])}
         </text>
       </g>
     );
@@ -139,7 +144,7 @@ export function PerformanceChart() {
           viewBox="0 0 760 300"
           style={{ width: "100%", height: "auto", display: "block" }}
         >
-        {GRID.map((gv, i) => (
+        {grid.map((gv, i) => (
           <g key={`gr${i}`}>
             <line
               x1={PX0}
@@ -174,7 +179,7 @@ export function PerformanceChart() {
             {tk[1]}
           </text>
         ))}
-        <path d={areaD} fill={COLOR.cobalt} opacity={0.08} />
+        <path d={areaD} fill={accent} opacity={0.08} />
         <polyline
           points={ndPts}
           fill="none"
@@ -186,23 +191,23 @@ export function PerformanceChart() {
         <polyline
           points={rgPts}
           fill="none"
-          stroke={COLOR.cobalt}
+          stroke={accent}
           strokeWidth={2.2}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <circle cx={mx(N - 1)} cy={my(ndx[N - 1])} r={3.5} fill="#9CA0B0" />
-        <circle cx={mx(N - 1)} cy={my(rg[N - 1])} r={3.5} fill={COLOR.cobalt} />
+        <circle cx={mx(N - 1)} cy={my(rg[N - 1])} r={3.5} fill={accent} />
         <text
           x={mx(N - 1) - 8}
           y={my(rg[N - 1]) - 9}
           textAnchor="end"
-          fill={COLOR.cobaltLighter}
+          fill={accentLighter}
           fontFamily={FONT.mono}
           fontSize={11}
           fontWeight={600}
         >
-          +{rg[N - 1].toFixed(1)}%
+          {sgn(rg[N - 1])}
         </text>
         <text
           x={mx(N - 1) - 8}
@@ -213,7 +218,7 @@ export function PerformanceChart() {
           fontSize={11}
           fontWeight={600}
         >
-          +{ndx[N - 1].toFixed(1)}%
+          {sgn(ndx[N - 1])}
         </text>
         {hoverMarks}
         {tooltip}

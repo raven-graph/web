@@ -1,7 +1,7 @@
 import React from "react";
 import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
 import { Kicker } from "./Kicker";
-import { PerformanceChart } from "./PerformanceChart";
+import { PerformanceCard } from "./PerformanceCard";
 
 const rowLabel = (color: string): React.CSSProperties => ({
   fontFamily: FONT.mono,
@@ -76,98 +76,11 @@ export function Status() {
             about it.
           </h2>
 
-          {/* Fig. 3 chart card */}
-          <div
-            style={{
-              margin: "34px 0 10px",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderRadius: 14,
-              background: "#0E0F17",
-              padding: "22px 22px 16px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: 12,
-                marginBottom: 16,
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontFamily: FONT.mono,
-                    fontSize: 10.5,
-                    letterSpacing: "0.16em",
-                    textTransform: "uppercase",
-                    color: "#5C606F",
-                  }}
-                >
-                  Fig. 3 · Cumulative return
-                </div>
-                <div
-                  style={{
-                    fontFamily: FONT.serif,
-                    fontSize: 20,
-                    color: "#ECEDF1",
-                    marginTop: 4,
-                  }}
-                >
-                  Live equity book vs. S&P 500
-                </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 16,
-                  fontFamily: FONT.mono,
-                  fontSize: 11,
-                }}
-              >
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 7,
-                    color: "#C7CAD3",
-                  }}
-                >
-                  <span style={{ width: 14, height: 2, background: COLOR.cobalt }} />
-                  RavenGraph
-                </span>
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 7,
-                    color: "#9CA0B0",
-                  }}
-                >
-                  <span style={{ width: 14, height: 2, background: "#6B6F7C" }} />
-                  S&P 500
-                </span>
-              </div>
-            </div>
-            <PerformanceChart />
-            <div
-              style={{
-                marginTop: 10,
-                fontFamily: FONT.mono,
-                fontSize: 10,
-                lineHeight: 1.5,
-                color: "#4C4F5C",
-              }}
-            >
-              Feb–Jul 2026 · small own book · real track record.
-            </div>
-          </div>
+          {/* Fig. 3 chart card (tabbed: equities / ETH) */}
+          <PerformanceCard />
 
           <Row label="Equities" color={COLOR.cobalt}>
-            Up <span style={strong}>~38% year-to-date</span>, roughly 26 points
+            Up <span style={strong}>~29% year-to-date</span>, roughly 16 points
             ahead of the S&P 500. Live trading, on a small own book.
           </Row>
           <Row label="Crypto" color={COLOR.teal}>

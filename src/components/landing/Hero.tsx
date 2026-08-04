@@ -3,7 +3,7 @@ import { CtaLink } from "./CtaLink";
 import { HeroSchematic } from "./HeroSchematic";
 import { NetworkBackground } from "./NetworkBackground";
 
-const META = ["Live, micro-size", "~38% YTD equities", "graph layer in build"];
+const META = ["Live, micro-size", "~29% YTD equities", "graph layer in build"];
 
 const FIG0_EDGES = [
   { pair: "10Y → XLF", read: "β +0.41 · 20m" },
