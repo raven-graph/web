@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { COLOR, CONTAINER, FONT, MAILTO } from "@/lib/landing/tokens";
 import { CtaLink } from "./CtaLink";
 
@@ -16,24 +17,34 @@ export function TopBar() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-          <Image
-            src="/icon-white-transparent.svg"
-            alt="RavenGraph"
-            width={22}
-            height={22}
-            style={{ opacity: 0.95 }}
-          />
-          <span
+          <Link
+            href="/"
             style={{
-              fontFamily: FONT.sans,
-              fontWeight: 600,
-              fontSize: 18,
-              letterSpacing: "-0.01em",
-              color: "#ECEDF1",
+              display: "flex",
+              alignItems: "center",
+              gap: 11,
+              textDecoration: "none",
             }}
           >
-            RavenGraph
-          </span>
+            <Image
+              src="/icon-white-transparent.svg"
+              alt="RavenGraph"
+              width={22}
+              height={22}
+              style={{ opacity: 0.95 }}
+            />
+            <span
+              style={{
+                fontFamily: FONT.sans,
+                fontWeight: 600,
+                fontSize: 18,
+                letterSpacing: "-0.01em",
+                color: "#ECEDF1",
+              }}
+            >
+              RavenGraph
+            </span>
+          </Link>
           <span
             className="rg-topbar-tag"
             style={{ display: "flex", alignItems: "center" }}
@@ -61,6 +72,30 @@ export function TopBar() {
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          <Link
+            href="/notes"
+            style={{
+              fontFamily: FONT.mono,
+              fontSize: 11.5,
+              letterSpacing: "0.12em",
+              color: "#ECEDF1",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 7,
+            }}
+          >
+            <span
+              style={{
+                width: 5,
+                height: 5,
+                borderRadius: "50%",
+                background: COLOR.cobaltLight,
+              }}
+            />
+            NOTES
+          </Link>
           <span
             className="rg-topbar-status"
             style={{
