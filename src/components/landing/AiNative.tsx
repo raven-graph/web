@@ -198,7 +198,7 @@ function GraphBox({ px }: { px: number }) {
   );
 }
 
-const INPUTS = ["FILINGS", "NEWS", "PRICES"];
+const INPUTS = ["FILINGS", "NEWS", "PRICES", "PREDICTION MARKETS"];
 
 function StackFigure() {
   const phase = useAmbientPhase();
@@ -206,7 +206,7 @@ function StackFigure() {
   const pulseColor = px < GATE_X ? COLOR.cobaltLight : COLOR.teal;
   return (
     <svg
-      viewBox="0 0 760 220"
+      viewBox="-56 0 816 220"
       style={{ width: "100%", height: "auto", display: "block" }}
     >
       {/* Zone labels */}
@@ -259,16 +259,16 @@ function StackFigure() {
 
       {/* Inputs feeding the agents */}
       {INPUTS.map((label, i) => {
-        const y = 100 + i * 18;
+        const y = 96 + i * 15;
         return (
           <g key={label}>
             <text
               x={70}
               y={y + 3}
               textAnchor="end"
-              fill="#5C606F"
+              fill="#9CA0B0"
               fontFamily={FONT.mono}
-              fontSize={9}
+              fontSize={9.5}
               letterSpacing="0.08em"
             >
               {label}
@@ -278,7 +278,7 @@ function StackFigure() {
               y1={y}
               x2={92}
               y2={y}
-              stroke="rgba(255,255,255,0.18)"
+              stroke="rgba(255,255,255,0.3)"
               strokeWidth={1}
             />
             <Arrow x={97} y={y} />
@@ -291,6 +291,10 @@ function StackFigure() {
       <Flow x1={364} x2={466} px={px} />
       <Flow x1={562} x2={624} px={px} />
 
+      {/* Pulse riding the flow line — drawn before the boxes so it passes under them */}
+      <circle cx={px} cy={FLOW_Y} r={7} fill={pulseColor} opacity={0.3} />
+      <circle cx={px} cy={FLOW_Y} r={3.5} fill={pulseColor} />
+
       <StageBox x={100} w={92} label="AGENTS" sub="hypotheses · features" px={px} />
       <GraphBox px={px} />
       <StageBox
@@ -302,10 +306,6 @@ function StackFigure() {
         exec
       />
       <StageBox x={628} w={92} label="ORDERS" sub="live book" px={px} exec />
-
-      {/* Pulse riding the flow line */}
-      <circle cx={px} cy={FLOW_Y} r={7} fill={pulseColor} opacity={0.3} />
-      <circle cx={px} cy={FLOW_Y} r={3.5} fill={pulseColor} />
     </svg>
   );
 }
