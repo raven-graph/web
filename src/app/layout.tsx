@@ -54,7 +54,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RavenGraph — A graph-native hedge fund",
+  title: "RavenGraph — AI research lab for quantitative finance",
   description: "Markets are networks, not time series. We trade the structure.",
   icons: {
     icon: "/noun-raven-1040402.png",

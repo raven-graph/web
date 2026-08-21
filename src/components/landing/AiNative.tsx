@@ -453,7 +453,7 @@ export function AiNative() {
             <span style={{ color: COLOR.cobalt, fontStyle: "normal" }}>
               &ldquo;
             </span>
-            A fund that scales like a software company.
+            Research that scales like software.
             <span style={{ color: COLOR.cobalt, fontStyle: "normal" }}>
               &rdquo;
             </span>
@@ -469,7 +469,7 @@ export function AiNative() {
               }}
             >
               Agents run the research and every strategy reads the same graph —
-              AUM grows without growing the team.
+              capacity grows without growing the team.
             </span>
           </blockquote>
         </div>

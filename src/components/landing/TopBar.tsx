@@ -56,7 +56,7 @@ export function TopBar() {
                 whiteSpace: "nowrap",
               }}
             >
-              Graph-native hedge fund
+              Graph-native AI research lab
             </span>
           </span>
         </div>

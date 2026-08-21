@@ -67,7 +67,7 @@ export function Hero() {
                   color: COLOR.cobaltLight,
                 }}
               >
-                Graph-native hedge fund
+                Graph-native AI research lab
               </span>
             </div>
             <h1
