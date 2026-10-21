@@ -1,7 +1,6 @@
 import React from "react";
 import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
 import { Kicker } from "./Kicker";
-import { PerformanceCard } from "./PerformanceCard";
 
 const rowLabel = (color: string): React.CSSProperties => ({
   fontFamily: FONT.mono,
@@ -33,6 +32,7 @@ function Row({
 }) {
   return (
     <div
+      className="rg-status-row"
       style={{
         display: "grid",
         gridTemplateColumns: "minmax(120px,190px) 1fr",
@@ -76,21 +76,20 @@ export function Status() {
             about it.
           </h2>
 
-          {/* Fig. 3 chart card (tabbed: equities / ETH) */}
-          <PerformanceCard />
+          <div style={{ height: 26 }} />
 
-          <Row label="Equities" color={COLOR.cobalt}>
-            Up <span style={strong}>~29% year-to-date</span>, roughly 16 points
-            ahead of the S&P 500. Live trading, on a small own book.
+          <Row label="Engine" color={COLOR.cobalt}>
+            Data pipelines, <span style={strong}>80+ features</span> and
+            walk-forward validated models, running in production for a year.
           </Row>
-          <Row label="Crypto" color={COLOR.teal}>
-            Live on Hyperliquid in a pilot with{" "}
-            <span style={strong}>Avant Protocol</span>, our DeFi design partner.
-            Micro-size, with performance shared weekly.
+          <Row label="Design partners" color={COLOR.teal}>
+            Piloting with a LatAm stablecoin payments API on{" "}
+            <span style={strong}>USDT/BRL treasury</span>, and with{" "}
+            <span style={strong}>Avant Protocol</span>, a DeFi design partner.
           </Row>
           <Row label="The graph layer" color={COLOR.amber} last>
-            Still in build — the core bet, and the hard part. Today&rsquo;s
-            results come from the baseline model.
+            Still in build. The core bet, and the hard part. Today&rsquo;s
+            forecasts come from the baseline models.
           </Row>
         </div>
       </div>

@@ -1,14 +1,14 @@
-import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
+import { COLOR, CONTAINER, FONT, MAILTO_BACKTEST } from "@/lib/landing/tokens";
 import { CtaLink } from "./CtaLink";
 import { HeroSchematic } from "./HeroSchematic";
 import { NetworkBackground } from "./NetworkBackground";
 
-const META = ["Live, micro-size", "~29% YTD equities", "graph layer in build"];
+const META = ["Forecast API in pilot", "USDT/BRL first", "graph layer in build"];
 
 const FIG0_EDGES = [
-  { pair: "10Y → XLF", read: "β +0.41 · 20m" },
-  { pair: "WTI → JETS", read: "β −0.48 · 15m" },
-  { pair: "SMH → NVDA", read: "β +0.83 · 6m" },
+  { pair: "ETH → USDT redemptions", read: "β −0.6 · 2h" },
+  { pair: "DXY → USDT/BRL", read: "β +0.5 · 1h" },
+  { pair: "VIX → ETH", read: "β −0.7 · 45m" },
 ];
 
 export function Hero() {
@@ -40,7 +40,7 @@ export function Hero() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(360px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(360px,100%),1fr))",
             gap: 56,
             alignItems: "center",
             minHeight: "calc(100vh - 102px)",
@@ -67,7 +67,7 @@ export function Hero() {
                   color: COLOR.cobaltLight,
                 }}
               >
-                Graph-native AI research lab
+                Risk and liquidity forecasting API
               </span>
             </div>
             <h1
@@ -81,10 +81,10 @@ export function Hero() {
                 color: "#F1F2F5",
               }}
             >
-              Markets are networks.
+              Move capital
               <br />
               <span style={{ fontStyle: "italic", color: "#C9CCD6" }}>
-                We trade the structure.
+                ahead of the market.
               </span>
             </h1>
             <p
@@ -97,10 +97,10 @@ export function Hero() {
                 fontWeight: 300,
               }}
             >
-              RavenGraph models the market as a living graph of stocks, sectors,
-              macro and commodities.{" "}
+              RavenGraph forecasts spreads, liquidity and risk regimes for
+              stablecoin payment companies and DeFi protocols.{" "}
               <span style={{ color: "#ECEDF1", fontWeight: 500 }}>
-                The graph is the asset.
+                Built on a live graph of how markets move together.
               </span>
             </p>
             <div
@@ -111,8 +111,8 @@ export function Hero() {
                 marginTop: 4,
               }}
             >
-              <CtaLink style={{ alignSelf: "flex-start" }}>
-                Get in touch <span style={{ fontSize: 18 }}>→</span>
+              <CtaLink href={MAILTO_BACKTEST} className="rg-cta-lg" style={{ alignSelf: "flex-start" }}>
+                Get a backtest on your corridor <span style={{ fontSize: 18 }}>→</span>
               </CtaLink>
               <div
                 style={{
@@ -138,7 +138,7 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right column — Fig. 0 instrument panel */}
+          {/* Right column: Fig. 0 instrument panel */}
           <div
             style={{
               border: "1px solid rgba(255,255,255,0.08)",
@@ -208,12 +208,15 @@ export function Hero() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
+                    gap: 12,
                     fontFamily: FONT.mono,
                     fontSize: 12,
                   }}
                 >
                   <span style={{ color: "#C7CAD3" }}>{e.pair}</span>
-                  <span style={{ color: "#9CA0B0" }}>{e.read}</span>
+                  <span style={{ color: "#9CA0B0", whiteSpace: "nowrap" }}>
+                    {e.read}
+                  </span>
                 </div>
               ))}
             </div>
@@ -227,8 +230,8 @@ export function Hero() {
                 color: "#4C4F5C",
               }}
             >
-              Nodes: assets, sectors, macro, commodities. Edges: calibrated
-              lead–lag. Illustrative of the model in build.
+              Nodes: crypto, stablecoins, corridors, FX, macro. Edges:
+              calibrated lead-lag. Illustrative of the model in build.
             </div>
           </div>
         </div>

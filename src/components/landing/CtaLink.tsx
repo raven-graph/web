@@ -9,6 +9,7 @@ interface CtaLinkProps {
   padding?: string;
   fontSize?: number;
   href?: string;
+  className?: string;
   style?: React.CSSProperties;
 }
 
@@ -19,12 +20,14 @@ export function CtaLink({
   padding = "0 26px",
   fontSize = 16,
   href = MAILTO,
+  className,
   style,
 }: CtaLinkProps) {
   const [hover, setHover] = useState(false);
   return (
     <a
       href={href}
+      className={className}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{

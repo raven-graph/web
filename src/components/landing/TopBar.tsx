@@ -67,7 +67,7 @@ export function TopBar() {
                 whiteSpace: "nowrap",
               }}
             >
-              Graph-native AI research lab
+              Risk API for crypto payments
             </span>
           </span>
         </div>
@@ -118,10 +118,11 @@ export function TopBar() {
                 animation: "rgblink 2.4s ease-in-out infinite",
               }}
             />
-            SYSTEM LIVE
+            API IN PILOT
           </span>
           <CtaLink
             href={MAILTO}
+            className="rg-topbar-cta"
             height={38}
             padding="0 18px"
             fontSize={14}

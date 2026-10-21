@@ -4,7 +4,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   buildModel,
   ease,
+  fmtLag,
   FNODES,
+  labelLines,
   lerp,
   maxLag,
   SCENARIOS,
@@ -14,16 +16,22 @@ import {
 import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
 
 const SHOW_EDGE_LABELS = true;
-const RAMP = 4;
-const RING = 5;
+// Timing in model-minutes.
+const RAMP = 18;
+const RING = 22;
+const TAIL = 30;
 
 const clamp = (v: number, lo: number, hi: number) =>
   Math.max(lo, Math.min(hi, v));
-const fmt = (v: number) => (v >= 0 ? "+" : "") + v.toFixed(1) + "%";
+const sign = (v: number) => (v >= 0 ? "+" : "−");
+const fmt = (v: number) => sign(v) + Math.abs(v).toFixed(1) + "%";
 const fmtUnit = (x: number, u: string) =>
-  u === "%"
-    ? (x >= 0 ? "+" : "") + x.toFixed(1) + "%"
-    : (x >= 0 ? "+" : "") + Math.round(x) + " " + u;
+  u === "%" ? fmt(x) : sign(x) + Math.abs(Math.round(x)) + " " + u;
+// Shock size for prose: "−15%", "+1%", "+25 bps".
+const fmtShock = (x: number, u: string) =>
+  sign(x) + +Math.abs(x).toFixed(1) + (u === "%" ? "%" : " " + u);
+const fmtAbout = (m: number) =>
+  m === 60 ? "1 hour" : m < 120 ? `${m} minutes` : `${+(m / 60).toFixed(1)} hours`;
 
 function btnStyle(active: boolean): React.CSSProperties {
   return active
@@ -40,7 +48,7 @@ function btnStyle(active: boolean): React.CSSProperties {
 }
 
 export function ShockSimulator() {
-  const [scenarioId, setScenarioId] = useState<Scenario["key"]>("oil");
+  const [scenarioId, setScenarioId] = useState<Scenario["key"]>("eth");
   const [mult, setMult] = useState(1);
   const [t, setT] = useState(0);
   const [fired, setFired] = useState(false);
@@ -53,10 +61,11 @@ export function ShockSimulator() {
   const firedRef = useRef(false);
   const draggingRef = useRef(false);
   const graphRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const tick = useCallback(() => {
     const sc = SCENARIOS[scRef.current];
-    const MAXT = maxLag(sc) + 6;
+    const MAXT = maxLag(sc) + TAIL;
     const now = performance.now();
     const dt = (now - lastRef.current) / 1000;
     lastRef.current = now;
@@ -113,7 +122,7 @@ export function ShockSimulator() {
       const frac = clamp((clientX - rect.left) / rect.width, 0, 1);
       stopLoop();
       const sc = SCENARIOS[scRef.current];
-      const MAXT = maxLag(sc) + 6;
+      const MAXT = maxLag(sc) + TAIL;
       firedRef.current = true;
       tRef.current = frac * MAXT;
       setFired(true);
@@ -156,9 +165,17 @@ export function ShockSimulator() {
 
   useEffect(() => () => stopLoop(), [stopLoop]);
 
+  // On narrow screens the graph scrolls sideways; keep the origin in view.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || el.scrollWidth <= el.clientWidth) return;
+    const x = (FNODES[SCENARIOS[scenarioId].origin].x / 720) * el.scrollWidth;
+    el.scrollTo({ left: Math.max(0, x - 48), behavior: "smooth" });
+  }, [scenarioId]);
+
   const sc = SCENARIOS[scenarioId];
   const MAXLAG = maxLag(sc);
-  const MAXT = MAXLAG + 6;
+  const MAXT = MAXLAG + TAIL;
 
   const frame = useMemo(() => {
     const { val, lag } = buildModel(sc, mult);
@@ -220,7 +237,7 @@ export function ShockSimulator() {
       }
       return {
         id: k,
-        ticker: n.t,
+        lines: labelLines(n.t),
         cx: n.x,
         cy: n.y,
         stroke,
@@ -250,7 +267,7 @@ export function ShockSimulator() {
         width: charged ? 2.2 : 1.2,
         lx: (s.x + g.x) / 2,
         ly: (s.y + g.y) / 2 - 8,
-        label: "β " + (e.w >= 0 ? "+" : "") + e.w.toFixed(2) + " · " + e.lag + "m",
+        label: "β " + sign(e.w) + Math.abs(e.w).toFixed(2) + " · " + fmtLag(e.lag),
         labelColor: charged ? "#C3C6D0" : "#5C606F",
         labelOpacity: SHOW_EDGE_LABELS ? (charged ? 1 : 0.42) : 0,
       };
@@ -275,7 +292,7 @@ export function ShockSimulator() {
     }
 
     const clockLabel =
-      "T + " + (fired ? Math.round(Math.min(t, MAXLAG)) : 0) + "m";
+      "T + " + fmtLag(fired ? Math.round(Math.min(t, MAXLAG)) : 0);
 
     const pathChips = sc.path.map((id, idx) => {
       const v = val[id];
@@ -286,27 +303,27 @@ export function ShockSimulator() {
       const pos = (v ?? 0) >= 0;
       const col = isO ? COLOR.amber : pos ? COLOR.teal : COLOR.rose;
       const valStr = !reached
-        ? "—"
+        ? "·"
         : isO
           ? fmtUnit(sc.originBase * mult * prog, sc.unit)
           : fmt(v * prog);
       return {
         ticker: FNODES[id].t,
-        sub: (idx === 0 ? "origin" : FNODES[id].d) + " · T+" + L + "m",
+        sub: (idx === 0 ? "origin" : FNODES[id].d) + " · T+" + fmtLag(L),
         val: valStr,
         color: reached ? col : "#5C606F",
         dim: reached ? 1 : 0.45,
       };
     });
 
-    const oLab = fmtUnit(sc.originBase * mult, sc.unit);
+    const oLab = fmtShock(sc.originBase * mult, sc.unit);
     let takeaway: string;
-    if (sc.key === "oil")
-      takeaway = `A ${oLab} crude shock prices a ${fmt(val.DAL)} move into DAL within ~${lag.DAL} minutes — down through the airline cluster, before the tape reflects it.`;
+    if (sc.key === "eth")
+      takeaway = `A ${oLab} ETH sell-off widens USDT/BRL spreads within about ${fmtAbout(lag.UBRL)}. A treasury team holding BRL float gets the alert before the spread moves.`;
     else if (sc.key === "rates")
-      takeaway = `A ${oLab} rates surprise reprices NVDA ${fmt(val.NVDA)} within ~${lag.NVDA} minutes — rate-sensitivity flowing through the tech cluster.`;
+      takeaway = `A ${oLab} 10Y surprise lifts VIX and pulls ETH ${fmt(val.ETH)} within about ${fmtAbout(lag.ETH)}. A DeFi protocol sees the collateral risk before liquidations start.`;
     else
-      takeaway = `A ${oLab} VIX spike pulls XLK ${fmt(val.XLK)} within ~${lag.XLK} minutes — correlations snapping toward one across the market.`;
+      takeaway = `A ${oLab} dollar move widens USDT/BRL spreads within about ${fmtAbout(lag.UBRL)}. BRL weakens first. Then the corridor reprices.`;
 
     return { nodeData, edgeData, pulses, clockLabel, pathChips, takeaway };
   }, [sc, mult, t, fired, MAXLAG]);
@@ -345,8 +362,8 @@ export function ShockSimulator() {
               }}
             >
               A shock enters the graph at its origin and cascades through
-              calibrated edges — weights and lags learned from history. Pick a
-              scenario, set the severity, scrub the timeline.
+              calibrated edges. Weights and lags are learned from history. Pick
+              a scenario, set the severity, scrub the timeline.
             </p>
           </div>
 
@@ -429,6 +446,7 @@ export function ShockSimulator() {
               </div>
 
               <div
+                ref={scrollRef}
                 style={{
                   marginTop: 16,
                   borderRadius: 10,
@@ -521,14 +539,18 @@ export function ShockSimulator() {
                       />
                       <text
                         x={n.cx}
-                        y={n.tickerY}
+                        y={n.lines.length > 1 ? n.cy - 2 : n.tickerY}
                         textAnchor="middle"
                         fill={n.tickerColor}
                         fontFamily={FONT.mono}
-                        fontSize={10.5}
+                        fontSize={n.lines[0].length > 5 ? 9 : 10.5}
                         fontWeight={600}
                       >
-                        {n.ticker}
+                        {n.lines.map((ln, li) => (
+                          <tspan key={li} x={n.cx} dy={li ? 11 : 0}>
+                            {ln}
+                          </tspan>
+                        ))}
                       </text>
                       {n.valueLabel && (
                         <text
@@ -818,7 +840,7 @@ export function ShockSimulator() {
               color: "#4C4F5C",
             }}
           >
-            Fig. 1 — Edge weights and lags are calibrated examples, not live
+            Fig. 1 · Edge weights and lags are calibrated examples, not live
             signals. The graph-powered model is in build.
           </div>
           <div style={{ height: 96 }} />

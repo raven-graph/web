@@ -1,6 +1,6 @@
 // Geometry and data models for the landing-page SVG figures.
-// Ported verbatim from the design reference (RavenGraph.dc.html logic class) —
-// the source of truth for exact node positions, edges, and the propagation model.
+// Layout and propagation model follow the design reference (RavenGraph.dc.html);
+// node positions, edges and scenario data are illustrative examples.
 
 // ---------------------------------------------------------------------------
 // Fig. 1 — shock-propagation simulator
@@ -14,21 +14,18 @@ export interface FNode {
 }
 
 export const FNODES: Record<string, FNode> = {
-  VIX: { x: 58, y: 70, t: "VIX", d: "vol" },
-  TNX: { x: 58, y: 196, t: "10Y", d: "rates" },
-  WTI: { x: 92, y: 330, t: "WTI", d: "crude" },
-  SPY: { x: 372, y: 56, t: "SPY", d: "index" },
-  JETS: { x: 232, y: 150, t: "JETS", d: "airlines" },
-  XLE: { x: 250, y: 300, t: "XLE", d: "energy" },
-  XOM: { x: 388, y: 338, t: "XOM", d: "exxon" },
-  DAL: { x: 392, y: 120, t: "DAL", d: "delta" },
-  UAL: { x: 392, y: 186, t: "UAL", d: "united" },
-  AAL: { x: 300, y: 226, t: "AAL", d: "american" },
-  XLF: { x: 520, y: 300, t: "XLF", d: "financials" },
-  JPM: { x: 660, y: 322, t: "JPM", d: "jpmorgan" },
-  XLK: { x: 548, y: 92, t: "XLK", d: "tech" },
-  NVDA: { x: 672, y: 150, t: "NVDA", d: "nvidia" },
-  SMH: { x: 628, y: 226, t: "SMH", d: "semis" },
+  VIX: { x: 170, y: 120, t: "VIX", d: "vol" },
+  TNX: { x: 50, y: 190, t: "10Y", d: "rates" },
+  DXY: { x: 150, y: 310, t: "DXY", d: "dollar" },
+  NDX: { x: 280, y: 50, t: "NASDAQ", d: "equities" },
+  BTC: { x: 400, y: 50, t: "BTC", d: "bitcoin" },
+  ETH: { x: 300, y: 170, t: "ETH", d: "ether" },
+  BRL: { x: 270, y: 340, t: "BRL", d: "real" },
+  USDT: { x: 440, y: 260, t: "USDT", d: "redemptions" },
+  USDC: { x: 580, y: 240, t: "USDC", d: "redemptions" },
+  UMXN: { x: 600, y: 120, t: "USDT/MXN", d: "spread" },
+  UBRL: { x: 560, y: 320, t: "USDT/BRL", d: "spread" },
+  FLOAT: { x: 690, y: 290, t: "FLOAT", d: "client BRL float" },
 };
 
 export interface Hop {
@@ -39,7 +36,7 @@ export interface Hop {
 }
 
 export interface Scenario {
-  key: "oil" | "rates" | "vol";
+  key: "eth" | "rates" | "dollar";
   label: string;
   title: string;
   subtitle: string;
@@ -48,70 +45,84 @@ export interface Scenario {
   unit: string;
   shock: number;
   hops: Hop[];
-  path: string[]; // 3-node headline path
+  path: string[]; // headline path, origin first
 }
 
 export const SCENARIOS: Record<Scenario["key"], Scenario> = {
-  oil: {
-    key: "oil",
-    label: "Oil · WTI",
-    title: "Fig. 1 · Oil-shock transmission",
-    subtitle: "WTI crude → sector network",
-    origin: "WTI",
-    originBase: 8,
+  eth: {
+    key: "eth",
+    label: "Crypto · ETH sell-off",
+    title: "Fig. 1 · ETH sell-off transmission",
+    subtitle: "ETH → stablecoins → BRL corridor",
+    origin: "ETH",
+    originBase: -15,
     unit: "%",
-    shock: 8,
+    shock: -15,
     hops: [
-      { s: "WTI", t: "XLE", w: 0.62, lag: 8 },
-      { s: "XLE", t: "XOM", w: 0.78, lag: 12 },
-      { s: "WTI", t: "JETS", w: -0.48, lag: 15 },
-      { s: "JETS", t: "DAL", w: 0.71, lag: 11 },
-      { s: "JETS", t: "UAL", w: 0.66, lag: 13 },
-      { s: "JETS", t: "AAL", w: 0.69, lag: 14 },
+      { s: "ETH", t: "BTC", w: 0.6, lag: 20 },
+      { s: "ETH", t: "USDT", w: -0.6, lag: 120 },
+      { s: "USDT", t: "USDC", w: 0.5, lag: 30 },
+      { s: "USDT", t: "UBRL", w: 0.9, lag: 60 },
+      { s: "USDT", t: "UMXN", w: 0.6, lag: 75 },
+      { s: "UBRL", t: "FLOAT", w: -0.25, lag: 30 },
     ],
-    path: ["WTI", "JETS", "DAL"],
+    path: ["ETH", "USDT", "UBRL", "FLOAT"],
   },
   rates: {
     key: "rates",
     label: "Rates · 10Y",
     title: "Fig. 1 · Rates-shock transmission",
-    subtitle: "10Y yield → equity clusters",
+    subtitle: "10Y yield → vol → crypto collateral",
     origin: "TNX",
-    originBase: 50,
+    originBase: 25,
     unit: "bps",
-    shock: 3.0,
+    shock: 2.5,
     hops: [
-      { s: "TNX", t: "XLF", w: 0.45, lag: 10 },
-      { s: "XLF", t: "JPM", w: 0.82, lag: 6 },
-      { s: "TNX", t: "XLK", w: -0.55, lag: 12 },
-      { s: "XLK", t: "NVDA", w: 0.88, lag: 5 },
-      { s: "XLK", t: "SMH", w: 0.8, lag: 6 },
-      { s: "TNX", t: "SPY", w: -0.18, lag: 14 },
+      { s: "TNX", t: "VIX", w: 2.4, lag: 20 },
+      { s: "TNX", t: "DXY", w: 0.3, lag: 20 },
+      { s: "VIX", t: "NDX", w: -0.5, lag: 15 },
+      { s: "VIX", t: "ETH", w: -0.7, lag: 45 },
+      { s: "NDX", t: "BTC", w: 1.5, lag: 40 },
+      { s: "DXY", t: "BRL", w: -0.5, lag: 20 },
+      { s: "BRL", t: "UBRL", w: -1.0, lag: 40 },
     ],
-    path: ["TNX", "XLK", "NVDA"],
+    path: ["TNX", "VIX", "ETH"],
   },
-  vol: {
-    key: "vol",
-    label: "Vol · VIX",
-    title: "Fig. 1 · Vol-spike transmission",
-    subtitle: "VIX → broad market",
-    origin: "VIX",
-    originBase: 12,
-    unit: "pts",
-    shock: 5.0,
+  dollar: {
+    key: "dollar",
+    label: "Dollar · DXY",
+    title: "Fig. 1 · Dollar-shock transmission",
+    subtitle: "DXY → BRL → USDT/BRL corridor",
+    origin: "DXY",
+    originBase: 1,
+    unit: "%",
+    shock: 1,
     hops: [
-      { s: "VIX", t: "SPY", w: -0.42, lag: 6 },
-      { s: "SPY", t: "XLK", w: 0.95, lag: 8 },
-      { s: "SPY", t: "XLF", w: 0.88, lag: 8 },
-      { s: "SPY", t: "JETS", w: 0.8, lag: 10 },
-      { s: "SPY", t: "XLE", w: 0.75, lag: 10 },
-      { s: "XLK", t: "NVDA", w: 0.9, lag: 5 },
+      { s: "DXY", t: "BRL", w: -0.5, lag: 20 },
+      { s: "DXY", t: "UMXN", w: 0.4, lag: 45 },
+      { s: "DXY", t: "ETH", w: -2.0, lag: 60 },
+      { s: "BRL", t: "UBRL", w: -1.0, lag: 40 },
+      { s: "ETH", t: "BTC", w: 0.6, lag: 20 },
+      { s: "UBRL", t: "FLOAT", w: -0.25, lag: 30 },
     ],
-    path: ["VIX", "SPY", "XLK"],
+    path: ["DXY", "BRL", "UBRL", "FLOAT"],
   },
 };
 
-export const SPEED = 14; // model-minutes per second
+export const SPEED = 60; // model-minutes per second
+
+/** Lag as a compact clock label: 0, 45m, 2h, 3.5h. */
+export function fmtLag(m: number): string {
+  if (m <= 0) return "0";
+  if (m < 60) return `${Math.round(m)}m`;
+  return `${+(m / 60).toFixed(1)}h`;
+}
+
+/** Split corridor labels ("USDT/BRL") over two lines inside a node. */
+export function labelLines(t: string): string[] {
+  const i = t.indexOf("/");
+  return i < 0 ? [t] : [t.slice(0, i), t.slice(i)];
+}
 
 export interface Model {
   val: Record<string, number>;
@@ -148,32 +159,41 @@ export interface HNode {
 }
 
 export const HNODES: Record<string, HNode> = {
-  SPY: { x: 250, y: 46, t: "SPY", hub: true },
-  DXY: { x: 60, y: 92, t: "DXY" },
-  TNX: { x: 46, y: 178, t: "10Y" },
-  VIX: { x: 74, y: 262, t: "VIX" },
-  WTI: { x: 118, y: 330, t: "WTI", shock: true },
-  NG: { x: 192, y: 320, t: "NG" },
-  XLE: { x: 210, y: 250, t: "XLE" },
-  XOM: { x: 276, y: 322, t: "XOM" },
-  JETS: { x: 236, y: 150, t: "JETS" },
-  DAL: { x: 312, y: 92, t: "DAL" },
-  UAL: { x: 344, y: 150, t: "UAL" },
-  AAL: { x: 318, y: 214, t: "AAL" },
-  XLF: { x: 300, y: 280, t: "XLF" },
-  JPM: { x: 382, y: 300, t: "JPM" },
-  XLK: { x: 398, y: 96, t: "XLK" },
-  NVDA: { x: 452, y: 150, t: "NVDA" },
-  SMH: { x: 438, y: 226, t: "SMH" },
+  DXY: { x: 56, y: 62, t: "DXY" },
+  TNX: { x: 44, y: 168, t: "10Y" },
+  VIX: { x: 70, y: 278, t: "VIX" },
+  NDX: { x: 160, y: 330, t: "NASDAQ", hub: true },
+  BTC: { x: 210, y: 96, t: "BTC" },
+  ETH: { x: 180, y: 200, t: "ETH", shock: true },
+  BRL: { x: 300, y: 52, t: "BRL" },
+  USDT: { x: 310, y: 200, t: "USDT", hub: true },
+  USDC: { x: 360, y: 300, t: "USDC" },
+  UBRL: { x: 420, y: 210, t: "USDT/BRL", hub: true },
+  UMXN: { x: 452, y: 110, t: "USDT/MXN", hub: true },
 };
 
 export const HEDGES: [string, string][] = [
-  ["DXY", "TNX"], ["TNX", "VIX"], ["VIX", "SPY"], ["SPY", "DXY"],
-  ["WTI", "XLE"], ["XLE", "XOM"], ["WTI", "NG"], ["NG", "XLE"],
-  ["WTI", "JETS"], ["JETS", "DAL"], ["JETS", "UAL"], ["JETS", "AAL"],
-  ["TNX", "XLF"], ["XLF", "JPM"], ["JPM", "SPY"],
-  ["SPY", "XLK"], ["XLK", "NVDA"], ["XLK", "SMH"], ["NVDA", "SMH"],
-  ["SPY", "XLE"], ["SPY", "JETS"], ["DXY", "WTI"],
+  ["DXY", "TNX"], ["TNX", "VIX"], ["DXY", "BRL"], ["DXY", "BTC"],
+  ["TNX", "BTC"], ["VIX", "ETH"], ["VIX", "NDX"], ["NDX", "ETH"],
+  ["BTC", "ETH"], ["ETH", "USDT"], ["BTC", "USDT"], ["USDT", "USDC"],
+  ["USDT", "UBRL"], ["USDT", "UMXN"], ["BRL", "UBRL"], ["USDC", "UBRL"],
+  ["UBRL", "UMXN"],
+];
+
+// Reduced Fig. 0 for phones (viewBox 0 0 280 220): the nodes behind the
+// three readout edges, plus the existing links between them so none floats.
+export const HNODES_MINI: Record<string, HNode> = {
+  DXY: { x: 34, y: 40, t: "DXY" },
+  VIX: { x: 34, y: 178, t: "VIX" },
+  ETH: { x: 110, y: 126, t: "ETH", shock: true },
+  BRL: { x: 140, y: 34, t: "BRL" },
+  USDT: { x: 190, y: 182, t: "USDT", hub: true },
+  UBRL: { x: 244, y: 98, t: "USDT/BRL", hub: true },
+};
+
+export const HEDGES_MINI: [string, string][] = [
+  ["VIX", "ETH"], ["ETH", "USDT"], ["DXY", "UBRL"],
+  ["DXY", "BRL"], ["BRL", "UBRL"], ["USDT", "UBRL"],
 ];
 
 // ---------------------------------------------------------------------------

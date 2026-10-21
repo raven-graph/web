@@ -54,8 +54,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RavenGraph — AI research lab for quantitative finance",
-  description: "Markets are networks, not time series. We trade the structure.",
+  title: "RavenGraph · Risk and liquidity forecasts for crypto payments",
+  description:
+    "Forecasts for spreads, liquidity and risk regimes, so stablecoin payment companies and DeFi protocols move capital ahead of the market.",
   icons: {
     icon: "/noun-raven-1040402.png",
     shortcut: "/noun-raven-1040402.png",

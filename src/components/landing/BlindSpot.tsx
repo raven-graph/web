@@ -4,7 +4,7 @@ import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
 import { useAmbientPhase } from "@/lib/landing/useAmbientPhase";
 import { Kicker } from "./Kicker";
 
-const ISO_TICKERS = ["AAPL", "XOM", "JPM"];
+const ISO_TICKERS = ["USDT", "BRL", "ETH"];
 
 function IsolatedViz({ phase }: { phase: number }) {
   const isoWave = (lane: number, x: number) => {
@@ -152,7 +152,7 @@ export function BlindSpot() {
     >
       <div style={CONTAINER}>
         <div style={{ padding: "100px 0" }}>
-          <Kicker label="The blind spot" />
+          <Kicker label="The problem" />
           <div
             style={{
               maxWidth: 820,
@@ -172,11 +172,11 @@ export function BlindSpot() {
                 color: "#F1F2F5",
               }}
             >
-              Everyone trades the same{" "}
+              Moving money at the{" "}
               <span style={{ fontStyle: "italic", color: "#C9CCD6" }}>
-                isolated
+                wrong time
               </span>{" "}
-              time series.
+              is expensive.
             </h2>
             <p
               style={{
@@ -187,11 +187,11 @@ export function BlindSpot() {
                 fontWeight: 300,
               }}
             >
-              Price, volume, a handful of factors — one ticker at a time. The
-              relationships{" "}
-              <em style={{ fontStyle: "italic", color: "#C9CCD6" }}>between</em>{" "}
-              assets — who leads, who follows, how a shock spreads — never enter
-              the model. That structure is where the edge is.
+              Stablecoin payment companies hold USDT and local currency across
+              venues. Every conversion at a bad rate, and every spread spike,
+              comes out of margin. Most treasury teams manage this with
+              spreadsheets and fixed rules. DeFi protocols face the same problem
+              with funding flips and liquidation cascades.
             </p>
           </div>
           <div
@@ -218,9 +218,9 @@ export function BlindSpot() {
                   marginBottom: 6,
                 }}
               >
-                <span style={cardLabel("#9CA0B0")}>Isolated time series</span>
+                <span style={cardLabel("#9CA0B0")}>Each asset alone</span>
                 <span style={{ fontFamily: FONT.mono, fontSize: 9.5, color: "#5C606F" }}>
-                  consensus view
+                  status quo
                 </span>
               </div>
               <IsolatedViz phase={phase} />
@@ -232,7 +232,7 @@ export function BlindSpot() {
                   color: "#7B7F8E",
                 }}
               >
-                Each ticker modeled alone — moving on its own clock.
+                Rules and spreadsheets.
               </p>
             </div>
             <div
@@ -265,7 +265,7 @@ export function BlindSpot() {
                   color: "#9CA0B0",
                 }}
               >
-                One move, propagating through the structure.
+                One shock, traced to your balance sheet.
               </p>
             </div>
           </div>

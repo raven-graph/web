@@ -6,8 +6,8 @@ import { Footer } from "@/components/landing/Footer";
 import { getAllNotes } from "@/lib/notes";
 
 export const metadata: Metadata = {
-  title: "Notes — RavenGraph",
-  description: "Research notes from the RavenGraph lab.",
+  title: "Notes · RavenGraph",
+  description: "Notes on market structure, liquidity and risk from RavenGraph.",
 };
 
 export default function NotesPage() {
@@ -51,7 +51,7 @@ export default function NotesPage() {
               color: "#F1F2F5",
             }}
           >
-            Notes from the lab.
+            Notes on market structure.
           </h1>
           <p
             style={{
@@ -63,8 +63,7 @@ export default function NotesPage() {
               fontWeight: 300,
             }}
           >
-            Research, market structure, and how we think about building
-            systems that trade.
+            Liquidity, risk regimes and how shocks travel between markets.
           </p>
 
           <div style={{ marginTop: 70 }}>

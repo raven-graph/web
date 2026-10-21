@@ -23,7 +23,7 @@ export async function generateMetadata({
   const note = getNote((await params).slug);
   if (!note) return {};
   return {
-    title: `${note.title} — RavenGraph`,
+    title: `${note.title} · RavenGraph`,
     description: note.summary,
   };
 }

@@ -91,6 +91,26 @@
 }
 @media (max-width: 560px) {
   .rg-topbar-status { display: none !important; }
+  /* Status rows: stack the label above the copy. */
+  .rg-status-row {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+}
+/* Fig. 0: reduced graph below 640px (see HeroSchematic). */
+.rg-fig0-mini { display: none; }
+@media (max-width: 639px) {
+  .rg-fig0-full { display: none !important; }
+  .rg-fig0-mini { display: block; }
+}
+/* Phones: the hero carries the primary CTA, so the top bar keeps only
+   the wordmark and NOTES; long CTAs tighten to stay on one line. */
+@media (max-width: 440px) {
+  .rg-topbar-cta { display: none !important; }
+  .rg-cta-lg {
+    padding: 0 18px !important;
+    font-size: 15px !important;
+  }
 }
 
 @layer utilities {
