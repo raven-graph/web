@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
+import { CONTAINER, FONT } from "@/lib/landing/tokens";
+import { proseComponents } from "@/components/markdown/proseComponents";
 import { TopBar } from "@/components/landing/TopBar";
 import { Footer } from "@/components/landing/Footer";
 import { getAllNotes, getNote } from "@/lib/notes";
@@ -27,104 +27,6 @@ export async function generateMetadata({
     description: note.summary,
   };
 }
-
-const bodyText: CSSProperties = {
-  margin: "0 0 24px",
-  fontSize: 16.5,
-  lineHeight: 1.75,
-  color: "#A9ADBB",
-  fontWeight: 300,
-};
-
-const mdComponents = {
-  h2: ({ children }: { children?: ReactNode }) => (
-    <h2
-      style={{
-        margin: "56px 0 20px",
-        fontFamily: FONT.serif,
-        fontWeight: 500,
-        fontSize: "clamp(24px,2.8vw,32px)",
-        lineHeight: 1.25,
-        letterSpacing: "-0.01em",
-        color: "#F1F2F5",
-      }}
-    >
-      {children}
-    </h2>
-  ),
-  h3: ({ children }: { children?: ReactNode }) => (
-    <h3
-      style={{
-        margin: "40px 0 16px",
-        fontFamily: FONT.sans,
-        fontWeight: 600,
-        fontSize: 19,
-        lineHeight: 1.35,
-        color: "#ECEDF1",
-      }}
-    >
-      {children}
-    </h3>
-  ),
-  p: ({ children }: { children?: ReactNode }) => (
-    <p style={bodyText}>{children}</p>
-  ),
-  strong: ({ children }: { children?: ReactNode }) => (
-    <strong style={{ fontWeight: 600, color: "#ECEDF1" }}>{children}</strong>
-  ),
-  a: ({ href, children }: { href?: string; children?: ReactNode }) => (
-    <a
-      href={href}
-      style={{ color: COLOR.cobaltLight, textDecoration: "underline" }}
-    >
-      {children}
-    </a>
-  ),
-  ul: ({ children }: { children?: ReactNode }) => (
-    <ul style={{ ...bodyText, paddingLeft: 24 }}>{children}</ul>
-  ),
-  ol: ({ children }: { children?: ReactNode }) => (
-    <ol style={{ ...bodyText, paddingLeft: 24 }}>{children}</ol>
-  ),
-  li: ({ children }: { children?: ReactNode }) => (
-    <li style={{ margin: "0 0 10px" }}>{children}</li>
-  ),
-  blockquote: ({ children }: { children?: ReactNode }) => (
-    <blockquote
-      style={{
-        margin: "0 0 24px",
-        padding: "4px 0 4px 22px",
-        borderLeft: `2px solid ${COLOR.cobalt}`,
-        fontStyle: "italic",
-        color: "#C9CCD6",
-      }}
-    >
-      {children}
-    </blockquote>
-  ),
-  hr: () => (
-    <hr
-      style={{
-        margin: "52px 0",
-        border: "none",
-        borderTop: "1px solid rgba(255,255,255,0.08)",
-      }}
-    />
-  ),
-  code: ({ children }: { children?: ReactNode }) => (
-    <code
-      style={{
-        fontFamily: FONT.mono,
-        fontSize: "0.88em",
-        background: "#11131C",
-        padding: "2px 6px",
-        borderRadius: 4,
-      }}
-    >
-      {children}
-    </code>
-  ),
-};
 
 export default async function NotePage({
   params,
@@ -188,7 +90,7 @@ export default async function NotePage({
             {note.title}
           </h1>
           <div style={{ marginTop: 46 }}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={proseComponents}>
               {note.content}
             </ReactMarkdown>
           </div>
