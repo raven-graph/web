@@ -129,7 +129,7 @@ Predictions are in time order, one per hour. Rows with `status: "unavailable"` a
 
 ## The prediction object
 
-Here is a real example. OKX at 10:00 UTC on 2 Nov 2026, as returned by `/history` after the window closed:
+Here is a real example (numbers rounded for readability; the API returns full precision). OKX at 10:00 UTC on 2 Nov 2026, as returned by `/history` after the window closed:
 
 ```json
 {
@@ -215,11 +215,14 @@ Error responses look like this:
 { "detail": "<message>" }
 ```
 
+A request to a path that doesn't exist is rejected by our gateway with `{"code": 404, "message": "..."}` instead. Base your error handling on the HTTP status code, not the body.
+
 | HTTP code | When |
 |---|---|
 | `400` | A parameter is malformed: a bad timestamp, `from` not before `to`, a range over 7 days, or a `venue` that isn't a lowercase identifier. |
 | `401` | The key is missing or wrong, or it was sent as `Authorization: Bearer` instead of `X-API-Key`. |
 | `404` | The exchange is unknown or not enabled for your key, nothing has been published for it yet, or the path doesn't exist. |
+| `422` | A required parameter is missing. Here `detail` is a list of objects, not a string. |
 | `429` | More than 60 requests in a rolling minute. Wait the number of seconds given in the `Retry-After` header, then try again. |
 | `502` / `503` / `504` | A temporary problem in front of the service. Retry with a backoff, for example after 2 s, 5 s, then 15 s. |
 
