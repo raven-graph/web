@@ -85,7 +85,7 @@
 }
 
 /* Top bar: drop secondary mono labels on narrow screens so the wordmark
-   and the "Get in touch" button always fit without wrapping. */
+   and the "Contact" button always fit without wrapping. */
 @media (max-width: 760px) {
   .rg-topbar-tag { display: none !important; }
 }

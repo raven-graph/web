@@ -4,7 +4,7 @@ import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
 import { useAmbientPhase } from "@/lib/landing/useAmbientPhase";
 import { Kicker } from "./Kicker";
 
-const ISO_TICKERS = ["USDT", "BRL", "ETH"];
+const ISO_TICKERS = ["SPX", "10Y", "BTC"];
 
 function IsolatedViz({ phase }: { phase: number }) {
   const isoWave = (lane: number, x: number) => {
@@ -141,7 +141,7 @@ const cardLabel = (color: string): React.CSSProperties => ({
   color,
 });
 
-export function BlindSpot() {
+export function Thesis() {
   const phase = useAmbientPhase();
   return (
     <section
@@ -152,7 +152,7 @@ export function BlindSpot() {
     >
       <div style={CONTAINER}>
         <div style={{ padding: "100px 0" }}>
-          <Kicker label="The problem" />
+          <Kicker label="Thesis" />
           <div
             style={{
               maxWidth: 820,
@@ -172,11 +172,11 @@ export function BlindSpot() {
                 color: "#F1F2F5",
               }}
             >
-              Moving money at the{" "}
+              Markets are a network.
+            <br />
               <span style={{ fontStyle: "italic", color: "#C9CCD6" }}>
-                wrong time
-              </span>{" "}
-              is expensive.
+                Most models treat them as a list.
+              </span>
             </h2>
             <p
               style={{
@@ -187,11 +187,9 @@ export function BlindSpot() {
                 fontWeight: 300,
               }}
             >
-              Stablecoin payment companies hold USDT and local currency across
-              venues. Every conversion at a bad rate, and every spread spike,
-              comes out of margin. Most treasury teams manage this with
-              spreadsheets and fixed rules. DeFi protocols face the same problem
-              with funding flips and liquidation cascades.
+              Most quant models forecast each asset in isolation. A world
+              model learns how shocks travel between assets. That structure
+              compounds. More nodes, more edges, more signal.
             </p>
           </div>
           <div
@@ -218,7 +216,7 @@ export function BlindSpot() {
                   marginBottom: 6,
                 }}
               >
-                <span style={cardLabel("#9CA0B0")}>Each asset alone</span>
+                <span style={cardLabel("#9CA0B0")}>One asset at a time</span>
                 <span style={{ fontFamily: FONT.mono, fontSize: 9.5, color: "#5C606F" }}>
                   status quo
                 </span>
@@ -232,7 +230,7 @@ export function BlindSpot() {
                   color: "#7B7F8E",
                 }}
               >
-                Rules and spreadsheets.
+                Thousands of separate models. Hand-built factors.
               </p>
             </div>
             <div
@@ -265,7 +263,7 @@ export function BlindSpot() {
                   color: "#9CA0B0",
                 }}
               >
-                One shock, traced to your balance sheet.
+                One model. Every asset. Learned structure.
               </p>
             </div>
           </div>

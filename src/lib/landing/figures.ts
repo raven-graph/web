@@ -3,7 +3,7 @@
 // node positions, edges and scenario data are illustrative examples.
 
 // ---------------------------------------------------------------------------
-// Fig. 1 — shock-propagation simulator
+// Fig. 1: shock-propagation simulator
 // ---------------------------------------------------------------------------
 
 export interface FNode {
@@ -14,18 +14,17 @@ export interface FNode {
 }
 
 export const FNODES: Record<string, FNode> = {
-  VIX: { x: 170, y: 120, t: "VIX", d: "vol" },
   TNX: { x: 50, y: 190, t: "10Y", d: "rates" },
+  VIX: { x: 170, y: 80, t: "VIX", d: "vol" },
   DXY: { x: 150, y: 310, t: "DXY", d: "dollar" },
-  NDX: { x: 280, y: 50, t: "NASDAQ", d: "equities" },
-  BTC: { x: 400, y: 50, t: "BTC", d: "bitcoin" },
-  ETH: { x: 300, y: 170, t: "ETH", d: "ether" },
-  BRL: { x: 270, y: 340, t: "BRL", d: "real" },
-  USDT: { x: 440, y: 260, t: "USDT", d: "redemptions" },
-  USDC: { x: 580, y: 240, t: "USDC", d: "redemptions" },
-  UMXN: { x: 600, y: 120, t: "USDT/MXN", d: "spread" },
-  UBRL: { x: 560, y: 320, t: "USDT/BRL", d: "spread" },
-  FLOAT: { x: 690, y: 290, t: "FLOAT", d: "client BRL float" },
+  XLF: { x: 230, y: 190, t: "XLF", d: "bank equities" },
+  NDX: { x: 330, y: 60, t: "NDX", d: "tech equities" },
+  EMFX: { x: 330, y: 250, t: "EM FX", d: "emerging FX" },
+  GOLD: { x: 300, y: 330, t: "GOLD", d: "commodities" },
+  HY: { x: 410, y: 170, t: "HY", d: "credit spreads" },
+  BTC: { x: 560, y: 130, t: "BTC", d: "bitcoin" },
+  ETH: { x: 670, y: 80, t: "ETH", d: "ether" },
+  USDT: { x: 670, y: 230, t: "USDT", d: "stablecoin flows" },
 };
 
 export interface Hop {
@@ -36,7 +35,7 @@ export interface Hop {
 }
 
 export interface Scenario {
-  key: "eth" | "rates" | "dollar";
+  key: "rates" | "dollar" | "crypto";
   label: string;
   title: string;
   subtitle: string;
@@ -49,30 +48,11 @@ export interface Scenario {
 }
 
 export const SCENARIOS: Record<Scenario["key"], Scenario> = {
-  eth: {
-    key: "eth",
-    label: "Crypto · ETH sell-off",
-    title: "Fig. 1 · ETH sell-off transmission",
-    subtitle: "ETH → stablecoins → BRL corridor",
-    origin: "ETH",
-    originBase: -15,
-    unit: "%",
-    shock: -15,
-    hops: [
-      { s: "ETH", t: "BTC", w: 0.6, lag: 20 },
-      { s: "ETH", t: "USDT", w: -0.6, lag: 120 },
-      { s: "USDT", t: "USDC", w: 0.5, lag: 30 },
-      { s: "USDT", t: "UBRL", w: 0.9, lag: 60 },
-      { s: "USDT", t: "UMXN", w: 0.6, lag: 75 },
-      { s: "UBRL", t: "FLOAT", w: -0.25, lag: 30 },
-    ],
-    path: ["ETH", "USDT", "UBRL", "FLOAT"],
-  },
   rates: {
     key: "rates",
     label: "Rates · 10Y",
     title: "Fig. 1 · Rates-shock transmission",
-    subtitle: "10Y yield → vol → crypto collateral",
+    subtitle: "10Y yield → bank equities → credit spreads → crypto",
     origin: "TNX",
     originBase: 25,
     unit: "bps",
@@ -80,32 +60,51 @@ export const SCENARIOS: Record<Scenario["key"], Scenario> = {
     hops: [
       { s: "TNX", t: "VIX", w: 2.4, lag: 20 },
       { s: "TNX", t: "DXY", w: 0.3, lag: 20 },
+      { s: "TNX", t: "XLF", w: -0.6, lag: 30 },
       { s: "VIX", t: "NDX", w: -0.5, lag: 15 },
-      { s: "VIX", t: "ETH", w: -0.7, lag: 45 },
-      { s: "NDX", t: "BTC", w: 1.5, lag: 40 },
-      { s: "DXY", t: "BRL", w: -0.5, lag: 20 },
-      { s: "BRL", t: "UBRL", w: -1.0, lag: 40 },
+      { s: "DXY", t: "EMFX", w: -0.8, lag: 30 },
+      { s: "XLF", t: "HY", w: -1.2, lag: 60 },
+      { s: "HY", t: "BTC", w: -1.5, lag: 90 },
+      { s: "BTC", t: "ETH", w: 1.3, lag: 20 },
     ],
-    path: ["TNX", "VIX", "ETH"],
+    path: ["TNX", "XLF", "HY", "BTC"],
   },
   dollar: {
     key: "dollar",
     label: "Dollar · DXY",
     title: "Fig. 1 · Dollar-shock transmission",
-    subtitle: "DXY → BRL → USDT/BRL corridor",
+    subtitle: "DXY → EM FX → credit spreads → bank equities",
     origin: "DXY",
     originBase: 1,
     unit: "%",
     shock: 1,
     hops: [
-      { s: "DXY", t: "BRL", w: -0.5, lag: 20 },
-      { s: "DXY", t: "UMXN", w: 0.4, lag: 45 },
-      { s: "DXY", t: "ETH", w: -2.0, lag: 60 },
-      { s: "BRL", t: "UBRL", w: -1.0, lag: 40 },
-      { s: "ETH", t: "BTC", w: 0.6, lag: 20 },
-      { s: "UBRL", t: "FLOAT", w: -0.25, lag: 30 },
+      { s: "DXY", t: "EMFX", w: -0.8, lag: 20 },
+      { s: "DXY", t: "GOLD", w: -0.9, lag: 30 },
+      { s: "EMFX", t: "HY", w: -1.5, lag: 60 },
+      { s: "HY", t: "XLF", w: -0.8, lag: 45 },
+      { s: "HY", t: "BTC", w: -1.5, lag: 90 },
+      { s: "BTC", t: "ETH", w: 1.3, lag: 20 },
     ],
-    path: ["DXY", "BRL", "UBRL", "FLOAT"],
+    path: ["DXY", "EMFX", "HY", "XLF"],
+  },
+  crypto: {
+    key: "crypto",
+    label: "Crypto · BTC sell-off",
+    title: "Fig. 1 · Crypto-shock transmission",
+    subtitle: "BTC → tech equities → vol",
+    origin: "BTC",
+    originBase: -10,
+    unit: "%",
+    shock: -10,
+    hops: [
+      { s: "BTC", t: "ETH", w: 1.3, lag: 20 },
+      { s: "BTC", t: "NDX", w: 0.15, lag: 45 },
+      { s: "BTC", t: "USDT", w: -0.3, lag: 60 },
+      { s: "BTC", t: "HY", w: -0.1, lag: 90 },
+      { s: "NDX", t: "VIX", w: -2.0, lag: 15 },
+    ],
+    path: ["BTC", "NDX", "VIX"],
   },
 };
 
@@ -118,7 +117,7 @@ export function fmtLag(m: number): string {
   return `${+(m / 60).toFixed(1)}h`;
 }
 
-/** Split corridor labels ("USDT/BRL") over two lines inside a node. */
+/** Split slash labels ("A/B") over two lines inside a node. */
 export function labelLines(t: string): string[] {
   const i = t.indexOf("/");
   return i < 0 ? [t] : [t.slice(0, i), t.slice(i)];
@@ -147,7 +146,7 @@ export function maxLag(sc: Scenario): number {
 }
 
 // ---------------------------------------------------------------------------
-// Fig. 0 — hero market-graph schematic
+// Fig. 0: hero market-graph schematic
 // ---------------------------------------------------------------------------
 
 export interface HNode {
@@ -159,45 +158,55 @@ export interface HNode {
 }
 
 export const HNODES: Record<string, HNode> = {
-  DXY: { x: 56, y: 62, t: "DXY" },
-  TNX: { x: 44, y: 168, t: "10Y" },
-  VIX: { x: 70, y: 278, t: "VIX" },
-  NDX: { x: 160, y: 330, t: "NASDAQ", hub: true },
-  BTC: { x: 210, y: 96, t: "BTC" },
-  ETH: { x: 180, y: 200, t: "ETH", shock: true },
-  BRL: { x: 300, y: 52, t: "BRL" },
-  USDT: { x: 310, y: 200, t: "USDT", hub: true },
-  USDC: { x: 360, y: 300, t: "USDC" },
-  UBRL: { x: 420, y: 210, t: "USDT/BRL", hub: true },
-  UMXN: { x: 452, y: 110, t: "USDT/MXN", hub: true },
+  // macro, rates
+  VIX: { x: 52, y: 70, t: "VIX" },
+  TNX: { x: 44, y: 180, t: "10Y", shock: true },
+  DXY: { x: 72, y: 290, t: "DXY" },
+  // futures, commodities, FX
+  ES: { x: 140, y: 110, t: "ES" },
+  GOLD: { x: 150, y: 236, t: "GOLD" },
+  EMFX: { x: 160, y: 336, t: "EM FX", hub: true },
+  WTI: { x: 270, y: 340, t: "WTI" },
+  // equities, sectors, credit
+  XLF: { x: 250, y: 170, t: "XLF" },
+  SPX: { x: 265, y: 262, t: "SPX", hub: true },
+  HYG: { x: 345, y: 140, t: "HYG" },
+  XLK: { x: 360, y: 222, t: "XLK" },
+  XLE: { x: 360, y: 320, t: "XLE" },
+  // crypto, stablecoins
+  ETH: { x: 255, y: 40, t: "ETH" },
+  BTC: { x: 440, y: 160, t: "BTC", hub: true },
+  USDT: { x: 455, y: 270, t: "USDT" },
 };
 
 export const HEDGES: [string, string][] = [
-  ["DXY", "TNX"], ["TNX", "VIX"], ["DXY", "BRL"], ["DXY", "BTC"],
-  ["TNX", "BTC"], ["VIX", "ETH"], ["VIX", "NDX"], ["NDX", "ETH"],
-  ["BTC", "ETH"], ["ETH", "USDT"], ["BTC", "USDT"], ["USDT", "USDC"],
-  ["USDT", "UBRL"], ["USDT", "UMXN"], ["BRL", "UBRL"], ["USDC", "UBRL"],
-  ["UBRL", "UMXN"],
+  ["VIX", "TNX"], ["TNX", "DXY"], ["VIX", "ES"], ["TNX", "ES"],
+  ["TNX", "XLF"], ["TNX", "GOLD"], ["DXY", "GOLD"], ["DXY", "EMFX"],
+  ["VIX", "ETH"], ["ES", "SPX"], ["XLF", "SPX"], ["XLF", "HYG"],
+  ["HYG", "BTC"], ["ETH", "BTC"], ["SPX", "XLK"], ["XLK", "BTC"],
+  ["SPX", "XLE"], ["WTI", "XLE"], ["EMFX", "WTI"], ["BTC", "USDT"],
 ];
 
 // Reduced Fig. 0 for phones (viewBox 0 0 280 220): the nodes behind the
 // three readout edges, plus the existing links between them so none floats.
 export const HNODES_MINI: Record<string, HNode> = {
-  DXY: { x: 34, y: 40, t: "DXY" },
-  VIX: { x: 34, y: 178, t: "VIX" },
-  ETH: { x: 110, y: 126, t: "ETH", shock: true },
-  BRL: { x: 140, y: 34, t: "BRL" },
-  USDT: { x: 190, y: 182, t: "USDT", hub: true },
-  UBRL: { x: 244, y: 98, t: "USDT/BRL", hub: true },
+  VIX: { x: 34, y: 40, t: "VIX" },
+  TNX: { x: 34, y: 110, t: "10Y", shock: true },
+  DXY: { x: 34, y: 180, t: "DXY" },
+  ETH: { x: 140, y: 34, t: "ETH" },
+  XLF: { x: 130, y: 112, t: "XLF" },
+  EMFX: { x: 130, y: 186, t: "EM FX", hub: true },
+  HYG: { x: 220, y: 150, t: "HYG" },
+  BTC: { x: 236, y: 70, t: "BTC", hub: true },
 };
 
 export const HEDGES_MINI: [string, string][] = [
-  ["VIX", "ETH"], ["ETH", "USDT"], ["DXY", "UBRL"],
-  ["DXY", "BRL"], ["BRL", "UBRL"], ["USDT", "UBRL"],
+  ["VIX", "ETH"], ["TNX", "XLF"], ["DXY", "EMFX"], ["VIX", "TNX"],
+  ["TNX", "DXY"], ["ETH", "BTC"], ["XLF", "HYG"], ["HYG", "BTC"],
 ];
 
 // ---------------------------------------------------------------------------
-// Hero animated background — jittered lattice
+// Hero animated background: jittered lattice
 // ---------------------------------------------------------------------------
 
 export interface Lattice {

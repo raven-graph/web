@@ -67,7 +67,7 @@ export function TopBar() {
                 whiteSpace: "nowrap",
               }}
             >
-              Risk API for crypto payments
+              A world model of markets
             </span>
           </span>
         </div>
@@ -103,22 +103,10 @@ export function TopBar() {
               fontSize: 11,
               letterSpacing: "0.08em",
               color: "#5C606F",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
               whiteSpace: "nowrap",
             }}
           >
-            <span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: COLOR.teal,
-                animation: "rgblink 2.4s ease-in-out infinite",
-              }}
-            />
-            API IN PILOT
+            RESEARCH LAB
           </span>
           <CtaLink
             href={MAILTO}
@@ -128,7 +116,7 @@ export function TopBar() {
             fontSize={14}
             style={{ gap: 0, flex: "none", whiteSpace: "nowrap" }}
           >
-            Get in touch
+            Contact
           </CtaLink>
         </div>
       </div>

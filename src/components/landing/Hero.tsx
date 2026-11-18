@@ -1,13 +1,12 @@
-import { COLOR, CONTAINER, FONT, MAILTO_BACKTEST } from "@/lib/landing/tokens";
+import Link from "next/link";
+import { COLOR, CONTAINER, FONT, MAILTO } from "@/lib/landing/tokens";
 import { CtaLink } from "./CtaLink";
 import { HeroSchematic } from "./HeroSchematic";
 import { NetworkBackground } from "./NetworkBackground";
 
-const META = ["Forecast API in pilot", "USDT/BRL first", "graph layer in build"];
-
 const FIG0_EDGES = [
-  { pair: "ETH → USDT redemptions", read: "β −0.6 · 2h" },
-  { pair: "DXY → USDT/BRL", read: "β +0.5 · 1h" },
+  { pair: "10Y → bank equities (XLF)", read: "β −0.6 · 30m" },
+  { pair: "DXY → EM FX", read: "β −0.8 · 20m" },
   { pair: "VIX → ETH", read: "β −0.7 · 45m" },
 ];
 
@@ -67,7 +66,7 @@ export function Hero() {
                   color: COLOR.cobaltLight,
                 }}
               >
-                Risk and liquidity forecasting API
+                Graph-native AI for financial markets
               </span>
             </div>
             <h1
@@ -75,16 +74,15 @@ export function Hero() {
                 margin: 0,
                 fontFamily: FONT.serif,
                 fontWeight: 500,
-                fontSize: "clamp(40px,5.6vw,76px)",
-                lineHeight: 1.0,
+                fontSize: "clamp(38px,4.8vw,64px)",
+                lineHeight: 1.04,
                 letterSpacing: "-0.01em",
                 color: "#F1F2F5",
               }}
             >
-              Move capital
-              <br />
+              We&rsquo;re building a world model{" "}
               <span style={{ fontStyle: "italic", color: "#C9CCD6" }}>
-                ahead of the market.
+                of financial markets.
               </span>
             </h1>
             <p
@@ -97,44 +95,40 @@ export function Hero() {
                 fontWeight: 300,
               }}
             >
-              RavenGraph forecasts spreads, liquidity and risk regimes for
-              stablecoin payment companies and DeFi protocols.{" "}
+              Every market is connected. A rate move hits banks, then credit,
+              then crypto.{" "}
               <span style={{ color: "#ECEDF1", fontWeight: 500 }}>
-                Built on a live graph of how markets move together.
+                RavenGraph learns that structure as one graph, across every
+                asset at once, and gets smarter as the graph grows.
               </span>
             </p>
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                gap: 18,
+                flexWrap: "wrap",
+                alignItems: "center",
+                gap: "16px 26px",
                 marginTop: 4,
               }}
             >
-              <CtaLink href={MAILTO_BACKTEST} className="rg-cta-lg" style={{ alignSelf: "flex-start" }}>
-                Get a backtest on your corridor <span style={{ fontSize: 18 }}>→</span>
+              <CtaLink href={MAILTO} className="rg-cta-lg">
+                Talk to the founders <span style={{ fontSize: 18 }}>→</span>
               </CtaLink>
-              <div
+              <Link
+                href="/notes"
                 style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "10px 18px",
-                  fontFamily: FONT.mono,
-                  fontSize: 11,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "#5C606F",
+                  fontFamily: FONT.sans,
+                  fontWeight: 500,
+                  fontSize: 16,
+                  color: "#C7CAD3",
+                  textDecoration: "underline",
+                  textDecorationColor: "rgba(255,255,255,0.25)",
+                  textUnderlineOffset: 5,
+                  whiteSpace: "nowrap",
                 }}
               >
-                {META.map((m, i) => (
-                  <span key={i} style={{ display: "contents" }}>
-                    <span>{m}</span>
-                    {i < META.length - 1 && (
-                      <span style={{ color: "#2E3140" }}>/</span>
-                    )}
-                  </span>
-                ))}
-              </div>
+                Read our notes
+              </Link>
             </div>
           </div>
 
@@ -230,8 +224,9 @@ export function Hero() {
                 color: "#4C4F5C",
               }}
             >
-              Nodes: crypto, stablecoins, corridors, FX, macro. Edges:
-              calibrated lead-lag. Illustrative of the model in build.
+              Nodes: equities, sectors, futures, rates, FX, commodities,
+              crypto, stablecoins, macro. Edges: lead-lag. Illustrative of
+              the model in build.
             </div>
           </div>
         </div>

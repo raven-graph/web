@@ -2,9 +2,10 @@ import { FONT } from "@/lib/landing/tokens";
 import { TopBar } from "@/components/landing/TopBar";
 import { Hero } from "@/components/landing/Hero";
 import { ShockSimulator } from "@/components/landing/ShockSimulator";
-import { BlindSpot } from "@/components/landing/BlindSpot";
-import { Product } from "@/components/landing/Product";
+import { Thesis } from "@/components/landing/Thesis";
+import { WhyItScales } from "@/components/landing/WhyItScales";
 import { Status } from "@/components/landing/Status";
+import { Team } from "@/components/landing/Team";
 import { Footer } from "@/components/landing/Footer";
 
 export default function LandingPage() {
@@ -22,9 +23,10 @@ export default function LandingPage() {
       <TopBar />
       <Hero />
       <ShockSimulator />
-      <BlindSpot />
-      <Product />
+      <Thesis />
+      <WhyItScales />
       <Status />
+      <Team />
       <Footer />
     </div>
   );

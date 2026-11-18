@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CONTAINER, FONT, MAILTO, MAILTO_BACKTEST } from "@/lib/landing/tokens";
+import { CONTAINER, FONT, MAILTO } from "@/lib/landing/tokens";
 import { CtaLink } from "./CtaLink";
 
 export function Footer() {
@@ -32,20 +32,19 @@ export function Footer() {
               color: "#F1F2F5",
             }}
           >
-            Your treasury runs on timing.
-            <br />
+            If you think markets are a graph,{" "}
             <span style={{ fontStyle: "italic", color: "#C9CCD6" }}>
-              Let&rsquo;s measure it.
+              talk to us.
             </span>
           </h2>
           <CtaLink
-            href={MAILTO_BACKTEST}
+            href={MAILTO}
             className="rg-cta-lg"
             height={52}
             padding="0 28px"
             style={{ alignSelf: "flex-start" }}
           >
-            Get a backtest on your corridor <span style={{ fontSize: 18 }}>→</span>
+            Talk to the founders <span style={{ fontSize: 18 }}>→</span>
           </CtaLink>
         </div>
         <div

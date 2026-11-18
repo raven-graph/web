@@ -20,7 +20,6 @@ export const COLOR = {
 } as const;
 
 export const MAILTO = "mailto:gabriel@ravengraph.com";
-export const MAILTO_BACKTEST = `${MAILTO}?subject=Corridor%20backtest`;
 
 export const CONTAINER: React.CSSProperties = {
   maxWidth: 1240,

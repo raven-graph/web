@@ -80,16 +80,22 @@ export function Status() {
 
           <Row label="Engine" color={COLOR.cobalt}>
             Data pipelines, <span style={strong}>80+ features</span> and
-            walk-forward validated models, running in production for a year.
+            walk-forward validated models. In production for a year.
           </Row>
-          <Row label="Design partners" color={COLOR.teal}>
-            Piloting with a LatAm stablecoin payments API on{" "}
-            <span style={strong}>USDT/BRL treasury</span>, and with{" "}
-            <span style={strong}>Avant Protocol</span>, a DeFi design partner.
+          {/* OPTIONAL, confirm with Gabriel before shipping. If enabled, the
+              number must keep "paper trading" and "small book" in the same
+              line: "Equities book up 46% since February, 34 points ahead of
+              the S&P 500 (paper trading, small book)." */}
+          <Row label="Trading" color={COLOR.teal}>
+            Live since <span style={strong}>February 2026</span>.
           </Row>
-          <Row label="The graph layer" color={COLOR.amber} last>
-            Still in build. The core bet, and the hard part. Today&rsquo;s
-            forecasts come from the baseline models.
+          <Row label="Partners" color={COLOR.cobaltLight}>
+            <span style={strong}>Avant Protocol</span> (DeFi) and a LatAm
+            stablecoin payments company.
+          </Row>
+          {/* TODO: add "First graph model: <date>." once the date is set. */}
+          <Row label="Graph layer" color={COLOR.amber} last>
+            In build. Current models are baselines.
           </Row>
         </div>
       </div>

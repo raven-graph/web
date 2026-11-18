@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // Shared ambient animation clock. The hero background, Fig. 0 sweep, and the
-// blind-spot viz all read this same ~11s phase so they stay visually in sync —
+// blind-spot viz all read this same ~11s phase so they stay visually in sync:
 // phase is derived purely from the wall clock, so independent rAF loops on each
 // consumer produce identical values. Throttled to ~30fps.
 const PERIOD_MS = 11000;
