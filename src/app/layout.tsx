@@ -15,6 +15,7 @@ import {
   Spectral,
   IBM_Plex_Sans,
   IBM_Plex_Mono,
+  Overpass,
 } from "next/font/google";
 
 const outfit = Outfit({
@@ -53,6 +54,13 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+// Landing page signage face (transit-map world).
+const overpass = Overpass({
+  subsets: ["latin"],
+  variable: "--font-overpass",
+  display: "swap",
+});
+
 const SITE_TITLE = "RavenGraph: a world model of financial markets";
 const SITE_DESCRIPTION = "RavenGraph: a world model of financial markets.";
 
@@ -87,7 +95,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${outfit.variable} ${jakarta.variable} ${spectral.variable} ${plexSans.variable} ${plexMono.variable} antialiased bg-background text-foreground selection:bg-cyan-500/30 selection:text-cyan-100`}
+        className={`${outfit.variable} ${jakarta.variable} ${spectral.variable} ${plexSans.variable} ${plexMono.variable} ${overpass.variable} antialiased bg-background text-foreground selection:bg-cyan-500/30 selection:text-cyan-100`}
       >
         <AuthProvider>
           {children}

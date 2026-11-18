@@ -26,3 +26,19 @@ export const CONTAINER: React.CSSProperties = {
   margin: "0 auto",
   padding: "0 32px",
 };
+
+// Transit-map world for the landing page (see PRODUCT.md and the surface brief).
+export const MAP = {
+  paper: "#F4F5F0",
+  ink: "#131A3A",
+  inkSoft: "#4A5070",
+  onInk: "#FFFFFF",
+  onInkSoft: "#C3C8DE",
+  rates: "#E0352B",
+  equities: "#2450F0",
+  credit: "#F5B301",
+  crypto: "#0B9E6B",
+  futures: "#9333C8",
+} as const;
+
+export const SIGN = "var(--font-overpass), 'Overpass', 'Helvetica Neue', Arial, sans-serif";

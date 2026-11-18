@@ -1,173 +1,173 @@
 import Link from "next/link";
-import { CONTAINER, FONT, MAILTO } from "@/lib/landing/tokens";
+import { MAILTO, MAP } from "@/lib/landing/tokens";
 import { TopBar } from "@/components/landing/TopBar";
 import { Footer } from "@/components/landing/Footer";
-import { PathFigure } from "@/components/landing/PathFigure";
+import { MarketMap } from "@/components/landing/MarketMap";
+import { Arrow } from "@/components/landing/Arrow";
 import { getAllNotes } from "@/lib/notes";
 
-const body: React.CSSProperties = {
-  margin: "22px 0 0",
-  fontFamily: FONT.serif,
-  fontSize: "clamp(18px,1.5vw,20px)",
-  lineHeight: 1.65,
-  color: "#C7CAD3",
-};
-
-const h2: React.CSSProperties = {
-  margin: "88px 0 0",
-  fontFamily: FONT.serif,
-  fontWeight: 500,
-  fontSize: "clamp(24px,2.6vw,30px)",
-  lineHeight: 1.2,
-  letterSpacing: "-0.005em",
-  color: "#F1F2F5",
-};
-
-const small: React.CSSProperties = {
-  fontFamily: FONT.sans,
-  fontSize: 14,
-  lineHeight: 1.55,
-  color: "#7B7F8E",
-};
+const KEY_LINES = [
+  ["Rates", MAP.rates],
+  ["Equities", MAP.equities],
+  ["Credit", MAP.credit],
+  ["Crypto", MAP.crypto],
+  ["Futures", MAP.futures],
+] as const;
 
 // OPTIONAL Trading line, confirm with Gabriel before shipping. If enabled,
 // the number must keep "paper trading" and "small book" in the same line:
 // "Equities book up 46% since February, 34 points ahead of the S&P 500
 // (paper trading, small book)."
 // TODO: add "First graph model: <date>." to the Graph model row once set.
-const STATUS: [string, string][] = [
-  [
-    "Engine",
-    "Data pipelines, 80+ features and walk-forward validated models. In production for a year.",
-  ],
-  ["Trading", "Live since February 2026."],
-  [
-    "Partners",
-    "Avant Protocol (DeFi) and a LatAm stablecoin payments company.",
-  ],
-  ["Graph model", "In build. Current models are baselines."],
+const SERVICE: { name: string; live: boolean; text: string }[] = [
+  {
+    name: "Engine",
+    live: true,
+    text: "Data pipelines, 80+ features and walk-forward validated models. In production for a year.",
+  },
+  { name: "Trading", live: true, text: "Live since February 2026." },
+  {
+    name: "Partners",
+    live: true,
+    text: "Avant Protocol (DeFi) and a LatAm stablecoin payments company.",
+  },
+  {
+    name: "Graph model",
+    live: false,
+    text: "In build. Current models are baselines.",
+  },
 ];
 
 export default function LandingPage() {
   const notes = getAllNotes().slice(0, 3);
   return (
-    <div
-      style={{
-        background: "#0B0C11",
-        color: "#ECEDF1",
-        fontFamily: FONT.sans,
-        minHeight: "100vh",
-        overflowX: "hidden",
-        WebkitFontSmoothing: "antialiased",
-      }}
-    >
+    <div className="rg-world">
       <TopBar />
-      <main style={CONTAINER}>
-        <div style={{ maxWidth: 720, padding: "96px 0 112px" }}>
-          <h1
-            style={{
-              margin: 0,
-              fontFamily: FONT.serif,
-              fontWeight: 500,
-              fontSize: "clamp(32px,4.4vw,48px)",
-              lineHeight: 1.14,
-              letterSpacing: "-0.01em",
-              color: "#F1F2F5",
-            }}
-          >
-            RavenGraph is a neolab building a world model of financial
-            markets.
-          </h1>
-          <p style={{ ...body, marginTop: 30 }}>
-            Markets are one connected system: a rate move hits banks, then
-            credit, then crypto. Our model learns that structure directly,
-            across equities, futures and crypto, and gets better with every
-            asset and link we add.
-          </p>
-          <p style={body}>
-            Most quant models forecast each asset in isolation. A world model
-            learns how shocks travel between assets, so every asset we add
-            improves the forecast for the others. The first thing the model
-            trades is our own book. Agents do research. Validated models
-            trade.
-          </p>
-          <p style={body}>
-            We are early. The graph model is in build, and the models we run
-            today are baselines.
-          </p>
-          <p style={body}>
-            <a href={MAILTO} className="rg-link">
-              Talk to the founders
-            </a>
-            <span style={{ color: "#4C4F5C", margin: "0 12px" }}>/</span>
-            <Link href="/notes" className="rg-link">
-              Read our notes
-            </Link>
-          </p>
-
-          <figure style={{ margin: "72px 0 0" }}>
-            <PathFigure />
-            <figcaption style={{ ...small, marginTop: 18 }}>
-              Fig. 1. The example above drawn as a path through the graph. A
-              rise in the 10-year yield reaches bank equities, then credit
-              spreads, then crypto. Illustrative, with no model output shown.
-            </figcaption>
-          </figure>
-
-          <h2 style={h2}>Early, live, and honest about it.</h2>
-          <div style={{ marginTop: 26 }}>
-            {STATUS.map(([label, text]) => (
-              <div
-                key={label}
-                className="rg-status-row"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "150px 1fr",
-                  gap: 20,
-                  padding: "16px 0",
-                  borderTop: "1px solid rgba(255,255,255,0.08)",
-                  alignItems: "baseline",
-                }}
-              >
-                <div style={{ ...small, fontSize: 15 }}>{label}</div>
-                <div style={{ ...body, margin: 0 }}>{text}</div>
+      <main>
+        <section className="rg-hero">
+          <div className="rg-hero-in">
+            <div className="rg-title">
+              <h1>A world model of financial markets.</h1>
+              <p>
+                RavenGraph is a neolab. Markets are one connected system: a
+                rate move hits banks, then credit, then crypto. Our model
+                learns that structure directly, across equities, futures and
+                crypto, and gets better with every asset and link we add.
+              </p>
+              <div className="rg-actions">
+                <a href={MAILTO} className="rg-plate">
+                  Talk to the founders <Arrow />
+                </a>
+                <Link href="/notes" className="rg-text-link">
+                  Read our notes
+                </Link>
               </div>
-            ))}
+            </div>
+            <MarketMap />
           </div>
+        </section>
 
-          <h2 style={h2}>Team</h2>
-          <p style={body}>
-            Mike Osorio, CTO, is an applied mathematician (Oxford) who led
-            graph deep learning at JPMorgan. Gabriel Goulart, CEO, has spent
-            ten years shipping production ML and was previously Lead Data
-            Scientist at Whop.
-          </p>
-          <p style={body}>Two people. We think that&rsquo;s enough.</p>
+        <section className="rg-wrap rg-thesis">
+          <div>
+            <h2>Most quant models forecast each asset in isolation.</h2>
+            <p>
+              A world model learns how shocks travel between assets, so every
+              asset we add improves the forecast for the others.
+            </p>
+            <p>
+              The first thing the model trades is our own book. Agents do
+              research. Validated models trade.
+            </p>
+          </div>
+          <div className="rg-key">
+            <h3>Key</h3>
+            <ul>
+              {KEY_LINES.map(([name, color]) => (
+                <li key={name}>
+                  <span className="rg-key-line" style={{ background: color }} />
+                  {name}
+                </li>
+              ))}
+              <li>
+                <span className="rg-key-stop" />
+                An asset
+              </li>
+              <li>
+                <span className="rg-key-hub" />
+                Where one market moves another
+              </li>
+              <li>
+                <span className="rg-key-planned" />
+                Planned extension
+              </li>
+            </ul>
+            <p>
+              Schematic. Lines, stations and journeys are illustrative. No
+              model output is shown.
+            </p>
+          </div>
+        </section>
 
-          {notes.length > 0 && (
-            <>
-              <h2 style={h2}>Notes</h2>
-              <ul style={{ listStyle: "none", margin: "22px 0 0", padding: 0 }}>
-                {notes.map((n) => (
-                  <li key={n.slug} style={{ margin: "0 0 18px" }}>
-                    <Link
-                      href={`/notes/${n.slug}`}
-                      className="rg-link"
-                      style={{
-                        fontFamily: FONT.serif,
-                        fontSize: "clamp(18px,1.5vw,20px)",
-                        lineHeight: 1.45,
-                      }}
-                    >
-                      {n.title}
-                    </Link>
-                    <div style={{ ...small, marginTop: 4 }}>{n.date}</div>
+        <section className="rg-board">
+          <div className="rg-wrap">
+            <h2>Early, live, and honest about it.</h2>
+            <ol className="rg-service">
+              {SERVICE.map((s, i) => {
+                const next = SERVICE[i + 1];
+                return (
+                  <li key={s.name} data-live={s.live}>
+                    {next && <span className="rg-service-track" data-live={next.live} />}
+                    <span className="rg-service-stop" />
+                    <h3>{s.name}</h3>
+                    <span className="rg-service-state">
+                      {s.live ? "In service" : "Under construction"}
+                    </span>
+                    <p>{s.text}</p>
                   </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
+                );
+              })}
+            </ol>
+          </div>
+        </section>
+
+        <section className="rg-wrap rg-team">
+          <h2>Two people. We think that&rsquo;s enough.</h2>
+          <div className="rg-team-grid">
+            <div>
+              <h3>Mike Osorio</h3>
+              <p className="rg-role">CTO</p>
+              <p>
+                Applied mathematician (Oxford). Led graph deep learning at
+                JPMorgan.
+              </p>
+            </div>
+            <div>
+              <h3>Gabriel Goulart</h3>
+              <p className="rg-role">CEO</p>
+              <p>
+                Ten years shipping production ML. Previously Lead Data
+                Scientist at Whop.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {notes.length > 0 && (
+          <section className="rg-wrap rg-notes">
+            <h2>Notes</h2>
+            <ul>
+              {notes.map((n) => (
+                <li key={n.slug}>
+                  <Link href={`/notes/${n.slug}`}>
+                    <span>{n.title}</span>
+                    <Arrow size={22} />
+                  </Link>
+                  <time dateTime={n.date}>{n.date}</time>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </main>
       <Footer />
     </div>
