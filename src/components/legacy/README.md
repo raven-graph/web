@@ -1,11 +1,14 @@
 # Legacy landing components
 
-Sections from the "risk and liquidity API for crypto payments" landing page,
-kept in case we revert. Nothing imports these.
+Earlier versions of the landing page, kept in case we revert. Nothing imports
+these from `src/app`.
 
-- `Product.tsx`: "One API, three answers" endpoint cards.
-- `BlindSpot.tsx`: "The problem" section (replaced by `landing/Thesis.tsx`).
+- `Product.tsx`, `BlindSpot.tsx`: sections from the "risk and liquidity API
+  for crypto payments" page.
+- `Hero.tsx`, `HeroSchematic.tsx`, `NetworkBackground.tsx`,
+  `ShockSimulator.tsx`, `Thesis.tsx`, `WhyItScales.tsx`, `Status.tsx`,
+  `Team.tsx`, `Kicker.tsx`, `CtaLink.tsx`, `EdgeTape.tsx`: the first
+  "world model" page (cards, eyebrows, animated figures, shock simulator).
+  The simulator's edge weights and lags are invented examples.
 
-The other landing sections (TopBar, Hero, ShockSimulator, Status, Footer,
-`lib/landing/figures.ts`) were edited in place. Their API-era versions are in
-git history before the `reposition-world-model` branch.
+Figure data for these lives in `src/lib/landing/figures.ts`.

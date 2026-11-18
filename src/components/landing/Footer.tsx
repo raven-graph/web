@@ -1,55 +1,44 @@
 import Image from "next/image";
 import { CONTAINER, FONT, MAILTO } from "@/lib/landing/tokens";
-import { CtaLink } from "./CtaLink";
 
 export function Footer() {
   return (
     <footer
       style={{
-        position: "relative",
         borderTop: "1px solid rgba(255,255,255,0.06)",
         background: "#08090D",
       }}
     >
       <div style={CONTAINER}>
-        <div
-          style={{
-            padding: "118px 0 0",
-            display: "flex",
-            flexDirection: "column",
-            gap: 30,
-            maxWidth: 760,
-          }}
-        >
-          <h2
+        <div style={{ padding: "72px 0 0", maxWidth: 720 }}>
+          <p
             style={{
               margin: 0,
               fontFamily: FONT.serif,
               fontWeight: 500,
-              fontSize: "clamp(32px,5vw,60px)",
-              lineHeight: 1.06,
-              letterSpacing: "-0.01em",
+              fontSize: "clamp(24px,3vw,30px)",
+              lineHeight: 1.25,
               color: "#F1F2F5",
             }}
           >
-            If you think markets are a graph,{" "}
-            <span style={{ fontStyle: "italic", color: "#C9CCD6" }}>
-              talk to us.
-            </span>
-          </h2>
-          <CtaLink
-            href={MAILTO}
-            className="rg-cta-lg"
-            height={52}
-            padding="0 28px"
-            style={{ alignSelf: "flex-start" }}
+            If you think markets are a graph, talk to us.
+          </p>
+          <p
+            style={{
+              margin: "14px 0 0",
+              fontFamily: FONT.serif,
+              fontSize: 19,
+              lineHeight: 1.6,
+            }}
           >
-            Talk to the founders <span style={{ fontSize: 18 }}>→</span>
-          </CtaLink>
+            <a href={MAILTO} className="rg-link">
+              Talk to the founders
+            </a>
+          </p>
         </div>
         <div
           style={{
-            margin: "90px 0 0",
+            margin: "64px 0 0",
             padding: "26px 0",
             borderTop: "1px solid rgba(255,255,255,0.06)",
             display: "flex",
@@ -62,7 +51,7 @@ export function Footer() {
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <Image
               src="/icon-white-transparent.svg"
-              alt="RavenGraph"
+              alt=""
               width={20}
               height={20}
               style={{ opacity: 0.9 }}
@@ -82,9 +71,9 @@ export function Footer() {
           <a
             href={MAILTO}
             style={{
-              fontFamily: FONT.mono,
-              fontSize: 12,
-              color: "#5C606F",
+              fontFamily: FONT.sans,
+              fontSize: 14,
+              color: "#6B6F7C",
               textDecoration: "none",
             }}
           >

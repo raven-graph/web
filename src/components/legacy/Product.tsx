@@ -1,6 +1,6 @@
 import React from "react";
 import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
-import { Kicker } from "@/components/landing/Kicker";
+import { Kicker } from "./Kicker";
 
 interface Endpoint {
   name: string;

@@ -84,33 +84,33 @@
   50%      { opacity: 1; }
 }
 
-/* Top bar: drop secondary mono labels on narrow screens so the wordmark
-   and the "Contact" button always fit without wrapping. */
-@media (max-width: 760px) {
+/* Landing page text links. */
+.rg-link {
+  color: #ECEDF1;
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,0.3);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.rg-link:hover { text-decoration-color: #ECEDF1; }
+.rg-nav:hover { color: #FFFFFF !important; }
+
+/* Top bar: drop the tagline on narrow screens. */
+@media (max-width: 640px) {
   .rg-topbar-tag { display: none !important; }
 }
+/* Status rows: stack the label above the copy on phones. */
 @media (max-width: 560px) {
-  .rg-topbar-status { display: none !important; }
-  /* Status rows: stack the label above the copy. */
   .rg-status-row {
     grid-template-columns: 1fr !important;
-    gap: 10px !important;
+    gap: 2px !important;
   }
 }
-/* Fig. 0: reduced graph below 640px (see HeroSchematic). */
+/* Fig. 0 size swap, used only by the legacy HeroSchematic. */
 .rg-fig0-mini { display: none; }
 @media (max-width: 639px) {
   .rg-fig0-full { display: none !important; }
   .rg-fig0-mini { display: block; }
-}
-/* Phones: the hero carries the primary CTA, so the top bar keeps only
-   the wordmark and NOTES; long CTAs tighten to stay on one line. */
-@media (max-width: 440px) {
-  .rg-topbar-cta { display: none !important; }
-  .rg-cta-lg {
-    padding: 0 18px !important;
-    font-size: 15px !important;
-  }
 }
 
 @layer utilities {

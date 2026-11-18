@@ -2,7 +2,7 @@
 
 import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
 import { useAmbientPhase } from "@/lib/landing/useAmbientPhase";
-import { Kicker } from "@/components/landing/Kicker";
+import { Kicker } from "./Kicker";
 
 const ISO_TICKERS = ["USDT", "BRL", "ETH"];
 
