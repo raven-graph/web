@@ -3,10 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { CONTAINER, FONT } from "@/lib/landing/tokens";
 import { proseComponents } from "@/components/markdown/proseComponents";
 import { TopBar } from "@/components/landing/TopBar";
 import { Footer } from "@/components/landing/Footer";
+import { Arrow } from "@/components/landing/Arrow";
 import { getAllNotes, getNote } from "@/lib/notes";
 
 type Params = { slug: string };
@@ -37,65 +37,25 @@ export default async function NotePage({
   if (!note) notFound();
 
   return (
-    <div
-      style={{
-        background: "#0B0C11",
-        color: "#ECEDF1",
-        fontFamily: FONT.sans,
-        minHeight: "100vh",
-        overflowX: "hidden",
-        WebkitFontSmoothing: "antialiased",
-      }}
-    >
+    <div className="rg-world">
       <TopBar />
-      <div style={CONTAINER}>
-        <article style={{ padding: "80px 0 120px", maxWidth: 720 }}>
-          <Link
-            href="/notes"
-            style={{
-              fontFamily: FONT.mono,
-              fontSize: 11,
-              letterSpacing: "0.12em",
-              color: "#5C606F",
-              textDecoration: "none",
-            }}
-          >
-            ← NOTES
+      <main className="rg-wrap rg-read">
+        <article>
+          <Link href="/notes" className="rg-back">
+            <Arrow size={18} back /> Notes
           </Link>
-          <div
-            style={{
-              margin: "34px 0 0",
-              fontFamily: FONT.mono,
-              fontSize: 11,
-              letterSpacing: "0.1em",
-              color: "#5C606F",
-              display: "flex",
-              gap: 16,
-            }}
-          >
-            <span>{note.date}</span>
-            <span>{note.readingMinutes} MIN READ</span>
+          <h1>{note.title}</h1>
+          <div className="rg-meta">
+            <time dateTime={note.date}>{note.date}</time>
+            <span>{note.readingMinutes} min read</span>
           </div>
-          <h1
-            style={{
-              margin: "18px 0 0",
-              fontFamily: FONT.serif,
-              fontWeight: 500,
-              fontSize: "clamp(30px,4.2vw,46px)",
-              lineHeight: 1.15,
-              letterSpacing: "-0.01em",
-              color: "#F1F2F5",
-            }}
-          >
-            {note.title}
-          </h1>
-          <div style={{ marginTop: 46 }}>
+          <div className="rg-prose">
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={proseComponents}>
               {note.content}
             </ReactMarkdown>
           </div>
         </article>
-      </div>
+      </main>
       <Footer />
     </div>
   );

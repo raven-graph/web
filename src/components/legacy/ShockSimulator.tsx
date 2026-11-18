@@ -48,7 +48,7 @@ function btnStyle(active: boolean): React.CSSProperties {
 }
 
 export function ShockSimulator() {
-  const [scenarioId, setScenarioId] = useState<Scenario["key"]>("eth");
+  const [scenarioId, setScenarioId] = useState<Scenario["key"]>("rates");
   const [mult, setMult] = useState(1);
   const [t, setT] = useState(0);
   const [fired, setFired] = useState(false);
@@ -317,13 +317,14 @@ export function ShockSimulator() {
     });
 
     const oLab = fmtShock(sc.originBase * mult, sc.unit);
-    let takeaway: string;
-    if (sc.key === "eth")
-      takeaway = `A ${oLab} ETH sell-off widens USDT/BRL spreads within about ${fmtAbout(lag.UBRL)}. A treasury team holding BRL float gets the alert before the spread moves.`;
-    else if (sc.key === "rates")
-      takeaway = `A ${oLab} 10Y surprise lifts VIX and pulls ETH ${fmt(val.ETH)} within about ${fmtAbout(lag.ETH)}. A DeFi protocol sees the collateral risk before liquidations start.`;
+    let lead: string;
+    if (sc.key === "rates")
+      lead = `A ${oLab} move in the 10Y hits bank equities first. Credit spreads widen next, then BTC moves ${fmt(val.BTC)} within about ${fmtAbout(lag.BTC)}.`;
+    else if (sc.key === "dollar")
+      lead = `A ${oLab} dollar move weakens EM FX within about ${fmtAbout(lag.EMFX)}. Credit spreads widen next, then bank equities move ${fmt(val.XLF)} within about ${fmtAbout(lag.XLF)}.`;
     else
-      takeaway = `A ${oLab} dollar move widens USDT/BRL spreads within about ${fmtAbout(lag.UBRL)}. BRL weakens first. Then the corridor reprices.`;
+      lead = `A ${oLab} BTC sell-off reaches tech equities within about ${fmtAbout(lag.NDX)}, then lifts VIX ${fmt(val.VIX)}.`;
+    const takeaway = `${lead} The model sees the second and third move before they happen.`;
 
     return { nodeData, edgeData, pulses, clockLabel, pathChips, takeaway };
   }, [sc, mult, t, fired, MAXLAG]);
@@ -361,9 +362,10 @@ export function ShockSimulator() {
                 fontWeight: 300,
               }}
             >
-              A shock enters the graph at its origin and cascades through
-              calibrated edges. Weights and lags are learned from history. Pick
-              a scenario, set the severity, scrub the timeline.
+              A shock enters the graph at its origin and travels along the
+              edges. The first move is news. The model is built for the
+              second and third. Pick a scenario, set the severity, scrub the
+              timeline.
             </p>
           </div>
 
