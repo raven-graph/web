@@ -10,10 +10,14 @@ The prediction is the probability that the exchange's USDT/BRL price will be at 
 
 The API is read-only and serves JSON over HTTPS.
 
+MB is currently unavailable: its v1 rows come back with `status: "unavailable"` and `reason: "fetch_error"`.
+
+**Version 2** (`/v2/...`) adds predictions between pairs of exchanges (Binance, OKX and Foxbit), in both directions, at gap sizes of 5, 10, 15 and 20 bps. See [v2: pair predictions](#v2-pair-predictions).
+
 ## Quick start
 
 ```bash
-export BASE="https://ravengraph-spread-gw-staging-q7u6jww.ue.gateway.dev"
+export BASE="<your base URL>"
 export RAVENGRAPH_API_KEY="<your key>"
 
 curl -s -H "X-API-Key: $RAVENGRAPH_API_KEY" "$BASE/v1/spread/latest"
@@ -23,11 +27,7 @@ The other shell examples below use the same two variables.
 
 ## Base URL
 
-| Environment | Base URL |
-|---|---|
-| Pilot | `https://ravengraph-spread-gw-staging-q7u6jww.ue.gateway.dev` |
-
-We will send a separate production URL and key before the pilot ends.
+Your base URL is sent to you together with your API key. The examples below use it as `$BASE`.
 
 ## Authentication
 
@@ -38,8 +38,8 @@ X-API-Key: <your key>
 ```
 
 - **Use `X-API-Key`, not `Authorization: Bearer <key>`.** Our gateway replaces the `Authorization` header, so a key sent that way is never seen and the request returns `401`.
-- **Keep the key on your servers.** We share it with you through a private channel. Don't put it in browser or mobile code.
-- **Key rotation:** for a period agreed with you, the old key and the new key both work, so you can switch over without downtime.
+- **Keep the key on your servers.** We send it through a private channel. Don't put it in browser or mobile code.
+- **Key rotation:** for an overlap period, the old key and the new key both work, so you can switch over without downtime.
 
 ## How the predictions work
 
@@ -242,7 +242,7 @@ This example reads every exchange at once. With `?venue=mb`, the response is a s
 import os
 import requests
 
-BASE = "https://ravengraph-spread-gw-staging-q7u6jww.ue.gateway.dev"
+BASE = "<your base URL>"
 HEADERS = {"X-API-Key": os.environ["RAVENGRAPH_API_KEY"]}
 
 resp = requests.get(f"{BASE}/v1/spread/latest", headers=HEADERS, timeout=30)
@@ -252,6 +252,181 @@ for p in resp.json()["predictions"]:
         print(p["venue"], p["as_of"], round(p["probability_gap"], 2), p["direction"])
     else:
         print(p["venue"], p["as_of"], p["status"], p["reason"])
+```
+
+## v2: pair predictions
+
+Version 2 adds predictions **between pairs of exchanges**, in **both directions**, at **four gap sizes**: 5, 10, 15 and 20 bps. Version 1 keeps working unchanged. We will announce any retirement of v1 in advance.
+
+**Pairs:** `binance-okx`, `binance-foxbit` and `okx-foxbit`. MB is not included in v2 while it is unavailable.
+
+**Direction.** Each pair has two directions, named `buy_<A>_sell_<B>`. For a direction, the gap at a minute is:
+
+```
+gap_bps = 10,000 × (price on B / price on A − 1)
+```
+
+A positive gap means B is more expensive than A, so you would buy on A and sell on B.
+
+**Prediction.** For each direction and each gap size X, the probability that the gap is **at least X bps** for **at least 5 minutes** (not necessarily in a row) during the same 4-hour window as v1 (`as_of + 5 min` to `as_of + 4 h 5 min`).
+
+**Prices.** Prices are 1-minute trade prices, cleaned as in v1. A minute counts only when both exchanges have a usable price.
+
+**Binance is still needed for every pair.** Binance can be either exchange in a pair, but the bad-print check compares every exchange's price with Binance, as in v1. So when Binance's data is missing or late, every pair is `unavailable`, including `okx-foxbit`.
+
+**Costs are not subtracted.** The gap is the raw difference between trade prices. Neither exchange fees nor the cost of trading through the order book are taken off. For 10k USDT, we measured the cost of buying on one exchange and selling on the other at the same moment, against the order-book mid prices. The mid price is halfway between the best buy and sell price. This cost is before exchange fees.
+
+| Pair | Typical round-trip cost (median) |
+|---|---|
+| Binance–OKX | about 1.0 bps |
+| Binance–Foxbit | about 1.5 bps |
+| OKX–Foxbit | about 1.5 bps |
+
+This is measured on the round trip directly, so it's higher than adding up typical one-way costs: the two sides tend to get expensive at the same moments.
+
+**Read the probabilities as optimistic for trading.** Because costs are not subtracted, the chance of a gap you can actually trade at size is usually lower than the stated probability. The difference is largest at 5 and 10 bps, where many gaps only just clear the threshold and the cost of trading also tends to rise while a gap is open. In our first week of live data, the ranking held: hours with a higher probability were more likely to have a tradeable gap.
+
+**How strongly this was tested.** The v2 models are new, so they haven't been tested on a year of unseen data like v1. They are marked `forward_pending`. 15 and 20 bps gaps are rarer than 5 and 10 bps gaps, so those probabilities rest on fewer past examples and are less certain.
+
+### `GET /v2/spread/latest`
+
+| Query parameter | Required | Description |
+|---|---|---|
+| `pair` | no | `binance-okx`, `binance-foxbit` or `okx-foxbit`. |
+
+**Without `pair`**, you get every pair enabled for your key, as `{"predictions": [ ... ]}`. **With `pair`**, you get a single pair object. As in v1, `/latest` never includes outcomes: its `outcome` field is always `null`.
+
+### `GET /v2/spread/history`
+
+| Query parameter | Required | Description |
+|---|---|---|
+| `pair` | yes | A pair id, as above. |
+| `from`, `to` | yes | As in v1: ISO-8601 UTC, `from` inclusive, `to` exclusive, at most 7 days. |
+
+```bash
+curl -s -H "X-API-Key: $RAVENGRAPH_API_KEY" \
+  "$BASE/v2/spread/history?pair=binance-okx&from=2026-11-16T00:00:00Z&to=2026-11-17T00:00:00Z"
+```
+
+```json
+{
+  "pair": "binance-okx",
+  "from": "2026-11-16T00:00:00Z",
+  "to": "2026-11-17T00:00:00Z",
+  "predictions": [ { "as_of": "2026-11-16T00:00:00Z", ..., "outcome": { ... } }, ... ]
+}
+```
+
+**Same as v1:**
+- timing: published at about `:02` past the hour, so poll at about `:03`;
+- rate limit;
+- statuses and the `stale` rule;
+- error codes.
+
+**Errors specific to v2:** a malformed `pair` is a `400`, and a pair that is unknown or not enabled for your key is a `404`.
+
+### The pair object
+
+**Note on `pair`:** in v1, `pair` is the trading pair `"USDT/BRL"`. In v2, `pair` is the exchange pair id (for example `"binance-okx"`), and `"USDT/BRL"` moves to a new field, `symbol`. If you share parsing code between v1 and v2, handle this field separately.
+
+Here is a real example (numbers rounded for readability; the API returns full precision). Binance and OKX at 14:00 UTC on 16 Nov 2026, as returned by `/history` after the window closed:
+
+```json
+{
+  "pair": "binance-okx",
+  "venues": ["binance", "okx"],
+  "symbol": "USDT/BRL",
+  "as_of": "2026-11-16T14:00:00Z",
+  "generated_at": "2026-11-16T14:01:48Z",
+  "window": { "start": "2026-11-16T14:05:00Z", "end": "2026-11-16T18:05:00Z" },
+  "thresholds_bps": [5, 10, 15, 20],
+  "min_gap_minutes": 5,
+  "gap_definition": "raw_price",
+  "status": "ok",
+  "reason": null,
+  "directions": {
+    "buy_binance_sell_okx": {
+      "buy_venue": "binance",
+      "sell_venue": "okx",
+      "probability": { "5": 0.788, "10": 0.419, "15": 0.076, "20": 0.011 },
+      "unavailable_reason": {},
+      "model_version": { "5": "2026-11", "10": "2026-11", "15": "2026-11", "20": "2026-11" },
+      "recent": { "mean_edge_bps_4h": -3.6, "valid_minutes_1h": 55 }
+    },
+    "buy_okx_sell_binance": {
+      "buy_venue": "okx",
+      "sell_venue": "binance",
+      "probability": { "5": 0.993, "10": 0.911, "15": 0.777, "20": 0.535 },
+      "unavailable_reason": {},
+      "model_version": { "5": "2026-11", "10": "2026-11", "15": "2026-11", "20": "2026-11" },
+      "recent": { "mean_edge_bps_4h": 3.6, "valid_minutes_1h": 55 }
+    }
+  },
+  "model": { "validation": "forward_pending" },
+  "outcome": {
+    "gap": {
+      "buy_binance_sell_okx": { "5": false, "10": false, "15": false, "20": false },
+      "buy_okx_sell_binance": { "5": true, "10": true, "15": true, "20": false }
+    },
+    "excluded": false,
+    "valid_minutes": 226
+  }
+}
+```
+
+| Field | Type | Meaning |
+|---|---|---|
+| `pair` | string | The exchange pair id, e.g. `binance-okx`. |
+| `venues` | list of strings | The pair's two exchanges. |
+| `symbol` | string | Always `USDT/BRL`. |
+| `as_of`, `generated_at`, `window` | | As in v1. |
+| `thresholds_bps` | list of integers | The gap sizes predicted: 5, 10, 15, 20. |
+| `min_gap_minutes` | integer | Minutes the gap must last in the window: 5. |
+| `gap_definition` | string | `raw_price`: costs and fees are not subtracted. |
+| `status` | string | As in v1, for the pair as a whole. |
+| `reason` | string or null | As in v1. `null` when `status` is `ok`. |
+| `directions` | object | One entry per direction, keyed `buy_<A>_sell_<B>`. |
+| `buy_venue`, `sell_venue` | string | The exchange you would buy on and the one you would sell on, in this direction. |
+| `probability` | object | Gap size (as a string, e.g. `"10"`) → probability 0–1, or `null`. Keys may come in any order. |
+| `unavailable_reason` | object | Gap size → why that probability is `null` while the pair is `ok`. Empty when every probability is set. |
+| `model_version` | object | Gap size → the model month (`YYYY-MM`), or `null`. |
+| `recent.mean_edge_bps_4h` | number or null | The average gap in this direction over the 4 hours before `as_of`. ("Edge" in the field name means the same as "gap" here.) |
+| `recent.valid_minutes_1h` | integer or null | Minutes in the hour before `as_of` with a usable price on both exchanges, out of 60. |
+| `model.validation` | string | `forward_pending` until v2 has a full record on live data. |
+| `outcome` | object or null | Only in `/history`. Filled in and recomputed with the same timing as v1; `null` until then. |
+| `outcome.gap` | object | Direction → gap size → `true`/`false`. When the hour is excluded, the object is still there but every value is `null`. |
+| `outcome.excluded` | boolean | `true` when the window had fewer than 30 minutes with a usable price on both exchanges. |
+| `outcome.valid_minutes` | integer | Minutes in the window with a usable price on both exchanges. |
+
+**When the pair is `unavailable`:** this happens if:
+- Binance is down;
+- either exchange's data is missing or stale;
+- or fewer than 30 minutes in the last 4 hours had a usable price on both exchanges.
+
+`reason` uses the same values as v1. Every probability is `null`, and `unavailable_reason` is empty, because `reason` covers the whole pair.
+
+`reason` doesn't say which exchange caused the problem. For example, with `okx-foxbit` and `fetch_error`, check `/v1/spread/latest` for the current hour or `/v1/spread/history` for past hours: v1 gives each exchange its own row and `reason` for the same hour.
+
+**`unavailable_reason` values:**
+- `no_promoted_model`: too few past examples to train a model for that gap size;
+- `internal_error`.
+
+Always check `status` first, then each probability for `null`. As in v1, `null` means "no information", not "no gap expected".
+
+This example reads every pair at once, with the same `BASE` and `HEADERS` as the v1 example:
+
+```python
+resp = requests.get(f"{BASE}/v2/spread/latest", headers=HEADERS, timeout=30)
+resp.raise_for_status()
+for rec in resp.json()["predictions"]:
+    if rec["status"] != "ok":
+        print(rec["pair"], rec["status"], rec["reason"])
+        continue
+    for name, d in rec["directions"].items():
+        for x in rec["thresholds_bps"]:
+            p = d["probability"][str(x)]
+            label = "n/a" if p is None else f"{p:.0%}"
+            print(f"{rec['as_of']} {name} >= {x} bps: {label}")
 ```
 
 ## Contact
