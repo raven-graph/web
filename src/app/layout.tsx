@@ -57,6 +57,7 @@ const plexMono = IBM_Plex_Mono({
 // Landing page signage face (transit-map world).
 const overpass = Overpass({
   subsets: ["latin"],
+  style: ["normal", "italic"],
   variable: "--font-overpass",
   display: "swap",
 });

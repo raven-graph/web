@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { COLOR, CONTAINER, FONT } from "@/lib/landing/tokens";
 import { TopBar } from "@/components/landing/TopBar";
 import { Footer } from "@/components/landing/Footer";
+import { Arrow } from "@/components/landing/Arrow";
 import { getAllNotes } from "@/lib/notes";
 
 export const metadata: Metadata = {
@@ -13,127 +13,29 @@ export const metadata: Metadata = {
 export default function NotesPage() {
   const notes = getAllNotes();
   return (
-    <div
-      style={{
-        background: "#0B0C11",
-        color: "#ECEDF1",
-        fontFamily: FONT.sans,
-        minHeight: "100vh",
-        overflowX: "hidden",
-        WebkitFontSmoothing: "antialiased",
-      }}
-    >
+    <div className="rg-world">
       <TopBar />
-      <div style={CONTAINER}>
-        <div style={{ padding: "90px 0 120px", maxWidth: 760 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ width: 22, height: 1, background: COLOR.cobalt }} />
-            <span
-              style={{
-                fontFamily: FONT.mono,
-                fontSize: 11,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: COLOR.cobaltLight,
-              }}
-            >
-              Notes
-            </span>
-          </div>
-          <h1
-            style={{
-              margin: "26px 0 0",
-              fontFamily: FONT.serif,
-              fontWeight: 500,
-              fontSize: "clamp(34px,4.6vw,56px)",
-              lineHeight: 1.08,
-              letterSpacing: "-0.01em",
-              color: "#F1F2F5",
-            }}
-          >
-            Notes on market structure.
-          </h1>
-          <p
-            style={{
-              margin: "18px 0 0",
-              maxWidth: 560,
-              fontSize: 17,
-              lineHeight: 1.6,
-              color: "#9CA0B0",
-              fontWeight: 300,
-            }}
-          >
-            Liquidity, risk regimes and how shocks travel between markets.
-          </p>
-
-          <div style={{ marginTop: 70 }}>
-            {notes.map((note) => (
-              <Link
-                key={note.slug}
-                href={`/notes/${note.slug}`}
-                style={{
-                  display: "block",
-                  padding: "34px 0",
-                  borderTop: "1px solid rgba(255,255,255,0.08)",
-                  textDecoration: "none",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: FONT.mono,
-                    fontSize: 11,
-                    letterSpacing: "0.1em",
-                    color: "#5C606F",
-                    display: "flex",
-                    gap: 16,
-                  }}
-                >
-                  <span>{note.date}</span>
-                  <span>{note.readingMinutes} MIN READ</span>
-                </div>
-                <h2
-                  style={{
-                    margin: "12px 0 0",
-                    fontFamily: FONT.serif,
-                    fontWeight: 500,
-                    fontSize: "clamp(22px,2.6vw,30px)",
-                    lineHeight: 1.25,
-                    letterSpacing: "-0.01em",
-                    color: "#F1F2F5",
-                  }}
-                >
-                  {note.title}
-                </h2>
-                {note.summary && (
-                  <p
-                    style={{
-                      margin: "12px 0 0",
-                      fontSize: 15.5,
-                      lineHeight: 1.65,
-                      color: "#9CA0B0",
-                      fontWeight: 300,
-                    }}
-                  >
-                    {note.summary}
-                  </p>
-                )}
-                <span
-                  style={{
-                    display: "inline-block",
-                    marginTop: 16,
-                    fontFamily: FONT.mono,
-                    fontSize: 11,
-                    letterSpacing: "0.12em",
-                    color: COLOR.cobaltLight,
-                  }}
-                >
-                  READ NOTE →
-                </span>
+      <main className="rg-wrap rg-read">
+        <h1>Notes on market structure.</h1>
+        <p className="rg-read-lede">
+          Liquidity, risk regimes and how shocks travel between markets.
+        </p>
+        <ul className="rg-index">
+          {notes.map((note) => (
+            <li key={note.slug}>
+              <Link href={`/notes/${note.slug}`}>
+                <span>{note.title}</span>
+                <Arrow size={24} />
               </Link>
-            ))}
-          </div>
-        </div>
-      </div>
+              {note.summary && <p>{note.summary}</p>}
+              <div className="rg-meta">
+                <time dateTime={note.date}>{note.date}</time>
+                <span>{note.readingMinutes} min read</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </main>
       <Footer />
     </div>
   );
