@@ -4,6 +4,7 @@ import { TopBar } from "@/components/landing/TopBar";
 import { Footer } from "@/components/landing/Footer";
 import { MarketMap } from "@/components/landing/MarketMap";
 import { Arrow } from "@/components/landing/Arrow";
+import { MergeFigure, TermGlyph } from "@/components/landing/ArchFigure";
 import { getAllNotes } from "@/lib/notes";
 
 const KEY_LINES = [
@@ -160,20 +161,7 @@ export default function LandingPage() {
             turns that graph into embeddings: a compact description of every
             asset and where it sits in the system.
           </p>
-          <dl className="rg-terms">
-            {TERMS.map(([term, text]) => (
-              <div key={term}>
-                <dt>{term}</dt>
-                <dd>{text}</dd>
-              </div>
-            ))}
-          </dl>
-          {/* CONFIRM WITH MIKE before shipping */}
-          <p className="rg-model-spec">
-            Typed-edge attention, learned time encodings, walk-forward
-            training against XGBoost and LSTM baselines.
-          </p>
-
+          <MergeFigure />
           <div className="rg-pipe" role="group" aria-label="From market graph to embeddings">
             <ol className="rg-pipe-main">
               {PIPE.map(([name, note]) => (
@@ -195,6 +183,21 @@ export default function LandingPage() {
               ))}
             </ul>
           </div>
+
+          <dl className="rg-terms">
+            {TERMS.map(([term, text]) => (
+              <div key={term}>
+                <dt>{term}</dt>
+                <dd>{text}</dd>
+                <TermGlyph term={term} />
+              </div>
+            ))}
+          </dl>
+          {/* CONFIRM WITH MIKE before shipping */}
+          <p className="rg-model-spec">
+            Typed-edge attention, learned time encodings, walk-forward
+            training against XGBoost and LSTM baselines.
+          </p>
 
           <div className="rg-scales">
             <h3>What scales</h3>

@@ -218,11 +218,13 @@
 
 /* The model: glossary set like a map index, then the line it runs on */
 .rg-model { padding-bottom: 120px; scroll-margin-top: 32px; }
-.rg-model > h2 { font-weight: 800; font-size: clamp(30px, 3.6vw, 52px); line-height: 1.04; letter-spacing: -0.025em; max-width: 24ch; }
+.rg-model > h2 { font-weight: 800; font-size: clamp(38px, 5.6vw, 84px); line-height: 0.98; letter-spacing: -0.03em; max-width: 14ch; }
 .rg-model-lede { margin-top: 24px !important; font-size: clamp(19px, 1.7vw, 24px); line-height: 1.42; max-width: 46ch; }
-.rg-terms { margin: 56px 0 0; border-top: 6px solid var(--rg-ink); }
-.rg-terms > div { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 32px; padding: 20px 0; border-bottom: 2px solid var(--rg-ink); align-items: baseline; }
-.rg-terms dt { font-weight: 800; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1; }
+.rg-merge { display: block; width: 100%; height: auto; overflow: visible; margin-top: 64px; }
+.rg-glyph { display: block; width: 220px; height: 64px; justify-self: end; align-self: center; }
+.rg-terms { margin: 72px 0 0; border-top: 6px solid var(--rg-ink); }
+.rg-terms > div { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr) 220px; gap: 32px; padding: 22px 0; border-bottom: 2px solid var(--rg-ink); align-items: baseline; }
+.rg-terms dt { font-weight: 800; font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -0.02em; line-height: 1.1; }
 .rg-terms dd { margin: 0; font-size: 19px; line-height: 1.45; max-width: 56ch; }
 .rg-model-spec { margin-top: 18px !important; font-size: 15.5px; color: var(--rg-ink-soft); }
 .rg-scales { margin-top: 88px; }
@@ -236,9 +238,10 @@
 .rg-scales dd { margin: 0; font-size: 19px; line-height: 1.45; max-width: 56ch; }
 .rg-scales > p { margin-top: 12px !important; padding-top: 22px; border-top: 6px solid var(--rg-ink); font-weight: 800; font-size: clamp(20px, 2vw, 26px); letter-spacing: -0.015em; }
 .rg-test ::selection { background: var(--rg-ink); color: #fff; }
-.rg-test { margin-top: 88px; background: var(--rg-credit); color: var(--rg-ink); border-radius: 6px; padding: clamp(28px, 4vw, 56px); }
-.rg-test p { margin-top: 18px !important; font-size: clamp(20px, 2.2vw, 30px); line-height: 1.32; font-weight: 600; letter-spacing: -0.01em; max-width: 36ch; }
-.rg-pipe { margin-top: 72px; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1.5fr); }
+.rg-test { margin-top: 72px; max-width: 620px; background: var(--rg-credit); color: var(--rg-ink); border-radius: 4px; padding: 22px 26px 24px; }
+.rg-test h3 { font-size: 21px !important; letter-spacing: -0.01em !important; }
+.rg-test p { margin-top: 8px !important; font-size: 17.5px; line-height: 1.5; }
+.rg-pipe { margin-top: 56px; display: none; grid-template-columns: minmax(0, 3fr) minmax(0, 1.5fr); }
 .rg-pipe-main, .rg-fork { list-style: none; margin: 0; padding: 0; }
 .rg-pipe-main { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .rg-pipe li { position: relative; }
@@ -359,7 +362,11 @@
   .rg-service li:nth-child(2) .rg-service-track { display: none; }
 }
 @media (max-width: 900px) {
+  .rg-merge { display: none; }
+  .rg-pipe { display: grid; }
   .rg-pipe, .rg-pipe-main { grid-template-columns: 1fr; }
+  .rg-terms > div { grid-template-columns: minmax(0, 220px) minmax(0, 1fr); }
+  .rg-glyph { grid-column: 2; justify-self: start; }
   .rg-pipe-main li, .rg-fork li { padding: 0 0 32px 44px; }
   .rg-pipe-track { top: 22px; bottom: 0; left: 8px; right: auto; width: 8px; height: auto; }
   .rg-fork { gap: 0; }
@@ -384,7 +391,9 @@
   .rg-board { padding: 72px 0 80px; }
   .rg-model { padding-bottom: 80px; }
   .rg-terms > div, .rg-scales dl > div { grid-template-columns: 1fr; gap: 8px; }
-  .rg-scales, .rg-test { margin-top: 64px; }
+  .rg-glyph { grid-column: 1; margin-top: 8px; }
+  .rg-scales { margin-top: 64px; }
+  .rg-test { margin-top: 48px; }
   .rg-service { grid-template-columns: 1fr; row-gap: 0; margin-top: 48px; }
   .rg-service li { padding: 0 0 40px 48px; }
   .rg-service li:last-child { padding-bottom: 0; }
