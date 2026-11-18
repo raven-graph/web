@@ -201,7 +201,7 @@
 .rg-journey-sentence { margin-top: 16px !important; font-size: 17px; font-weight: 600; line-height: 1.35; }
 
 /* Thesis and key */
-.rg-thesis { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 72px; padding-top: 112px; padding-bottom: 112px; align-items: start; }
+.rg-thesis { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 72px; padding-top: 112px; padding-bottom: 104px; align-items: start; }
 .rg-thesis h2 { font-weight: 800; font-size: clamp(32px, 4vw, 58px); line-height: 1.02; letter-spacing: -0.025em; max-width: 16ch; }
 .rg-thesis h2 + p { margin-top: 28px; }
 .rg-thesis > div:first-child p { font-size: clamp(19px, 1.7vw, 24px); line-height: 1.42; max-width: 34ch; }
@@ -215,6 +215,30 @@
 .rg-key-hub { justify-self: center; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 5px solid var(--rg-ink); }
 .rg-key-planned { height: 10px; background: linear-gradient(90deg, var(--rg-crypto) 45%, transparent 0) 0 0 / 11px 100%; }
 .rg-key p { margin-top: 16px; font-size: 15px; color: var(--rg-ink-soft); max-width: 40ch; }
+
+/* The model: glossary set like a map index, then the line it runs on */
+.rg-model { padding-bottom: 120px; }
+.rg-model > h2 { font-weight: 800; font-size: clamp(30px, 3.6vw, 52px); line-height: 1.04; letter-spacing: -0.025em; max-width: 24ch; }
+.rg-model-lede { margin-top: 24px !important; font-size: clamp(19px, 1.7vw, 24px); line-height: 1.42; max-width: 46ch; }
+.rg-terms { margin: 56px 0 0; border-top: 6px solid var(--rg-ink); }
+.rg-terms > div { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 32px; padding: 20px 0; border-bottom: 2px solid var(--rg-ink); align-items: baseline; }
+.rg-terms dt { font-weight: 800; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1; }
+.rg-terms dd { margin: 0; font-size: 19px; line-height: 1.45; max-width: 56ch; }
+.rg-pipe { margin-top: 72px; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1.5fr); }
+.rg-pipe-main, .rg-fork { list-style: none; margin: 0; padding: 0; }
+.rg-pipe-main { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rg-pipe li { position: relative; }
+.rg-pipe-main li { padding: 44px 32px 0 0; }
+.rg-pipe-stop { position: absolute; top: 0; left: 0; box-sizing: border-box; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 5px solid var(--rg-ink); }
+.rg-pipe-track { position: absolute; top: 8px; left: 22px; right: 0; height: 8px; background: var(--rg-ink); }
+.rg-pipe h3 { font-weight: 800; font-size: 22px; letter-spacing: -0.015em; line-height: 1.15; }
+.rg-pipe p { margin-top: 8px; font-size: 16.5px; line-height: 1.45; color: var(--rg-ink-soft); max-width: 30ch; }
+.rg-fork { display: grid; gap: 36px; align-content: start; }
+.rg-fork li { padding-left: 92px; min-height: 24px; }
+.rg-fork li::before { content: ""; position: absolute; top: 8px; left: 0; width: 60px; height: 8px; background: var(--rg-ink); }
+.rg-fork li:first-child::after { content: ""; position: absolute; left: 0; top: 8px; bottom: -44px; width: 8px; background: var(--rg-ink); }
+.rg-fork li:last-child::after { content: ""; position: absolute; left: 0; top: 0; height: 16px; width: 8px; background: var(--rg-ink); border-bottom-left-radius: 8px; }
+.rg-fork .rg-pipe-stop { left: 56px; background: var(--rg-ink); }
 
 /* Service board */
 .rg-board { background: var(--rg-ink); color: #fff; padding: 104px 0 112px; }
@@ -320,6 +344,18 @@
   .rg-service { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 56px; }
   .rg-service li:nth-child(2) .rg-service-track { display: none; }
 }
+@media (max-width: 900px) {
+  .rg-pipe, .rg-pipe-main { grid-template-columns: 1fr; }
+  .rg-pipe-main li, .rg-fork li { padding: 0 0 32px 44px; }
+  .rg-pipe-track { top: 22px; bottom: 0; left: 8px; right: auto; width: 8px; height: auto; }
+  .rg-fork { gap: 0; }
+  .rg-fork li::before { display: none; }
+  .rg-fork li:first-child::after { left: 8px; top: 22px; bottom: 0; }
+  .rg-fork li:last-child::after { display: none; }
+  .rg-fork li:last-child { padding-bottom: 0; }
+  .rg-fork .rg-pipe-stop { left: 0; }
+  .rg-pipe p { max-width: 44ch; }
+}
 @media (max-width: 640px) {
   .rg-wrap, .rg-bar-in { padding-left: 20px; padding-right: 20px; }
   .rg-bar-tag { display: none; }
@@ -331,6 +367,8 @@
   .rg-strip li { padding: 0 0 0 32px; flex: none; }
   .rg-strip-leg { top: 16px; bottom: -16px; left: 5px; right: auto; width: 8px; height: auto; }
   .rg-board { padding: 72px 0 80px; }
+  .rg-model { padding-bottom: 80px; }
+  .rg-terms > div { grid-template-columns: 1fr; gap: 8px; }
   .rg-service { grid-template-columns: 1fr; row-gap: 0; margin-top: 48px; }
   .rg-service li { padding: 0 0 40px 48px; }
   .rg-service li:last-child { padding-bottom: 0; }

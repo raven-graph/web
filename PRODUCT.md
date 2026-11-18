@@ -22,6 +22,8 @@ Explain what RavenGraph is building, show honestly where it stands, and get the 
 
 "RavenGraph is a neolab building a world model of financial markets. Markets are one connected system: a rate move hits banks, then credit, then crypto. Our model learns that structure directly, across equities, futures and crypto, and gets better with every asset and link we add."
 
+The end goal is a temporal heterogeneous graph attention network (THGAT). It learns a representation of markets and produces embeddings that can fine-tune LLMs and give agents a world model (stated by Gabriel, 2026-11-18). It is in build.
+
 ## Operating Context
 
 Two founders. Mike Osorio (CTO), Gabriel Goulart (CEO). Contact is mailto:gabriel@ravengraph.com.

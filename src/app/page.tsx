@@ -14,6 +14,32 @@ const KEY_LINES = [
   ["Futures", MAP.futures],
 ] as const;
 
+const TERMS = [
+  [
+    "Temporal",
+    "Links between markets strengthen, fade and reverse. The model learns the timetable as well as the map.",
+  ],
+  [
+    "Heterogeneous",
+    "Stocks, futures, rates and tokens are different kinds of station, joined by different kinds of link. The model keeps them distinct.",
+  ],
+  [
+    "Graph attention",
+    "For each asset, the model learns which neighbours matter now, and how much.",
+  ],
+] as const;
+
+const PIPE = [
+  ["Market graph", "Assets and the links between them, across equities, futures and crypto."],
+  ["THGAT", "Learns the structure and how it changes over time."],
+  ["Embeddings", "The learned representation, reusable by other models."],
+] as const;
+
+const USES = [
+  ["Fine-tuned LLMs", "Embeddings that teach a language model how markets connect."],
+  ["A world model for agents", "Research agents that can reason about how a shock will travel."],
+] as const;
+
 // OPTIONAL Trading line, confirm with Gabriel before shipping. If enabled,
 // the number must keep "paper trading" and "small book" in the same line:
 // "Equities book up 46% since February, 34 points ahead of the S&P 500
@@ -105,6 +131,47 @@ export default function LandingPage() {
               Schematic. Lines, stations and journeys are illustrative. No
               model output is shown.
             </p>
+          </div>
+        </section>
+
+        <section className="rg-wrap rg-model">
+          <h2>
+            The end goal is a temporal heterogeneous graph attention network
+            (THGAT).
+          </h2>
+          <p className="rg-model-lede">
+            It learns a representation of markets as one graph and turns it
+            into embeddings: a compact description of every asset and where
+            it sits in the system.
+          </p>
+          <dl className="rg-terms">
+            {TERMS.map(([term, text]) => (
+              <div key={term}>
+                <dt>{term}</dt>
+                <dd>{text}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="rg-pipe" role="group" aria-label="What the model produces">
+            <ol className="rg-pipe-main">
+              {PIPE.map(([name, note]) => (
+                <li key={name}>
+                  <span className="rg-pipe-track" />
+                  <span className="rg-pipe-stop" />
+                  <h3>{name}</h3>
+                  <p>{note}</p>
+                </li>
+              ))}
+            </ol>
+            <ul className="rg-fork">
+              {USES.map(([name, note]) => (
+                <li key={name}>
+                  <span className="rg-pipe-stop" />
+                  <h3>{name}</h3>
+                  <p>{note}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
