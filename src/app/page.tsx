@@ -245,28 +245,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="rg-wrap rg-team">
-          <h2>Two people. We think that&rsquo;s enough.</h2>
-          <div className="rg-team-grid">
-            <div>
-              <h3>Mike Osorio</h3>
-              <p className="rg-role">CTO</p>
-              <p>
-                Applied mathematician (Oxford). Led graph deep learning at
-                JPMorgan.
-              </p>
-            </div>
-            <div>
-              <h3>Gabriel Goulart</h3>
-              <p className="rg-role">CEO</p>
-              <p>
-                Ten years shipping production ML. Previously Lead Data
-                Scientist at Whop.
-              </p>
-            </div>
-          </div>
-        </section>
-
         {notes.length > 0 && (
           <section className="rg-wrap rg-notes">
             <h2>Notes</h2>

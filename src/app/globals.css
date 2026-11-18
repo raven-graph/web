@@ -162,7 +162,9 @@
 
 /* Hero: the map is the viewport, the title sits in its open corner */
 .rg-hero { overflow: hidden; border-bottom: 2px solid var(--rg-ink); }
-.rg-hero-in { position: relative; max-width: 1680px; margin: 0 auto; container-type: inline-size; }
+/* The composition stops growing at the content width; past that only the
+   lines keep running to the screen edges (the svg overflows on purpose). */
+.rg-hero-in { position: relative; max-width: 1304px; margin: 0 auto; container-type: inline-size; }
 .rg-map { display: block; width: 100%; height: auto; overflow: visible; }
 .rg-map-narrow { display: none; }
 .rg-title { position: absolute; z-index: 1; left: max(32px, calc((100cqw - 1176px) / 2)); bottom: 3.4cqw; width: 39cqw; }
@@ -271,16 +273,8 @@
 .rg-service li[data-live="false"] .rg-service-state { background: var(--rg-credit); }
 .rg-service p { margin-top: 16px; font-size: 18px; line-height: 1.45; color: #E6E9F5; max-width: 30ch; }
 
-/* Team */
-.rg-team { padding-top: 112px; padding-bottom: 40px; }
-.rg-team h2 { font-weight: 800; font-size: clamp(32px, 4vw, 58px); line-height: 1.02; letter-spacing: -0.025em; max-width: 14ch; }
-.rg-team-grid { margin-top: 56px; display: grid; grid-template-columns: repeat(2, minmax(0, 420px)); gap: 40px 72px; }
-.rg-team h3 { font-weight: 800; font-size: 28px; letter-spacing: -0.02em; line-height: 1.1; }
-.rg-role { font-weight: 700; color: var(--rg-equities); margin-top: 4px !important; }
-.rg-role + p { margin-top: 12px; max-width: 36ch; }
-
 /* Notes */
-.rg-notes { padding-top: 72px; padding-bottom: 120px; }
+.rg-notes { padding-top: 104px; padding-bottom: 120px; }
 .rg-notes h2 { font-weight: 800; font-size: 28px; letter-spacing: -0.02em; }
 .rg-notes ul { list-style: none; margin: 20px 0 0; padding: 0; border-top: 6px solid var(--rg-ink); }
 .rg-notes li { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 20px 0; border-bottom: 2px solid var(--rg-ink); }
@@ -401,7 +395,6 @@
   .rg-service-track { top: 26px; bottom: 0; left: 9px; right: auto; width: 8px; height: auto; }
   .rg-service-track[data-live="false"] { height: auto; width: 0; border-top: 0; border-left: 8px dashed var(--rg-credit); }
   .rg-service p { max-width: none; }
-  .rg-team-grid { grid-template-columns: 1fr; }
   .rg-notes li { flex-direction: column; gap: 6px; }
   .rg-foot-close { padding: 80px 0 88px; }
   .rg-read { padding-top: 52px; padding-bottom: 88px; }
