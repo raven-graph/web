@@ -12,6 +12,7 @@ export function TopBar() {
         </Link>
         <span className="rg-bar-tag">A world model of markets</span>
         <nav className="rg-bar-nav">
+          <Link href="/#architecture" className="rg-bar-wide">Architecture</Link>
           <Link href="/notes">Notes</Link>
           <a href={MAILTO}>Contact</a>
         </nav>

@@ -217,13 +217,27 @@
 .rg-key p { margin-top: 16px; font-size: 15px; color: var(--rg-ink-soft); max-width: 40ch; }
 
 /* The model: glossary set like a map index, then the line it runs on */
-.rg-model { padding-bottom: 120px; }
+.rg-model { padding-bottom: 120px; scroll-margin-top: 32px; }
 .rg-model > h2 { font-weight: 800; font-size: clamp(30px, 3.6vw, 52px); line-height: 1.04; letter-spacing: -0.025em; max-width: 24ch; }
 .rg-model-lede { margin-top: 24px !important; font-size: clamp(19px, 1.7vw, 24px); line-height: 1.42; max-width: 46ch; }
 .rg-terms { margin: 56px 0 0; border-top: 6px solid var(--rg-ink); }
 .rg-terms > div { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 32px; padding: 20px 0; border-bottom: 2px solid var(--rg-ink); align-items: baseline; }
 .rg-terms dt { font-weight: 800; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1; }
 .rg-terms dd { margin: 0; font-size: 19px; line-height: 1.45; max-width: 56ch; }
+.rg-model-spec { margin-top: 18px !important; font-size: 15.5px; color: var(--rg-ink-soft); }
+.rg-scales { margin-top: 88px; }
+.rg-scales > h3, .rg-test h3 { font-weight: 800; font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -0.02em; line-height: 1.1; }
+.rg-scales dl { margin: 28px 0 0; }
+.rg-scales dl > div { position: relative; display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 32px; padding: 26px 0 22px; align-items: baseline; }
+/* each axis is an extension: built track, then planned track */
+.rg-scales dl > div::before { content: ""; position: absolute; top: 0; left: 0; width: 120px; height: 6px; background: var(--rg-ink); }
+.rg-scales dl > div::after { content: ""; position: absolute; top: 0; left: 132px; right: 0; border-top: 6px dashed var(--rg-ink); }
+.rg-scales dt { font-weight: 800; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1; }
+.rg-scales dd { margin: 0; font-size: 19px; line-height: 1.45; max-width: 56ch; }
+.rg-scales > p { margin-top: 12px !important; padding-top: 22px; border-top: 6px solid var(--rg-ink); font-weight: 800; font-size: clamp(20px, 2vw, 26px); letter-spacing: -0.015em; }
+.rg-test ::selection { background: var(--rg-ink); color: #fff; }
+.rg-test { margin-top: 88px; background: var(--rg-credit); color: var(--rg-ink); border-radius: 6px; padding: clamp(28px, 4vw, 56px); }
+.rg-test p { margin-top: 18px !important; font-size: clamp(20px, 2.2vw, 30px); line-height: 1.32; font-weight: 600; letter-spacing: -0.01em; max-width: 36ch; }
 .rg-pipe { margin-top: 72px; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1.5fr); }
 .rg-pipe-main, .rg-fork { list-style: none; margin: 0; padding: 0; }
 .rg-pipe-main { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -360,6 +374,7 @@
   .rg-wrap, .rg-bar-in { padding-left: 20px; padding-right: 20px; }
   .rg-bar-tag { display: none; }
   .rg-bar-nav { gap: 20px; }
+  .rg-bar-wide { display: none; }
   .rg-title { padding: 44px 20px 32px; }
   .rg-journey { padding: 22px 20px 26px; }
   .rg-journey-head { flex-direction: column; align-items: flex-start; }
@@ -368,7 +383,8 @@
   .rg-strip-leg { top: 16px; bottom: -16px; left: 5px; right: auto; width: 8px; height: auto; }
   .rg-board { padding: 72px 0 80px; }
   .rg-model { padding-bottom: 80px; }
-  .rg-terms > div { grid-template-columns: 1fr; gap: 8px; }
+  .rg-terms > div, .rg-scales dl > div { grid-template-columns: 1fr; gap: 8px; }
+  .rg-scales, .rg-test { margin-top: 64px; }
   .rg-service { grid-template-columns: 1fr; row-gap: 0; margin-top: 48px; }
   .rg-service li { padding: 0 0 40px 48px; }
   .rg-service li:last-child { padding-bottom: 0; }

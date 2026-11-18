@@ -25,19 +25,37 @@ const TERMS = [
   ],
   [
     "Graph attention",
-    "For each asset, the model learns which neighbours matter now, and how much.",
+    "For each asset, the model learns which neighbors matter now, and how much.",
   ],
 ] as const;
 
 const PIPE = [
   ["Market graph", "Assets and the links between them, across equities, futures and crypto."],
   ["THGAT", "Learns the structure and how it changes over time."],
-  ["Embeddings", "The learned representation, reusable by other models."],
+  [
+    "Embeddings",
+    "The learned representation. The foundation every downstream model and strategy builds on.",
+  ],
 ] as const;
 
 const USES = [
-  ["Fine-tuned LLMs", "Embeddings that teach a language model how markets connect."],
-  ["A world model for agents", "Research agents that can reason about how a shock will travel."],
+  [
+    "A world model for agents",
+    "Research agents that can reason about how a shock will travel before it does.",
+  ],
+  // OPTIONAL, remove if not confirmed
+  [
+    "Market-aware language models",
+    "Embeddings fed to a language model as structured context, so it knows how markets connect.",
+  ],
+] as const;
+
+// The Nodes line had "From 64 futures today"; Gabriel said that count is
+// wrong, so no starting number is stated until he supplies the right one.
+const SCALES = [
+  ["Nodes", "More assets, across equities, futures, commodities, indices and crypto."],
+  ["Relations", "More edge types: correlation, lead-lag, sector, supply chain, flows."],
+  ["Time", "From daily to hourly to dollar-volume bars."],
 ] as const;
 
 // OPTIONAL Trading line, confirm with Gabriel before shipping. If enabled,
@@ -134,15 +152,13 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="rg-wrap rg-model">
-          <h2>
-            The end goal is a temporal heterogeneous graph attention network
-            (THGAT).
-          </h2>
+        <section className="rg-wrap rg-model" id="architecture">
+          <h2>One model for the whole market.</h2>
           <p className="rg-model-lede">
-            It learns a representation of markets as one graph and turns it
-            into embeddings: a compact description of every asset and where
-            it sits in the system.
+            The world model is being built on a temporal heterogeneous graph
+            attention network (THGAT). It learns markets as one graph and
+            turns that graph into embeddings: a compact description of every
+            asset and where it sits in the system.
           </p>
           <dl className="rg-terms">
             {TERMS.map(([term, text]) => (
@@ -152,7 +168,13 @@ export default function LandingPage() {
               </div>
             ))}
           </dl>
-          <div className="rg-pipe" role="group" aria-label="What the model produces">
+          {/* CONFIRM WITH MIKE before shipping */}
+          <p className="rg-model-spec">
+            Typed-edge attention, learned time encodings, walk-forward
+            training against XGBoost and LSTM baselines.
+          </p>
+
+          <div className="rg-pipe" role="group" aria-label="From market graph to embeddings">
             <ol className="rg-pipe-main">
               {PIPE.map(([name, note]) => (
                 <li key={name}>
@@ -172,6 +194,29 @@ export default function LandingPage() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="rg-scales">
+            <h3>What scales</h3>
+            <dl>
+              {SCALES.map(([label, text]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{text}</dd>
+                </div>
+              ))}
+            </dl>
+            <p>Every axis adds signal to every node.</p>
+          </div>
+
+          <div className="rg-test">
+            <h3>How we&rsquo;ll know it works</h3>
+            <p>
+              We train the same model on a shuffled graph, with edges
+              randomly rewired. If the real structure doesn&rsquo;t beat the
+              shuffled one out of sample, the graph adds nothing, and
+              we&rsquo;ll say so.
+            </p>
           </div>
         </section>
 
